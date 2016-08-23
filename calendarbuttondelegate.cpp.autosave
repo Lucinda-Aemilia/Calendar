@@ -1,0 +1,6 @@
+#include "calendarbuttondelegate.h"
+
+CalendarButtonDelegate::CalendarButtonDelegate(QObject *parent) : QItemDelegate(parent)
+{
+
+}
