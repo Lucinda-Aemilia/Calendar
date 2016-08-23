@@ -35,6 +35,12 @@ MainWindow::MainWindow(QWidget *parent) :
     initCalendarTable(1, ui->dayTableWidget);
     initCalendarTable(7, ui->weekTableWidget);
     initCalendarTable(4, ui->fourDaysTableWidget);
+
+    // 测试sql连接
+    Event event;
+    event.setName("Go to School");
+    sqlEventModel->addEventToDb(&event);
+    qDebug() << "event id: " << event.id();
 }
 
 void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)

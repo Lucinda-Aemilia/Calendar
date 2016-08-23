@@ -15,3 +15,5 @@ const QString EventDbContract::END_DATE = "end_date";
 const QString EventDbContract::END_TIME = "end_time";
 const QString EventDbContract::LOCATION = "location";
 const QString EventDbContract::COLOR = "color";
+const QString EventDbContract::ID = "id";
+const QString EventDbContract::REPEAT = "repeat";
