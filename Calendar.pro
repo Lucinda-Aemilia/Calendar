@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,9 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    eventdbcontract.cpp
+    eventdbcontract.cpp \
+    sqleventmodel.cpp \
+    event.cpp
 
 HEADERS  += mainwindow.h \
-    eventdbcontract.h
+    eventdbcontract.h \
+    sqleventmodel.h \
+    event.h
 
 FORMS    += mainwindow.ui
