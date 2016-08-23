@@ -3,6 +3,8 @@
 
 #include <QDebug>
 #include <QHeaderView>
+#include <QComboBox>
+#include <QPushButton>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,20 +30,65 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(changeCurrentButtonToggleState(int)));
     changeCurrentButtonToggleState(0);
 
-    // 初始化timelabels
-    for (int i = 0; i < 24; i++)
+    // 初始化day, week, 4 days日历
+    initCalendarTable(1, ui->dayTableWidget);
+    initCalendarTable(7, ui->weekTableWidget);
+    initCalendarTable(4, ui->fourDaysTableWidget);
+}
+
+void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)
+{
+    tableWidget->setColumnCount(1 + dayNumber*4); // 一列显示日期，其余每天有4列
+    tableWidget->setRowCount(288 + 2); // 一行日期 + 一行comboBox + 24小时*12（5min）
+    tableWidget->horizontalHeader()->setVisible(false); // 不显示表头
+    tableWidget->verticalHeader()->setVisible(false);
+    tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers); // 不能编辑
+    tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+    tableWidget->horizontalHeader()->setStretchLastSection(true); // 设置占满并均分
+    tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    // 设置行高
+    tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    tableWidget->setRowHeight(0, 50);
+    tableWidget->setRowHeight(1, 30);
+    for (int i = 2; i < 288 + 2; i++)
     {
-        timeLabelsForTable.append(QString::number(i) + ":00");
-        timeLabelsForTable.append("");
+        tableWidget->setRowHeight(i, 10);
     }
 
-    // 初始化day日历
-    ui->dayTableWidget->setColumnCount(1);
-    ui->dayTableWidget->setRowCount(48);
-    ui->dayTableWidget->setVerticalHeaderLabels(timeLabelsForTable);
-    ui->dayTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->dayTableWidget->horizontalHeader()->resizeSections(QHeaderView::Stretch);
-    ui->dayTableWidget->horizontalHeader()->setStretchLastSection(true);
+    // 设置最左边一列的时间
+    tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+    tableWidget->setColumnWidth(0, 115);
+    QFont smallFont("Microsoft Yahei UI");
+    smallFont.setPointSize(10);
+    for (int i = 0; i < 288; i += 12)
+    {
+        tableWidget->setSpan(i+2, 0, 12, 1);
+        QTime time(i/12, 0);
+        QTableWidgetItem* item = new QTableWidgetItem(time.toString("a h:mm"));
+        item->setFont(smallFont);
+        item->setTextAlignment(Qt::AlignTop);
+        tableWidget->setItem(i+2, 0, item);
+    }
+
+    // 设置最上面一行的日期
+    tableWidget->setSpan(0, 0, 2, 1);
+    for (int i = 1; i <= dayNumber*4; i++)
+    {
+        tableWidget->setSpan(0, i, 1, 4);
+        tableWidget->setSpan(1, i, 1, 4);
+    }
+
+    /* 说明可以在表格里直接插入按钮
+    tableWidget->setSpan(0, 0, 3, 1);
+    QComboBox *comBox = new QComboBox();
+    comBox->addItem("Y");
+    comBox->addItem("N");
+    tableWidget->setCellWidget(0,0,comBox);
+
+    tableWidget->setSpan(0, 2, 3, 3);
+    QPushButton *btn = new QPushButton();
+    tableWidget->setCellWidget(0, 2, btn);
+    */
 }
 
 void MainWindow::changeCurrentButtonToggleState(int index)

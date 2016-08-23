@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 
     QFont font;
     font.setFamily("Microsoft Yahei UI");
-    font.setPixelSize(24);
+    font.setPointSize(12);
     font.setBold(false);
     a.setFont(font);
 

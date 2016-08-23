@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QTableWidget>
 
 namespace Ui {
 class MainWindow;
@@ -15,6 +16,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
 
+    void initCalendarTable(int dayNumber, QTableWidget* tableWidget);
 
     ~MainWindow();
 
@@ -30,7 +32,6 @@ public slots:
 private:
     Ui::MainWindow *ui;
     QPushButton* switchButtons[5];
-    QStringList timeLabelsForTable;
 };
 
 #endif // MAINWINDOW_H

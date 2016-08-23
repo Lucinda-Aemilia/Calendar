@@ -14,9 +14,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    calendarbuttondelegate.cpp
+    eventdbcontract.cpp
 
 HEADERS  += mainwindow.h \
-    calendarbuttondelegate.h
+    eventdbcontract.h
 
 FORMS    += mainwindow.ui
