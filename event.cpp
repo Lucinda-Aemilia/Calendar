@@ -62,7 +62,7 @@ QString Event::location() const
     return mLocation;
 }
 
-void Event::setlocation(const QString &location)
+void Event::setLocation(const QString &location)
 {
     if (location != mLocation) {
         mLocation = location;
@@ -75,7 +75,7 @@ QColor Event::color() const
     return mColor;
 }
 
-void Event::setcolor(const QString &color)
+void Event::setColor(const QColor &color)
 {
     if (color != mColor) {
         mColor = color;

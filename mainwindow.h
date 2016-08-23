@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "sqleventmodel.h"
+
 #include <QMainWindow>
 #include <QPushButton>
 #include <QTableWidget>
@@ -32,6 +34,7 @@ public slots:
 private:
     Ui::MainWindow *ui;
     QPushButton* switchButtons[5];
+    SqlEventModel* sqlEventModel;
 };
 
 #endif // MAINWINDOW_H

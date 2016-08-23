@@ -5,6 +5,7 @@
 #include <QObject>
 
 #include "event.h"
+#include "eventdbcontract.h"
 
 class SqlEventModel : public QObject
 {
@@ -13,7 +14,7 @@ class SqlEventModel : public QObject
 public:
     SqlEventModel();
 
-    Q_INVOKABLE QList<QObject*> eventsForDate(const QDate &date);
+    QList<QObject*> eventsForDate(const QDate &date);
 
 private:
     static void createConnection();
