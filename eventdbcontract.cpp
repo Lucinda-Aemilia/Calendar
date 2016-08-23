@@ -5,7 +5,7 @@ EventDbContract::EventDbContract()
 
 }
 
-const QString EventDbContract::DB_NAME = "calendar";
+const QString EventDbContract::DB_NAME = "calendar.db";
 const QString EventDbContract::TABLE_NAME = "calendar";
 const QString EventDbContract::HEADING = "heading";
 const QString EventDbContract::DESCRIPTION = "description";

@@ -400,7 +400,7 @@
          <enum>QFrame::Sunken</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="dayPage">
          <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -478,7 +478,7 @@
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_6">
               <item>
-               <widget class="QCalendarWidget" name="month_calendar">
+               <widget class="EventCalendar" name="month_calendar">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                   <horstretch>1</horstretch>
@@ -559,6 +559,13 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>EventCalendar</class>
+   <extends>QCalendarWidget</extends>
+   <header>eventcalendar.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
