@@ -17,12 +17,14 @@ SOURCES += main.cpp\
     eventdbcontract.cpp \
     sqleventmodel.cpp \
     event.cpp \
-    eventcalendar.cpp
+    eventcalendar.cpp \
+    cacheeventmodel.cpp
 
 HEADERS  += mainwindow.h \
     eventdbcontract.h \
     sqleventmodel.h \
     event.h \
-    eventcalendar.h
+    eventcalendar.h \
+    cacheeventmodel.h
 
 FORMS    += mainwindow.ui

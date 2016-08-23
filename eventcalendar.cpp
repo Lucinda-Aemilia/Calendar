@@ -65,7 +65,7 @@ QColor EventCalendar::color() const
 
 void EventCalendar::paintCell(QPainter *painter, const QRect &rect, const QDate &date) const
 {
-   qDebug() << "come in paintCell" << endl;
+   // qDebug() << "come in paintCell" << endl;
    QCalendarWidget::paintCell(painter, rect, date);
    Q_ASSERT(dates.size()==todolist.size());
    for (int i = 0; i < dates.size(); i++)

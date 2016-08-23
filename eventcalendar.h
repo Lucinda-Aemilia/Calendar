@@ -30,13 +30,14 @@ protected:
     virtual void paintCell(QPainter * painter, const QRect & rect, const QDate & date) const;
 
 private slots:
-    void addNote( const QDate & );
+    void addNote(const QDate & );
 
 private:
     QDate m_currentDate;
     QPen m_outlinePen;
     QBrush m_transparentBrush;
 
+    // QVector<QList> eventList;
     QVector<QDate> dates;
     QVector<QString> todolist;
 
