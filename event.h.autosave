@@ -31,16 +31,27 @@ public:
     QString description() const;
     void setDescription(const QString &description);
     
+    QString location() const;
+    void setlocation(const QString &location);
+    
+    QColor color() const;
+    void setColor(const QColor &color);
+    
 signals:
     void nameChanged(const QString &name);
     void startDateChanged(const QDateTime &startDate);
     void endDateChanged(const QDateTime &endDate);
-    void 
+    void descriptionChanged(const QString &description);
+    void locationChanged(const QString &location);
+    void colorChanged(const QColor &color);
     
 private:
     QString mName;
     QDateTime mStartDate;
     QDateTime mEndDate;
+    QString mDescription;
+    QString mLocation;
+    QColor mColor;
 };
 
 #endif
