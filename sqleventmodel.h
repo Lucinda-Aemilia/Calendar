@@ -14,7 +14,19 @@ class SqlEventModel : public QObject
 public:
     SqlEventModel();
 
-    QList<QObject*> eventsForDate(const QDate &date);
+    QList<Event*> eventsForDate(const QDate &date);
+
+public slots:
+    // 可以用 qobject_cast<chatDialog*>(QObject::sender()) 获得sender
+    void onEventNameChanged(const QString &name);
+    void onStartDateChanged(const QDateTime &startDate);
+    void onEndDateChanged(const QDateTime &endDate);
+    void onDescriptionChanged(const QString &description);
+    void onLocationChanged(const QString &location);
+    void onColorChanged(const QColor &color);
+
+    void deleteEventFromDb(Event* event);
+    void addEventToDb(Event* event);
 
 private:
     static void createConnection();
