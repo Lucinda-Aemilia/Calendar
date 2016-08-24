@@ -80,8 +80,11 @@
         <property name="styleSheet">
          <string notr="true">font: 9pt &quot;Microsoft YaHei UI&quot;;</string>
         </property>
+        <property name="locale">
+         <locale language="English" country="UnitedStates"/>
+        </property>
         <property name="firstDayOfWeek">
-         <enum>Qt::Monday</enum>
+         <enum>Qt::Sunday</enum>
         </property>
         <property name="gridVisible">
          <bool>false</bool>
@@ -494,8 +497,11 @@
                   <height>600</height>
                  </size>
                 </property>
+                <property name="locale">
+                 <locale language="English" country="UnitedStates"/>
+                </property>
                 <property name="firstDayOfWeek">
-                 <enum>Qt::Monday</enum>
+                 <enum>Qt::Sunday</enum>
                 </property>
                 <property name="dateEditEnabled">
                  <bool>false</bool>

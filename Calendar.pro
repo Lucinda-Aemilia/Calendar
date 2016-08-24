@@ -27,4 +27,7 @@ HEADERS  += mainwindow.h \
     eventcalendar.h \
     cacheeventmodel.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    editdialog.ui
+
+TRANSLATIONS += cn.ts
