@@ -48,8 +48,6 @@ void EventCalendar::setCacheEventModel(CacheEventModel* cacheEventModel)
 {
     qDebug() << "come in setCacheEventModel";
     m_cacheEventModel = cacheEventModel;
-    connect(m_cacheEventModel, SIGNAL(oneDayRefreshed(QDate)), this, SLOT(updateCell(QDate)));
-    updateCell(QDate::currentDate());
 }
 
 void EventCalendar::addNote(const QDate &date)

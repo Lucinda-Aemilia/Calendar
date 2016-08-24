@@ -32,6 +32,16 @@ public slots:
     void activateSchedule(bool toggled);
     void changeCurrentButtonToggleState(int index);
 
+    void attachToDesktop();
+    void detachFromDesktop();
+
+    void setWindowOpacity();
+
+private slots:
+    void on_opacityHorizontalSlider_valueChanged(int value);
+
+    void on_checkBox_stateChanged(int arg1);
+
 private:
     bool enumUserWindowsCB(HWND hwnd, LPARAM lParam);
     HWND findDesktopIconWnd();
@@ -41,6 +51,7 @@ private:
     QPushButton* switchButtons[5];
     CacheEventModel* cacheEventModel;
     HWND desktopHwnd;
+    bool attachedToDesktop;
 };
 
 #endif // MAINWINDOW_H

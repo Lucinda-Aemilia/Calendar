@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // layout()->setSizeConstraint(QLayout::SetFixedSize);
+
     // 初始化stackwidget相关
     ui->stackedWidget->setCurrentIndex(0);
     switchButtons[0] = ui->dayButton;
@@ -59,9 +61,31 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "number of rows: " << tableView->model()->rowCount();
 
     // 设置固定到桌面和透明度
-    desktopHwnd = findDesktopIconWnd();
-    if(desktopHwnd)
-        SetParent((HWND)winId(), desktopHwnd);
+    // attachToDesktop();
+
+}
+
+void MainWindow::attachToDesktop()
+{
+    if (!attachedToDesktop)
+    {
+        ui->opacityHorizontalSlider->setValue(100);
+        desktopHwnd = findDesktopIconWnd();
+        if(desktopHwnd)
+            SetParent((HWND)winId(), desktopHwnd);
+        attachedToDesktop = true;
+    }
+    setWindowOpacity();
+}
+
+void MainWindow::detachFromDesktop()
+{
+    if (attachedToDesktop)
+    {
+        SetParent((HWND)winId(), (HWND)0);
+        attachedToDesktop = false;
+    }
+    setWindowOpacity();
 }
 
 bool MainWindow::enumUserWindowsCB(HWND hwnd, LPARAM lParam)
@@ -185,4 +209,30 @@ void MainWindow::activateSchedule(bool toggled)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_opacityHorizontalSlider_valueChanged(int value)
+{
+    setWindowOpacity();
+}
+
+void MainWindow::setWindowOpacity()
+{
+    if (!attachedToDesktop)
+    {
+        QMainWindow::setWindowOpacity(ui->opacityHorizontalSlider->value() / 100.0);
+    }
+    else
+    {
+    }
+    ui->windowOpacityLabel->setText(QString::number(ui->opacityHorizontalSlider->value()) + "%");
+}
+
+// 是否固定在桌面上
+void MainWindow::on_checkBox_stateChanged(int arg1)
+{
+    if (arg1 == Qt::Checked)
+        attachToDesktop();
+    else
+        detachFromDesktop();
 }
