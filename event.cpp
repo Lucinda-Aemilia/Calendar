@@ -1,9 +1,10 @@
 #include "event.h"
 
-Event::Event(QObject *parent) :
-    QObject(parent), mId(-10), mRepeat(-1)
-{
-}
+Event::Event(QString name, QDateTime startDate, QDateTime endDate, QString description,
+             QString location, QColor color, int repeat, int id, QObject *parent) :
+    mName(name), mStartDate(startDate), mEndDate(endDate), mDescription(description),
+    mLocation(location), mColor(color), mRepeat(repeat), mId(id), QObject(parent)
+{ }
 
 QString Event::name() const
 {

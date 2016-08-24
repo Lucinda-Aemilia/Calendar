@@ -5,11 +5,13 @@
 #include <QHeaderView>
 #include <QComboBox>
 #include <QPushButton>
+#include <QCalendarWidget>
+#include <QTableView>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    sqlEventModel(new SqlEventModel)
+    cacheEventModel(new CacheEventModel)
 {
     ui->setupUi(this);
 
@@ -39,8 +41,20 @@ MainWindow::MainWindow(QWidget *parent) :
     // 测试sql连接
     Event event;
     event.setName("Go to School");
-    sqlEventModel->addEventToDb(&event);
+    cacheEventModel->addEventToDb(&event);
     qDebug() << "event id: " << event.id();
+
+    // 将sqlmodel连接到日历
+    ui->month_calendar->setCacheEventModel(cacheEventModel);
+
+    // 测试透明度
+    // this->setWindowOpacity(0.5);
+
+    // 测试QCalendarWidget的tableView
+    QTableView *tableView = ui->quickCalendar->findChild<QTableView*>("qt_calendar_calendarview");
+    qDebug() << "number of columns: " << tableView->model()->columnCount();
+    qDebug() << "number of rows: " << tableView->model()->rowCount();
+
 }
 
 void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)

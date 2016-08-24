@@ -13,37 +13,47 @@ SqlEventModel::SqlEventModel()
 
 QList<Event*> SqlEventModel::eventsForDate(const QDate &date)
 {
-    const QString queryStr = QString::fromLatin1("SELECT * FROM Event WHERE '%1' >= startDate \
-                                                 AND '%1' <= endDate").arg(date.toString("yyyy-MM-dd"));
+    const QString queryStr = QString("SELECT * FROM %1 WHERE '%2' >= %3 AND '%2' <= %4")
+                                     .arg(EventDbContract::TABLE_NAME)
+                                     .arg(date.toString("yyyy-MM-dd"))
+                                     .arg(EventDbContract::START_DATE)
+                                     .arg(EventDbContract::END_DATE);
     QSqlQuery query(queryStr);
+    qDebug() << queryStr;
     if (!query.exec())
         qFatal("Query failed");
 
     QList<Event*> events;
     while (query.next())
     {
-        Event *event = new Event(this);
-        event->setName(query.value(EventDbContract::NAME).toString());
+        QString name(query.value(EventDbContract::NAME).toString());
 
         QDateTime startDate;
         startDate.setDate(query.value(EventDbContract::START_DATE).toDate());
         startDate.setTime(QTime(0, 0).addSecs(query.value(EventDbContract::START_TIME).toInt()));
-        event->setStartDate(startDate);
 
         QDateTime endDate;
         endDate.setDate(query.value(EventDbContract::END_DATE).toDate());
         endDate.setTime(QTime(0, 0).addSecs(query.value(EventDbContract::END_TIME).toInt()));
-        event->setEndDate(endDate);
 
-        event->setDescription(query.value(EventDbContract::DESCRIPTION).toString());
+        QString description(query.value(EventDbContract::DESCRIPTION).toString());
 
-        event->setLocation(query.value(EventDbContract::LOCATION).toString());
+        QString location(query.value(EventDbContract::LOCATION).toString());
 
         QColor color(query.value(EventDbContract::COLOR).toString());
-        event->setColor(color);
 
+        int id = query.value(EventDbContract::ID).toInt();
+
+        int repeat = query.value(EventDbContract::REPEAT).toInt();
+
+        Event *event = new Event(name, startDate, endDate, description, location,
+                                 color, repeat, id);
         events.append(event);
     }
+
+    qDebug() << "打印sql语句一共找到了多少events";
+    for (int i = 0; i < events.size(); i++)
+        qDebug() << events.at(i)->name();
 
     return events;
 }
@@ -151,6 +161,9 @@ void SqlEventModel::onStartDateChanged(const QDateTime &startDate)
                         .arg(EventDbContract::ID)
                         .arg(event->id()));
     query.exec();
+
+    for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
+        emit oneDayChanged(i);
 }
 
 void SqlEventModel::onEndDateChanged(const QDateTime &endDate)
@@ -171,6 +184,9 @@ void SqlEventModel::onEndDateChanged(const QDateTime &endDate)
                         .arg(EventDbContract::ID)
                         .arg(event->id()));
     query.exec();
+
+    for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
+        emit oneDayChanged(i);
 }
 
 void SqlEventModel::onDescriptionChanged(const QString &description)
@@ -183,6 +199,9 @@ void SqlEventModel::onDescriptionChanged(const QString &description)
                     .arg(EventDbContract::ID)
                     .arg(event->id()));
     query.exec();
+
+    for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
+        emit oneDayChanged(i);
 }
 
 void SqlEventModel::onLocationChanged(const QString &location)
@@ -195,6 +214,9 @@ void SqlEventModel::onLocationChanged(const QString &location)
                     .arg(EventDbContract::ID)
                     .arg(event->id()));
     query.exec();
+
+    for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
+        emit oneDayChanged(i);
 }
 
 
@@ -208,8 +230,25 @@ void SqlEventModel::onColorChanged(const QColor &color)
                     .arg(EventDbContract::ID)
                     .arg(event->id()));
     query.exec();
+
+    for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
+        emit oneDayChanged(i);
 }
 
+void SqlEventModel::onRepeatChanged(const int& repeat)
+{
+    Event* event = qobject_cast<Event*>(QObject::sender());
+    QSqlQuery query(QString("UPDATE %1 SET %2='%3' WHERE %4='%5'")
+                    .arg(EventDbContract::TABLE_NAME)
+                    .arg(EventDbContract::REPEAT)
+                    .arg(repeat)
+                    .arg(EventDbContract::ID)
+                    .arg(event->id()));
+    query.exec();
+
+    for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
+        emit oneDayChanged(i);
+}
 
 /*
     Defines a helper function to open a connection to an

@@ -20,7 +20,10 @@ class Event : public QObject
     Q_PROPERTY(int repeat READ repeat WRITE setRepeat NOTIFY repeatChanged)
 
 public:
-    explicit Event(QObject *parent = 0);
+    explicit Event(QString name= "", QDateTime startDate=QDateTime::currentDateTime(),
+                   QDateTime endDate=QDateTime::currentDateTime(), QString description="",
+                   QString location="", QColor color=QColor("blue"),
+                   int repeat=-1, int id=-10, QObject *parent = 0);
 
     QString name() const;
     void setName(const QString &name);

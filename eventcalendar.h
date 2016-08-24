@@ -1,6 +1,8 @@
 #ifndef EVENTCALENDAR_H
 #define EVENTCALENDAR_H
 
+#include "cacheeventmodel.h"
+
 #include <QCalendarWidget>
 #include <QPainter>
 #include <qcolor>
@@ -26,8 +28,11 @@ public:
     void setColor(QColor& color);
     QColor color() const;
 
+    void setCacheEventModel(CacheEventModel* cacheEventModel);
+
 protected:
     virtual void paintCell(QPainter * painter, const QRect & rect, const QDate & date) const;
+    void updateCell(const QDate &date);
 
 private slots:
     void addNote(const QDate & );
@@ -37,9 +42,7 @@ private:
     QPen m_outlinePen;
     QBrush m_transparentBrush;
 
-    // QVector<QList> eventList;
-    QVector<QDate> dates;
-    QVector<QString> todolist;
+    CacheEventModel* m_cacheEventModel;
 
 };
 

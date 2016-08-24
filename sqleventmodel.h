@@ -24,9 +24,14 @@ public slots:
     void onDescriptionChanged(const QString &description);
     void onLocationChanged(const QString &location);
     void onColorChanged(const QColor &color);
+    void onRepeatChanged(const int& repeat);
 
     void deleteEventFromDb(Event* event);
     void addEventToDb(Event* event);
+
+signals:
+    void oneDayChanged(const QDate& date);
+    void oneDayRefreshed(const QDate& date);
 
 private:
     static void createConnection();
