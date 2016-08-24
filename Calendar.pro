@@ -33,3 +33,6 @@ FORMS    += mainwindow.ui \
     editeventdialog.ui
 
 TRANSLATIONS += cn.ts
+
+DISTFILES += \
+    TransparentStyle.qml

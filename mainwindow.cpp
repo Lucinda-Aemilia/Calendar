@@ -52,8 +52,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // 将sqlmodel连接到日历
     ui->month_calendar->setCacheEventModel(cacheEventModel);
 
-    // 测试透明度
-    // this->setWindowOpacity(0.5);
 
     // 测试QCalendarWidget的tableView
     QTableView *tableView = ui->quickCalendar->findChild<QTableView*>("qt_calendar_calendarview");
@@ -62,7 +60,73 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // 设置固定到桌面和透明度
     // attachToDesktop();
+    setAttribute(Qt::WA_TranslucentBackground);
+    setStyleSheet("background:transparent;");
+    // no window decorations
+    setWindowFlags(Qt::FramelessWindowHint);
+    // setAttribute(Qt::WA_OpaquePaintEvent,true);
+    // setAttribute(Qt::WA_TranslucentBackground, true);
+    setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    setStyleSheet("background:transparent;");
+    // setWindowFlags(Qt::Tool);
+    // setWindowFlags(Qt::FramelessWindowHint);
 
+    // 设置是否冻结
+    mFrozen = false;
+    ui->createButton->installEventFilter(this);
+    QList<QWidget*> lstChildren = findChildren<QWidget*>();
+    foreach (QWidget* pWidget, lstChildren)
+    {
+        if (pWidget != ui->freezeCheckBox)
+            pWidget->installEventFilter(this);
+    }
+
+    // 记下default背景颜色
+    windowDefaultPalette = palette();
+}
+
+bool MainWindow::eventFilter(QObject* obj, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonPress ||
+            event->type() == QEvent::MouseButtonDblClick ||
+            event->type() == QEvent::MouseMove ||
+            event->type() == QEvent::MouseTrackingChange ||
+            event->type() == QEvent::MouseButtonRelease ||
+            event->type() == QEvent::Enter ||
+            event->type() == QEvent::Leave ||
+            event->type() == QEvent::HoverEnter ||
+            event->type() == QEvent::HoverLeave ||
+            event->type() == QEvent::HoverMove ||
+            event->type() == QEvent::FocusIn ||
+            event->type() == QEvent::FocusOut)
+    {
+        // QMouseEvent* mouseEvent = qobject_cast<QMouseEvent*>(event);
+        // qDebug() << "MainWindow::eventFilter" << event << mFrozen;
+        if (mFrozen)
+            return true;
+    }
+    return QMainWindow::eventFilter(obj, event);
+
+}
+
+void MainWindow::freeze(bool frozen)
+{
+    if (frozen)
+    {
+        windowMinSize = this->minimumSize();
+        windowMaxSize = this->maximumSize();
+        QSize curSize(this->size());
+        this->setMinimumSize(curSize);
+        this->setMaximumSize(curSize);
+        // layout()->setSizeConstraint(QLayout::SetFixedSize);
+    }
+    else
+    {
+        // layout()->setSizeConstraint(QLayout::SetNoConstraint);
+        this->setMinimumSize(windowMinSize);
+        this->setMaximumSize(windowMaxSize);
+    }
+    mFrozen = frozen;
 }
 
 void MainWindow::attachToDesktop()
@@ -84,6 +148,8 @@ void MainWindow::detachFromDesktop()
     {
         SetParent((HWND)winId(), (HWND)0);
         attachedToDesktop = false;
+        // 将palette设置回去
+        setPalette(windowDefaultPalette);
     }
     setWindowOpacity();
 }
@@ -218,21 +284,72 @@ void MainWindow::on_opacityHorizontalSlider_valueChanged(int value)
 
 void MainWindow::setWindowOpacity()
 {
+    int value = ui->opacityHorizontalSlider->value();
     if (!attachedToDesktop)
     {
-        QMainWindow::setWindowOpacity(ui->opacityHorizontalSlider->value() / 100.0);
+        QMainWindow::setWindowOpacity(value / 100.0);
+
+        // 把背景palette改回去
+        if (palette() != windowDefaultPalette)
+        {
+            setChildWidgetsPalette(windowDefaultPalette);
+            setPalette(windowDefaultPalette);
+            setAutoFillBackground(true);
+        }
     }
     else
     {
+        // setStyleSheet("background-color:white;");
+
+        // 存下目前的默认palette
+        QPalette pal = palette();
+        QColor oriColor(windowDefaultPalette.color(QPalette::Background));
+        pal.setColor(QPalette::Background,
+                     QColor(oriColor.red(), oriColor.green(), oriColor.blue(),
+                            (int)(value / 100.0 * 255)));
+
+
+        // 改背景palette
+
+        if (palette() != pal)
+        {
+            setChildWidgetsPalette(pal);
+            setPalette(pal);
+            setAutoFillBackground(true);
+        }
+
+
+
+
     }
-    ui->windowOpacityLabel->setText(QString::number(ui->opacityHorizontalSlider->value()) + "%");
+    ui->windowOpacityLabel->setText(QString::number(value) + "%");
 }
 
-// 是否固定在桌面上
-void MainWindow::on_checkBox_stateChanged(int arg1)
+void MainWindow::setChildWidgetsPalette(const QPalette &palette)
+{
+    // 目前发现好像没什么用
+    /*
+    QList<QWidget*> lstChildren = findChildren<QWidget*>();
+    foreach (QWidget* pWidget, lstChildren)
+    {
+        pWidget->setPalette(palette);
+        setAutoFillBackground(true);
+    }
+    */
+}
+
+void MainWindow::on_attachCheckBox_stateChanged(int arg1)
 {
     if (arg1 == Qt::Checked)
         attachToDesktop();
     else
         detachFromDesktop();
+}
+
+void MainWindow::on_freezeCheckBox_stateChanged(int arg1)
+{
+    if (arg1 == Qt::Checked)
+        freeze(true);
+    else
+        freeze(false);
 }

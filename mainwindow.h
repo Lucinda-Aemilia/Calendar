@@ -23,6 +23,8 @@ public:
 
     ~MainWindow();
 
+    bool eventFilter(QObject* obj, QEvent *event);
+
 public slots:
     // 用于关联按钮和stackedwidget之间状态的槽函数
     void activateDay(bool toggled);
@@ -37,10 +39,16 @@ public slots:
 
     void setWindowOpacity();
 
+    void freeze(bool frozen);
+
+    void setChildWidgetsPalette(const QPalette& palette);
+
 private slots:
     void on_opacityHorizontalSlider_valueChanged(int value);
 
-    void on_checkBox_stateChanged(int arg1);
+    void on_attachCheckBox_stateChanged(int arg1);
+
+    void on_freezeCheckBox_stateChanged(int arg1);
 
 private:
     bool enumUserWindowsCB(HWND hwnd, LPARAM lParam);
@@ -52,6 +60,10 @@ private:
     CacheEventModel* cacheEventModel;
     HWND desktopHwnd;
     bool attachedToDesktop;
+    bool mFrozen;
+
+    QSize windowMinSize, windowMaxSize;
+    QPalette windowDefaultPalette;
 };
 
 #endif // MAINWINDOW_H

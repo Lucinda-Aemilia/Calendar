@@ -149,6 +149,18 @@
            </item>
            <item>
             <widget class="QSlider" name="opacityHorizontalSlider">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="minimum">
               <number>50</number>
              </property>
@@ -191,14 +203,14 @@
           </layout>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox">
+          <widget class="QCheckBox" name="attachCheckBox">
            <property name="text">
             <string>Attach To Desktop</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_2">
+          <widget class="QCheckBox" name="freezeCheckBox">
            <property name="text">
             <string>Freeze</string>
            </property>
@@ -489,7 +501,7 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>800</width>
+          <width>850</width>
           <height>800</height>
          </size>
         </property>
@@ -500,7 +512,7 @@
          <enum>QFrame::Sunken</enum>
         </property>
         <property name="currentIndex">
-         <number>4</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="dayPage">
          <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -572,8 +584,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>812</width>
-               <height>788</height>
+               <width>832</width>
+               <height>798</height>
               </rect>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_6">
