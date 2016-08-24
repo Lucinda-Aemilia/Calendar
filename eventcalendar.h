@@ -32,7 +32,6 @@ public:
 
 protected:
     virtual void paintCell(QPainter * painter, const QRect & rect, const QDate & date) const;
-    void updateCell(const QDate &date);
 
 private slots:
     void addNote(const QDate & );
@@ -41,6 +40,9 @@ private:
     QDate m_currentDate;
     QPen m_outlinePen;
     QBrush m_transparentBrush;
+    QPen m_unActivatedDatePen;
+    QPen m_activatedDatePen;
+    QBrush m_hasMemoBrush;
 
     CacheEventModel* m_cacheEventModel;
 

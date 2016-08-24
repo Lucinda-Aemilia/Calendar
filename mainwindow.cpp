@@ -39,10 +39,12 @@ MainWindow::MainWindow(QWidget *parent) :
     initCalendarTable(4, ui->fourDaysTableWidget);
 
     // 测试sql连接
+    /*
     Event event;
     event.setName("Go to School");
     cacheEventModel->addEventToDb(&event);
     qDebug() << "event id: " << event.id();
+    */
 
     // 将sqlmodel连接到日历
     ui->month_calendar->setCacheEventModel(cacheEventModel);

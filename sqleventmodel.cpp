@@ -13,11 +13,15 @@ SqlEventModel::SqlEventModel()
 
 QList<Event*> SqlEventModel::eventsForDate(const QDate &date)
 {
-    const QString queryStr = QString("SELECT * FROM %1 WHERE '%2' >= %3 AND '%2' <= %4")
+    // 排序
+    const QString queryStr = QString("SELECT * FROM %1 WHERE '%2' >= %3 AND '%2' <= %4 \
+ORDER BY %3, %5, %4, %6")
                                      .arg(EventDbContract::TABLE_NAME)
                                      .arg(date.toString("yyyy-MM-dd"))
                                      .arg(EventDbContract::START_DATE)
-                                     .arg(EventDbContract::END_DATE);
+                                     .arg(EventDbContract::END_DATE)
+                                     .arg(EventDbContract::START_TIME)
+                                     .arg(EventDbContract::END_TIME);
     QSqlQuery query(queryStr);
     qDebug() << queryStr;
     if (!query.exec())
@@ -264,9 +268,9 @@ void SqlEventModel::createConnection()
     }
 
     QSqlQuery query;
-    QString queryString = QString("create table %1 (%2 TEXT, %3 DATE, \
-                                  %4 INT, %5 DATE, %6 INT, %7 TEXT, %8 TEXT, \
-                                  %9 INTEGER PRIMARY KEY AUTOINCREMENT, ")
+    QString queryString = QString("create table %1 (%2 TEXT, %3 DATE, %4 INT, \
+%5 DATE, %6 INT, %7 TEXT, %8 TEXT, \
+%9 INTEGER PRIMARY KEY AUTOINCREMENT, ")
             .arg(EventDbContract::TABLE_NAME)
             .arg(EventDbContract::NAME)
             .arg(EventDbContract::START_DATE)

@@ -11,12 +11,24 @@
 
 EventCalendar::EventCalendar(QWidget* parent) : QCalendarWidget(parent)
 {
-    qDebug() << "come in EventCalendar constructor";
-    m_outlinePen.setColor(Qt::red);
-    m_transparentBrush.setColor(Qt::yellow);
+    // qDebug() << "come in EventCalendar constructor";
+    QCalendarWidget::setGridVisible(true);
+    m_outlinePen.setColor(Qt::black);
+    m_outlinePen.setStyle(Qt::DotLine);
+    m_transparentBrush.setColor(Qt::transparent);
+    m_unActivatedDatePen.setColor(QColor("gray"));
+    m_activatedDatePen.setColor(QColor("black"));
+    m_hasMemoBrush.setColor(QColor("yellow"));
     setAcceptDrops(true);
 
     connect(this, SIGNAL(activated(const QDate &)), this, SLOT(addNote(const QDate &)));
+
+    // 设置列宽
+    QTableView *tableView = QCalendarWidget::findChild<QTableView*>("qt_calendar_calendarview");
+    tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+    tableView->setColumnWidth(0, 50);
+    tableView->verticalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+    tableView->setRowHeight(0, 50);
 }
 
 EventCalendar::~EventCalendar()
@@ -64,55 +76,65 @@ QColor EventCalendar::color() const
    return (m_outlinePen.color());
 }
 
-void EventCalendar::updateCell(const QDate &date)
-{
-    QCalendarWidget::updateCell(date);
-
-    qDebug() << "EventCalendar::updateCell";
-    QList<Event*> events = m_cacheEventModel->eventsForDate(date);
-    qDebug() << events.size();
-    if (events.size() > 0)
-    {
-        // 设置背景为黄色
-        QBrush brush;
-        brush.setColor(Qt::yellow);
-        QTextCharFormat cf = this->dateTextFormat(date);
-        cf.setBackground(brush);
-        setDateTextFormat(date, cf);
-    }
-}
-
 void EventCalendar::paintCell(QPainter *painter, const QRect &rect, const QDate &date) const
 {
     // qDebug() << "come in paintCell" << endl;
     QCalendarWidget::paintCell(painter, rect, date);
 
-    /*
-    Q_ASSERT(dates.size()==todolist.size());
-    for (int i = 0; i < dates.size(); i++)
-    {
-       if (date == dates.at(i))
-       {
-           painter->setPen(m_outlinePen);
-           painter->setBrush(m_transparentBrush);
-           painter->drawRect(rect.adjusted(0, 0, -1, -1));
-           painter->drawText(rect,todolist.at(i));
-       }
-    }
-
-    */
-
     QList<Event*> events = m_cacheEventModel->eventsForDate(date);
-    if (events.size() > 0)
+
+    QFont font;
+    font.setFamily("Microsoft Yahei UI");
+    font.setPointSize(9);
+    painter->setFont(font);
+
+    // 先画是否被选中
+    if (date == this->selectedDate())
     {
         painter->setPen(m_outlinePen);
-        painter->setBrush(QBrush(QColor(255, 255, 0, 140)));
-        // 画黄色背景
+        // 白色背景 or 斜线黄色背景，被选中
+        painter->setBrush(QBrush(QColor(0, 162, 232)));
         painter->drawRect(rect.adjusted(0, 0, -1, -1));
-        // qDebug() << "EventCalendar::paintCell  " << date << events.size();
-        painter->drawText(rect, Qt::AlignHCenter, events.at(0)->name());
-        // painter->drawText(rect, "dead");
-        QTableView *tableView = QCalendarWidget::findChild<QTableView*>("qt_calendar_calendarview");
+        painter->setPen(QPen(Qt::transparent));
+    }
+    else
+    {
+        painter->setPen(Qt::transparent);
+        painter->setBrush(Qt::white);
+        painter->drawRect(rect.adjusted(0, 0, -1, -1));
+        painter->setPen(QPen(Qt::transparent));
     }
 
+    // 手画日期之类的
+    if (events.size() > 0)
+    {
+        // memo色背景
+        QColor memoColor(events.at(0)->color());
+        memoColor.setAlphaF(0.3);
+        painter->setBrush(QBrush(memoColor));
+        painter->drawRect(rect.adjusted(0, 0, -1, -1));
+
+        // 日期和待办事项
+        if (date.month() == this->monthShown())
+            painter->setPen(m_activatedDatePen);
+        else
+            painter->setPen(m_unActivatedDatePen);
+        QString wordsToShow;
+        wordsToShow += date.toString("d") + '\n';
+        for (int i = 0; i != events.size(); i++)
+        {
+            // painter->setPen(QPen(QColor(events.at(i)->color())));
+            wordsToShow += events.at(i)->name() + '\n';
+        }
+        painter->drawText(rect, Qt::AlignHCenter, wordsToShow);
+    }
+    else
+    {
+        // 写日期
+        if (date.month() == this->monthShown())
+            painter->setPen(m_activatedDatePen);
+        else
+            painter->setPen(m_unActivatedDatePen);
+        painter->drawText(rect, Qt::AlignCenter, date.toString("d"));
+    }
 }
