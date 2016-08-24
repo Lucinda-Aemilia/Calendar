@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>EditEventDialog</class>
+ <widget class="QDialog" name="EditEventDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>438</width>
-    <height>462</height>
+    <width>400</width>
+    <height>665</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,10 +21,13 @@
        <property name="text">
         <string>Event Name</string>
        </property>
+       <property name="buddy">
+        <cstring>eventNameLineEdit</cstring>
+       </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit">
+      <widget class="QLineEdit" name="eventNameLineEdit">
        <property name="clearButtonEnabled">
         <bool>false</bool>
        </property>
@@ -37,7 +40,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QDateTimeEdit" name="dateTimeEdit"/>
+        <widget class="QDateTimeEdit" name="startDateTimeEdit"/>
        </item>
        <item>
         <widget class="QLabel" name="label">
@@ -47,19 +50,32 @@
         </widget>
        </item>
        <item>
-        <widget class="QDateTimeEdit" name="dateTimeEdit_2"/>
+        <widget class="QDateTimeEdit" name="endDateTimeEdit"/>
        </item>
       </layout>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="allDayCheckBox">
        <property name="text">
         <string>All Day</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_2">
+      <widget class="QCheckBox" name="repeatCheckBox">
        <property name="text">
         <string>Repeat</string>
        </property>
@@ -68,86 +84,75 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="eventDetailsGroupBox">
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>250</height>
+      </size>
+     </property>
      <property name="title">
       <string>Event Details</string>
      </property>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>50</y>
-        <width>133</width>
-        <height>53</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Description</string>
-         </property>
-         <property name="buddy">
-          <cstring>locationLineEditor</cstring>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTextEdit" name="textEdit"/>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>133</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Location</string>
-         </property>
-         <property name="buddy">
-          <cstring>locationLineEditor</cstring>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="locationLineEdit"/>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>120</y>
-        <width>91</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_7">
-       <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Color</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox"/>
-       </item>
-      </layout>
-     </widget>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Location</string>
+        </property>
+        <property name="buddy">
+         <cstring>locationLineEdit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="locationLineEdit">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Description</string>
+        </property>
+        <property name="buddy">
+         <cstring>textEdit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QTextEdit" name="textEdit">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>50</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Color</string>
+        </property>
+        <property name="buddy">
+         <cstring>comboBox</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QComboBox" name="comboBox"/>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="repetitionGroupBox">
      <property name="title">
       <string>Repetition</string>
      </property>
@@ -156,6 +161,9 @@
        <widget class="QLabel" name="label_6">
         <property name="text">
          <string>Repeat</string>
+        </property>
+        <property name="buddy">
+         <cstring>comboBox_2</cstring>
         </property>
        </widget>
       </item>
@@ -167,12 +175,18 @@
         <property name="text">
          <string>Frequency</string>
         </property>
+        <property name="buddy">
+         <cstring>comboBox_3</cstring>
+        </property>
        </widget>
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
          <string>Time</string>
+        </property>
+        <property name="buddy">
+         <cstring>comboBox_4</cstring>
         </property>
        </widget>
       </item>
@@ -183,6 +197,9 @@
        <widget class="QLabel" name="label_9">
         <property name="text">
          <string>Start Date</string>
+        </property>
+        <property name="buddy">
+         <cstring>dateEdit</cstring>
         </property>
        </widget>
       </item>
@@ -300,34 +317,82 @@
  <resources/>
  <connections>
   <connection>
+   <sender>startDateTimeEdit</sender>
+   <signal>dateTimeChanged(QDateTime)</signal>
+   <receiver>dateEdit</receiver>
+   <slot>setDateTime(QDateTime)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>74</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>198</x>
+     <y>482</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>repeatCheckBox</sender>
+   <signal>released()</signal>
+   <receiver>repetitionGroupBox</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>371</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>35</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>repeatCheckBox</sender>
+   <signal>released()</signal>
+   <receiver>repetitionGroupBox</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>361</x>
+     <y>51</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>66</x>
+     <y>331</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>EditEventDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>650</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
+     <x>-3</x>
+     <y>639</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>EditEventDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>333</x>
+     <y>650</y>
     </hint>
     <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>399</x>
+     <y>650</y>
     </hint>
    </hints>
   </connection>

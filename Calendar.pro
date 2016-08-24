@@ -18,16 +18,18 @@ SOURCES += main.cpp\
     sqleventmodel.cpp \
     event.cpp \
     eventcalendar.cpp \
-    cacheeventmodel.cpp
+    cacheeventmodel.cpp \
+    editeventdialog.cpp
 
 HEADERS  += mainwindow.h \
     eventdbcontract.h \
     sqleventmodel.h \
     event.h \
     eventcalendar.h \
-    cacheeventmodel.h
+    cacheeventmodel.h \
+    editeventdialog.h
 
 FORMS    += mainwindow.ui \
-    editdialog.ui
+    editeventdialog.ui
 
 TRANSLATIONS += cn.ts

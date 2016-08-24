@@ -1,6 +1,6 @@
 #include "eventcalendar.h"
+#include "editeventdialog.h"
 
-#include "eventcalendar.h"
 #include <QtWidgets>
 #include <QInputDialog>
 #include <QTextCharFormat>
@@ -49,6 +49,10 @@ void EventCalendar::addNote( const QDate &date )
     qDebug()<<"come in addNote"<<endl;
     QString memo = QInputDialog::getText(this,
             "Memo", "Description:" );
+
+    EditEventDialog* editEventDialog = new EditEventDialog(this);
+    int result = editEventDialog->exec();
+    delete editEventDialog;
 
     if( !memo.isEmpty() ){
         QBrush brush;
