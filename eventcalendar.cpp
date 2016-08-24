@@ -44,13 +44,14 @@ void EventCalendar::setCacheEventModel(CacheEventModel* cacheEventModel)
     updateCell(QDate::currentDate());
 }
 
-void EventCalendar::addNote( const QDate &date )
+void EventCalendar::addNote(const QDate &date)
 {
     qDebug()<<"come in addNote"<<endl;
     QString memo = QInputDialog::getText(this,
             "Memo", "Description:" );
 
     EditEventDialog* editEventDialog = new EditEventDialog(this);
+    editEventDialog->init();
     int result = editEventDialog->exec();
     delete editEventDialog;
 

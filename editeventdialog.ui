@@ -125,16 +125,6 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
-       <widget class="QTextEdit" name="textEdit">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>50</height>
-         </size>
-        </property>
-       </widget>
-      </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
@@ -147,6 +137,28 @@
       </item>
       <item row="6" column="1">
        <widget class="QComboBox" name="comboBox"/>
+      </item>
+      <item row="5" column="1">
+       <widget class="QTextEdit" name="textEdit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -163,12 +175,12 @@
          <string>Repeat</string>
         </property>
         <property name="buddy">
-         <cstring>comboBox_2</cstring>
+         <cstring>repeatComboBox</cstring>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="comboBox_2"/>
+       <widget class="QComboBox" name="repeatComboBox"/>
       </item>
       <item row="3" column="0" colspan="2">
        <widget class="QLabel" name="label_7">
@@ -176,7 +188,7 @@
          <string>Frequency</string>
         </property>
         <property name="buddy">
-         <cstring>comboBox_3</cstring>
+         <cstring>comboBox_2</cstring>
         </property>
        </widget>
       </item>
@@ -224,9 +236,12 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QRadioButton" name="radioButton">
+          <widget class="QRadioButton" name="repeatNeverRadioButton">
            <property name="text">
             <string>Never</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -268,7 +283,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDateEdit" name="dateEdit_2"/>
+            <widget class="QDateEdit" name="repeatEndDateEdit"/>
            </item>
            <item>
             <widget class="QLabel" name="label_14">
@@ -297,13 +312,13 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QComboBox" name="comboBox_3"/>
+       <widget class="QComboBox" name="comboBox_2"/>
       </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
+    <widget class="QDialogButtonBox" name="dialogButtonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -333,39 +348,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>repeatCheckBox</sender>
-   <signal>released()</signal>
-   <receiver>repetitionGroupBox</receiver>
-   <slot>hide()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>371</x>
-     <y>47</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>35</x>
-     <y>324</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>repeatCheckBox</sender>
-   <signal>released()</signal>
-   <receiver>repetitionGroupBox</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>361</x>
-     <y>51</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>66</x>
-     <y>331</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
+   <sender>dialogButtonBox</sender>
    <signal>accepted()</signal>
    <receiver>EditEventDialog</receiver>
    <slot>accept()</slot>
@@ -381,7 +364,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>dialogButtonBox</sender>
    <signal>rejected()</signal>
    <receiver>EditEventDialog</receiver>
    <slot>reject()</slot>

@@ -19,6 +19,15 @@ public:
     ~EditEventDialog();
     void init(Event* event = NULL);
 
+private slots:
+    void on_startDateTimeEdit_dateTimeChanged(const QDateTime &dateTime);
+
+    void on_repeatCheckBox_stateChanged(int arg1);
+
+    void on_endDateTimeEdit_dateChanged(const QDate &date);
+
+    void on_allDayCheckBox_stateChanged(int arg1);
+
 private:
     Ui::EditEventDialog *ui;
     EditFlag mEditFlag;
