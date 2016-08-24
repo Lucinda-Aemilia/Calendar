@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "windows.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -57,7 +58,36 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "number of columns: " << tableView->model()->columnCount();
     qDebug() << "number of rows: " << tableView->model()->rowCount();
 
+    // 设置固定到桌面和透明度
+    desktopHwnd = findDesktopIconWnd();
+    if(desktopHwnd)
+        SetParent((HWND)winId(), desktopHwnd);
 }
+
+bool MainWindow::enumUserWindowsCB(HWND hwnd, LPARAM lParam)
+{
+    long wflags = GetWindowLong(hwnd, GWL_STYLE);
+    if(!(wflags & WS_VISIBLE)) return TRUE;
+
+    HWND sndWnd;
+    if( !(sndWnd=FindWindowEx(hwnd, NULL, L"SHELLDLL_DefView", NULL)) ) return TRUE;
+
+    HWND targetWnd;
+    if( !(targetWnd=FindWindowEx(sndWnd, NULL, L"SysListView32", L"FolderView")) ) return TRUE;
+
+    HWND* resultHwnd = (HWND*)lParam;
+    *resultHwnd = targetWnd;
+
+    return FALSE;
+}
+
+HWND MainWindow::findDesktopIconWnd()
+{
+    HWND resultHwnd = NULL;
+    EnumWindows((WNDENUMPROC)&enumUserWindowsCB, (LPARAM)&resultHwnd);
+    return resultHwnd;
+}
+
 
 void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)
 {

@@ -29,6 +29,14 @@ EventCalendar::EventCalendar(QWidget* parent) : QCalendarWidget(parent)
     tableView->setColumnWidth(0, 50);
     tableView->verticalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
     tableView->setRowHeight(0, 50);
+
+    // widget测试
+    /*
+    QComboBox *comBox = new QComboBox();
+    comBox->addItem("Y");
+    comBox->addItem("N");
+    tableView->setIndexWidget(tableView->model()->index(1, 1), comBox);
+    */
 }
 
 EventCalendar::~EventCalendar()

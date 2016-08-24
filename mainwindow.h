@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "cacheeventmodel.h"
+#include "windows.h"
 
 #include <QMainWindow>
 #include <QPushButton>
@@ -32,9 +33,14 @@ public slots:
     void changeCurrentButtonToggleState(int index);
 
 private:
+    bool enumUserWindowsCB(HWND hwnd, LPARAM lParam);
+    HWND findDesktopIconWnd();
+
+
     Ui::MainWindow *ui;
     QPushButton* switchButtons[5];
     CacheEventModel* cacheEventModel;
+    HWND desktopHwnd;
 };
 
 #endif // MAINWINDOW_H
