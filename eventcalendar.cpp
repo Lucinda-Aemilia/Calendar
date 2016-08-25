@@ -57,7 +57,7 @@ void EventCalendar::addNote(const QDate &date)
     QString memo = QInputDialog::getText(this,
             "Memo", "Description:" );
     */
-    CreatNewEventDialog* editEventDialog = new CreatNewEventDialog(this);
+    CreateNewEventDialog* editEventDialog = new CreateNewEventDialog(this);
     editEventDialog->init(m_cacheEventModel, NULL, QDateTime(date, QTime::currentTime()),
                           QDateTime(date, QTime::currentTime()));
 
@@ -126,6 +126,7 @@ void EventCalendar::paintCell(QPainter *painter, const QRect &rect, const QDate 
         painter->setPen(QPen(Qt::transparent));
     }
 
+    /*
     // 手画日期之类的
     if (events.size() > 0)
     {
@@ -158,4 +159,5 @@ void EventCalendar::paintCell(QPainter *painter, const QRect &rect, const QDate 
             painter->setPen(m_unActivatedDatePen);
         painter->drawText(rect, Qt::AlignCenter, date.toString("d"));
     }
+    */
 }

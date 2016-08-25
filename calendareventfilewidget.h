@@ -30,6 +30,8 @@ private slots:
     void refreshEvents(const QDate& date);
     void refreshFiles();
 
+    void on_addEventPushButton_clicked();
+
 private:
     Ui::CalendarEventFileWidget *ui;
     QDate mCurDate;

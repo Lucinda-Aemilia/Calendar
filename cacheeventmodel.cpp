@@ -98,7 +98,7 @@ void CacheEventModel::deleteEvent(Event *event)
 
 void CacheEventModel::refreshEventInDays(Event* event)
 {
-    for (QDate i (event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
+    for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
         refreshOneDay(i);
 }
 
@@ -120,6 +120,7 @@ void CacheEventModel::refreshOneDay(const QDate &date)
 
     iter.value() = SqlEventModel::eventsForDate(date);
 
+    qDebug() << "refresh on day" << date;
     emit oneDayRefreshed(date);
 }
 

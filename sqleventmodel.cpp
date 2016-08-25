@@ -55,9 +55,11 @@ ORDER BY %3, %5, %4, %6")
         events.append(event);
     }
 
+    /*
     qDebug() << "打印sql语句一共找到了多少events";
     for (int i = 0; i < events.size(); i++)
         qDebug() << events.at(i)->name();
+    */
 
     return events;
 }

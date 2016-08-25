@@ -55,7 +55,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // 将sqlmodel连接到日历
     ui->month_calendar->setCacheEventModel(cacheEventModel);
     // 设置日历widget
-    on_month_calendar_currentPageChanged(0, 0);
+    on_month_calendar_currentPageChanged(QDate::currentDate().year(),
+                                         QDate::currentDate().month());
 
 
     // 测试QCalendarWidget的tableView
@@ -300,7 +301,7 @@ void MainWindow::changeCurrentButtonToggleState(int index)
 
 void MainWindow::activateDay(bool toggled)
 {
-    qDebug() << "active day" << toggled;
+    // qDebug() << "active day" << toggled;
     if (toggled)
         ui->stackedWidget->setCurrentIndex(0);
 }
@@ -453,21 +454,85 @@ void MainWindow::on_month_calendar_selectionChanged()
 
 void MainWindow::on_month_calendar_currentPageChanged(int year, int month)
 {
+    year = ui->month_calendar->yearShown();
+    month = ui->month_calendar->monthShown();
+
     QTableView *tableView = ui->month_calendar->findChild<QTableView*>("qt_calendar_calendarview");
     int height = tableView->horizontalHeader()->count();
     int width = tableView->verticalHeader()->count();
 
     // 如果是null那就先都加上
-    if (tableView->indexWidget(tableView->model()->index(1, 1)) == 0)
-    for (int i = 1; i < height; i++)
+    if (tableView->indexWidget(tableView->model()->index(1, 1)) == NULL)
     {
-        for (int j = 1; j < width; j++)
+        int flag = -1;
+        for (int i = 1; i < width; i++)
         {
-            int date = tableView->model()->index(j, i).data().toInt();
-            int month = ui->month_calendar->monthShown();
-            int year = ui->month_calendar->yearShown();
-            CalendarEventFileWidget* widget = new CalendarEventFileWidget(cacheEventModel, QDate(year, month, date));
-            tableView->setIndexWidget(tableView->model()->index(j, i), widget);
+            for (int j = 1; j < height; j++)
+            {
+                int curDate = tableView->model()->index(i, j).data().toInt();
+                int curYear = year, curMonth = month;
+                // qDebug() << "add" << year << month << date;
+
+                if (flag == -1 && curDate != 1)
+                {
+                    curMonth--;
+                    //continue;
+                }
+                else if (flag == -1 && curDate == 1)
+                    flag = 0;
+                else if (flag == 1)
+                {
+                    curMonth++;
+                    //continue;
+                }
+                else if (flag == 0 && curDate == 1)
+                {
+                    curMonth++;
+                    flag = 1;
+                    //continue;
+                }
+
+                CalendarEventFileWidget* widget = new CalendarEventFileWidget(
+                            cacheEventModel, QDate(curYear, curMonth, curDate));
+                tableView->setIndexWidget(tableView->model()->index(i, j), widget);
+            }
+        }
+    }
+    else
+    {
+        int flag = -1;
+        for (int i = 1; i < width; i++)
+        {
+            for (int j = 1; j < height; j++)
+            {
+                int curDate = tableView->model()->index(i, j).data().toInt();
+                int curYear = year, curMonth = month;
+                // qDebug() << "add" << year << month << date;
+
+                if (flag == -1 && curDate != 1)
+                {
+                    curMonth--;
+                    //continue;
+                }
+                else if (flag == -1 && curDate == 1)
+                    flag = 0;
+                else if (flag == 1)
+                {
+                    curMonth++;
+                    //continue;
+                }
+                else if (flag == 0 && curDate == 1)
+                {
+                    curMonth++;
+                    flag = 1;
+                   // continue;
+                }
+
+                qDebug() << "modify" << curYear << curMonth << curDate;
+                CalendarEventFileWidget* widget = qobject_cast<CalendarEventFileWidget*>
+                        (tableView->indexWidget(tableView->model()->index(i, j)));
+                widget->setCurDate(QDate(curYear, curMonth, curDate));
+            }
         }
     }
 
