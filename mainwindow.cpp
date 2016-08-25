@@ -59,21 +59,40 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "number of rows: " << tableView->model()->rowCount();
 
     // 设置固定到桌面和透明度
+    // windowFlags = windowFlags();
     // attachToDesktop();
-    setAttribute(Qt::WA_TranslucentBackground);
-    setStyleSheet("background:transparent;");
+    // setAttribute(Qt::WA_TranslucentBackground);
+    // setStyleSheet("background:transparent;");
     // no window decorations
-    setWindowFlags(Qt::FramelessWindowHint);
+    // setWindowFlags(Qt::WindowStaysOnTopHint);
+    // setWindowFlags(Qt::WindowStaysOnBottomHint);
     // setAttribute(Qt::WA_OpaquePaintEvent,true);
+    // setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint);
     // setAttribute(Qt::WA_TranslucentBackground, true);
-    setAttribute(Qt::WA_TransparentForMouseEvents, true);
-    setStyleSheet("background:transparent;");
+    // setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
+    /*
+    QList<QWidget*> lstChildren = findChildren<QWidget*>();
+    foreach (QWidget* pWidget, lstChildren)
+    {
+        if (pWidget != ui->freezeCheckBox && pWidget != ui->settingsGroupBox)
+        {
+            pWidget->setAttribute(Qt::WA_TranslucentBackground, true);
+            pWidget->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        }
+    }
+    */
+
     // setWindowFlags(Qt::Tool);
     // setWindowFlags(Qt::FramelessWindowHint);
+    /*
+    etWindowFlags(Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground, true);
+    setAttribute(Qt::WA_TransparentForMouseEvents, true);
+     * */
 
     // 设置是否冻结
     mFrozen = false;
-    ui->createButton->installEventFilter(this);
     QList<QWidget*> lstChildren = findChildren<QWidget*>();
     foreach (QWidget* pWidget, lstChildren)
     {
@@ -101,7 +120,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent *event)
             event->type() == QEvent::FocusOut)
     {
         // QMouseEvent* mouseEvent = qobject_cast<QMouseEvent*>(event);
-        // qDebug() << "MainWindow::eventFilter" << event << mFrozen;
+        qDebug() << "MainWindow::eventFilter" << event->type() << mFrozen;
         if (mFrozen)
             return true;
     }
@@ -111,7 +130,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent *event)
 
 void MainWindow::freeze(bool frozen)
 {
-    if (frozen)
+    if (frozen && !mFrozen)
     {
         windowMinSize = this->minimumSize();
         windowMaxSize = this->maximumSize();
@@ -119,12 +138,45 @@ void MainWindow::freeze(bool frozen)
         this->setMinimumSize(curSize);
         this->setMaximumSize(curSize);
         // layout()->setSizeConstraint(QLayout::SetFixedSize);
+
+        /*
+        QList<QWidget*> lstChildren = findChildren<QWidget*>();
+        foreach (QWidget* pWidget, lstChildren)
+        {
+            if (pWidget != ui->freezeCheckBox)
+            {
+                pWidget->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+            }
+        }
+        */
+
+        setWindowFlags(Qt::FramelessWindowHint);
+        // windowFlags();
+        // setAttribute(Qt::WA_TranslucentBackground, true);
+        // setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        show();
     }
-    else
+    else if (!frozen && mFrozen)
     {
         // layout()->setSizeConstraint(QLayout::SetNoConstraint);
         this->setMinimumSize(windowMinSize);
         this->setMaximumSize(windowMaxSize);
+
+        /*
+        QList<QWidget*> lstChildren = findChildren<QWidget*>();
+        foreach (QWidget* pWidget, lstChildren)
+        {
+            if (pWidget != ui->freezeCheckBox)
+            {
+                pWidget->setAttribute(Qt::WA_TransparentForMouseEvents, false);
+            }
+        }
+        */
+
+        setWindowFlags(Qt::Window);
+        // setAttribute(Qt::WA_TranslucentBackground, false);
+        // setAttribute(Qt::WA_TransparentForMouseEvents, false);
+        show();
     }
     mFrozen = frozen;
 }
@@ -317,10 +369,6 @@ void MainWindow::setWindowOpacity()
             setPalette(pal);
             setAutoFillBackground(true);
         }
-
-
-
-
     }
     ui->windowOpacityLabel->setText(QString::number(value) + "%");
 }

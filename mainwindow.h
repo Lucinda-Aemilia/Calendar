@@ -64,6 +64,7 @@ private:
 
     QSize windowMinSize, windowMaxSize;
     QPalette windowDefaultPalette;
+    int windowFlags;
 };
 
 #endif // MAINWINDOW_H

@@ -121,7 +121,7 @@
          <string>Description</string>
         </property>
         <property name="buddy">
-         <cstring>textEdit</cstring>
+         <cstring>descriptionTextEdit</cstring>
         </property>
        </widget>
       </item>
@@ -131,15 +131,15 @@
          <string>Color</string>
         </property>
         <property name="buddy">
-         <cstring>comboBox</cstring>
+         <cstring>clorComboBox</cstring>
         </property>
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="QComboBox" name="comboBox"/>
+       <widget class="QComboBox" name="clorComboBox"/>
       </item>
       <item row="5" column="1">
-       <widget class="QTextEdit" name="textEdit">
+       <widget class="QTextEdit" name="descriptionTextEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
           <horstretch>0</horstretch>
@@ -188,7 +188,7 @@
          <string>Frequency</string>
         </property>
         <property name="buddy">
-         <cstring>comboBox_2</cstring>
+         <cstring>frequencyComboBox</cstring>
         </property>
        </widget>
       </item>
@@ -198,12 +198,12 @@
          <string>Time</string>
         </property>
         <property name="buddy">
-         <cstring>comboBox_4</cstring>
+         <cstring>timeComboBox</cstring>
         </property>
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="QComboBox" name="comboBox_4"/>
+       <widget class="QComboBox" name="timeComboBox"/>
       </item>
       <item row="9" column="0" colspan="2">
        <widget class="QLabel" name="label_9">
@@ -211,12 +211,12 @@
          <string>Start Date</string>
         </property>
         <property name="buddy">
-         <cstring>dateEdit</cstring>
+         <cstring>repeatStartDateEdit</cstring>
         </property>
        </widget>
       </item>
       <item row="11" column="1">
-       <widget class="QDateEdit" name="dateEdit">
+       <widget class="QDateEdit" name="repeatStartDateEdit">
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -248,14 +248,14 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
-            <widget class="QRadioButton" name="radioButton_2">
+            <widget class="QRadioButton" name="repeatTimesRadioButton">
              <property name="text">
               <string>After Repeating</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="spinBox">
+            <widget class="QSpinBox" name="repeatTimesSpinBox">
              <property name="minimum">
               <number>1</number>
              </property>
@@ -276,7 +276,7 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
-            <widget class="QRadioButton" name="radioButton_3">
+            <widget class="QRadioButton" name="repeatEndTimeRadioButton">
              <property name="text">
               <string>End Date: </string>
              </property>
@@ -286,7 +286,7 @@
             <widget class="QDateEdit" name="repeatEndDateEdit"/>
            </item>
            <item>
-            <widget class="QLabel" name="label_14">
+            <widget class="QLabel" name="repeatEndDateLabel">
              <property name="text">
               <string>TextLabel</string>
              </property>
@@ -305,14 +305,14 @@
        </widget>
       </item>
       <item row="15" column="1">
-       <widget class="QLabel" name="label_13">
+       <widget class="QLabel" name="repeatSummaryLabel">
         <property name="text">
          <string>TextLabel</string>
         </property>
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QComboBox" name="comboBox_2"/>
+       <widget class="QComboBox" name="frequencyComboBox"/>
       </item>
      </layout>
     </widget>
@@ -334,7 +334,7 @@
   <connection>
    <sender>startDateTimeEdit</sender>
    <signal>dateTimeChanged(QDateTime)</signal>
-   <receiver>dateEdit</receiver>
+   <receiver>repeatStartDateEdit</receiver>
    <slot>setDateTime(QDateTime)</slot>
    <hints>
     <hint type="sourcelabel">
