@@ -59,9 +59,7 @@ private slots:
     void on_repeatEndTimeRadioButton_toggled(bool checked);
 
 private:
-
     QString getWeekDayName(const QDate& date);
-
     Ui::CreateNewEventDialog *ui;
     QString mName;
     QDateTime mStartDate, mEndDate;

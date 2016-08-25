@@ -156,7 +156,8 @@ void CalendarEventFileWidget::on_eventComboBox_activated(int index)
     if (index != ui->eventComboBox->currentIndex())
         return;
 
-    ViewEventDialog* dialog = new ViewEventDialog;
+    // ViewEventDialog* dialog = new ViewEventDialog;
+    CreateNewEventDialog* dialog = new CreateNewEventDialog;
     dialog->init(mCacheEventModel, mEvents.at(index));
     int result = dialog->exec();
     if (result = QDialog::Accepted)
