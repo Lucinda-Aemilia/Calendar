@@ -63,6 +63,72 @@ ORDER BY %3, %5, %4, %6")
 }
 
 // slot functions
+void SqlEventModel::deleteEventFromDb(Event *event, int deleteRepeatDirect)
+{
+    // 删除重复事件
+    if (deleteRepeatDirect == 0)
+    {
+        deleteEventFromDb(event);
+        return;
+    }
+    else if (deleteRepeatDirect == -1 || deleteRepeatDirect == 1) // 全部删除
+    {
+        QSqlQuery query;
+        QString queryString;
+        queryString = QString("SELECT * FROM %1 ROM %1 WHERE %2='%3' AND  \
+%4='%5' AND %6='%7' AND %8='%9' AND")
+                .arg(EventDbContract::TABLE_NAME)
+                .arg(EventDbContract::NAME)
+                .arg(event->name())
+                .arg(EventDbContract::DESCRIPTION)
+                .arg(event->description())
+                .arg(EventDbContract::START_TIME)
+                .arg(QTime(0, 0).secsTo(event->startDate().time()))
+                .arg(EventDbContract::END_TIME)
+                .arg(QTime(0, 0).secsTo(event->endDate().time()));
+
+        queryString += QString("%1='%2' AND %3='%4' AND %5='%6' AND %7='%8'")
+                .arg(EventDbContract::LOCATION)
+                .arg(event->location())
+                .arg(EventDbContract::COLOR)
+                .arg(event->color().name());
+
+        if (deleteRepeatDirect > 0)
+        {
+            queryString += QString("AND %1>='%2'").arg(EventDbContract::START_DATE)
+                    .arg(event->startDate().date().toString("yyyy-MM-dd"));
+        }
+        queryString += ')';
+
+        query.exec(queryString);
+        if (query.isActive())
+        {
+            while (query.next())
+            {
+                QString repeat = query.value(EventDbContract::REPEAT).toString();
+                int repeatFatherId = repeat.split(',').at(0).toInt();
+                if (repeatFatherId == event->repeat().split(',').at(0).toInt())
+                {
+                    int id = query.value(EventDbContract::REPEAT).toInt();
+                    deleteEventFromDb(id);
+                }
+            }
+        }
+    }
+}
+
+void SqlEventModel::deleteEventFromDb(int id)
+{
+    QSqlQuery query;
+    QString queryString;
+    queryString = QString("DELETE FROM %1 WHERE %2='%3'")
+            .arg(EventDbContract::TABLE_NAME)
+            .arg(EventDbContract::ID)
+            .arg(id);
+    query.prepare(queryString);
+    query.exec();
+}
+
 void SqlEventModel::deleteEventFromDb(Event *event)
 {
     QSqlQuery query;
@@ -78,7 +144,7 @@ void SqlEventModel::deleteEventFromDb(Event *event)
                           .arg(event->startDate().toString("yyyy-MM-dd"))
                           .arg(EventDbContract::START_TIME)
                           .arg(QTime(0, 0).secsTo(event->startDate().time()));
-    queryString += QString("%1='%2' AND %3='%4' AND %5='%6' AND %7='%8'")
+    queryString += QString("%1='%2' AND %3='%4' AND %5='%6' AND %7='%8')")
             .arg(EventDbContract::END_DATE)
             .arg(event->endDate().toString("yyyy-MM-dd"))
             .arg(EventDbContract::END_TIME)
@@ -133,6 +199,13 @@ void SqlEventModel::addEventToDb(Event *event)
                .arg(EventDbContract::ID));
     query.first();
     event->setId(query.value(EventDbContract::ID).toInt());
+
+    // 连接槽函数
+    connect(event, SIGNAL(nameChanged(QString)), this, SLOT(onEventNameChanged(QString)));
+    connect(event, SIGNAL(startDateChanged(QDateTime)), this, SLOT(onStartDateChanged(QDateTime)));
+    connect(event, SIGNAL(endDateChanged(QDateTime)), this, SLOT(onEndDateChanged(QDateTime)));
+    // to do
+    connect(event, SIGNAL(repeatChanged(QString)), this, SLOT(onRepeatChanged(QString)));
 }
 
 void SqlEventModel::onEventNameChanged(const QString &name)

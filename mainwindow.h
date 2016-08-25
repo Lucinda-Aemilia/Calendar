@@ -65,6 +65,7 @@ private slots:
 private:
     bool enumUserWindowsCB(HWND hwnd, LPARAM lParam);
     HWND findDesktopIconWnd();
+    void changeDisplayDate(int increment);
 
 
     Ui::MainWindow *ui;

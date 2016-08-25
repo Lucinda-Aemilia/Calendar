@@ -405,18 +405,32 @@ void MainWindow::on_freezeCheckBox_stateChanged(int arg1)
         freeze(false);
 }
 
+// 各种情况
 // 将日历转到上个月的本日
 void MainWindow::on_leftSwitchButton_clicked()
 {
-    QDate date = ui->month_calendar->selectedDate();
-    date = date.addMonths(-1);
-    ui->quickCalendar->setSelectedDate(date);
+    changeDisplayDate(-1);
 }
 
 void MainWindow::on_rightSwitchButton_clicked()
 {
-    QDate date = ui->month_calendar->selectedDate();
-    date = date.addMonths(1);
+    changeDisplayDate(1);
+}
+
+void MainWindow::changeDisplayDate(int increment)
+{
+    QDate date = ui->quickCalendar->selectedDate();
+    if (ui->stackedWidget->currentIndex() == 0) // day
+        date = date.addDays(increment);
+    else if (ui->stackedWidget->currentIndex() == 1) // week
+        date = date.addDays(increment * 7);
+    else if (ui->stackedWidget->currentIndex() == 2) // month
+        date = date.addMonths(increment);
+    else if (ui->stackedWidget->currentIndex() == 3) // 4 days
+        date = date.addDays(increment * 4);
+    else if (ui->stackedWidget->currentIndex() == 4) // schedule
+        date = date.addDays(increment * 7);
+
     ui->quickCalendar->setSelectedDate(date);
 }
 

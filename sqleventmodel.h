@@ -26,7 +26,9 @@ public slots:
     void onColorChanged(const QColor &color);
     void onRepeatChanged(const QString &repeat);
 
+    void deleteEventFromDb(Event *event, int deleteRepeatDirect); // 默认只删除自己
     void deleteEventFromDb(Event* event);
+    void deleteEventFromDb(int id);
     void addEventToDb(Event* event);
 
 signals:
