@@ -649,33 +649,7 @@
         <widget class="QWidget" name="schedulePage">
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QListWidget" name="listWidget">
-            <item>
-             <property name="text">
-              <string>edit</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>新建项目</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>新建项目</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>新建项目</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>新建项目</string>
-             </property>
-            </item>
-           </widget>
+           <widget class="QComboBox" name="comboBox"/>
           </item>
          </layout>
         </widget>

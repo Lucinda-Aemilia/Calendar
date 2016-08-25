@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "windows.h"
+#include "createneweventdialog.h"
+#include "calendareventfilewidget.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -451,39 +453,56 @@ void MainWindow::on_month_calendar_selectionChanged()
 
 void MainWindow::on_month_calendar_currentPageChanged(int year, int month)
 {
-    /*
     QTableView *tableView = ui->month_calendar->findChild<QTableView*>("qt_calendar_calendarview");
     int height = tableView->horizontalHeader()->count();
     int width = tableView->verticalHeader()->count();
 
-    if (tableView->indexWidget(tableView->model()->index(1, 1)) == NULL)
+    // 如果是null那就先都加上
+    if (tableView->indexWidget(tableView->model()->index(1, 1)) == 0)
+    for (int i = 1; i < height; i++)
     {
-        for (int i = 1; i < height; i++)
+        for (int j = 1; j < width; j++)
         {
-            for (int j = 1; j < width; j++)
+            int date = tableView->model()->index(j, i).data().toInt();
+            int month = ui->month_calendar->monthShown();
+            int year = ui->month_calendar->yearShown();
+            CalendarEventFileWidget* widget = new CalendarEventFileWidget(cacheEventModel, QDate(year, month, date));
+            tableView->setIndexWidget(tableView->model()->index(j, i), widget);
+        }
+    }
+
+    /*
+    for (int i = 1; i < height; i++)
+    {
+        for (int j = 1; j < width; j++)
+        {
+            // QComboBox *comBox = new QComboBox();
+            // comBox->addItem("Y");
+            // comBox->addItem("N");
+            if (tableView->indexWidget(tableView->model()->index(j, i)) != NULL)
             {
-                // QComboBox *comBox = new QComboBox();
-                // comBox->addItem("Y");
-                // comBox->addItem("N");
-                int date = tableView->model()->index(j, i).data().toInt();
-                qDebug() << "tableview" << date;
-                QTableWidget* tableWidget = new QTableWidget(3, 2, ui->month_calendar);
-                tableWidget->setSpan(0, 0, 1, 2);
-                tableWidget->horizontalHeader()->setVisible(false);
-                tableWidget->verticalHeader()->setVisible(false);
-                tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers); // 不能编辑
-                tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
-                tableWidget->horizontalHeader()->setStretchLastSection(true); // 设置占满并均分
-                tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-                tableWidget->verticalHeader()->setStretchLastSection(true); // 设置占满并均分
-                tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
-                // QSignalMapper *m = new QSignalMapper(this);
-                // connect(tableWidget, SIGNAL(cellDoubleClicked(int,int)), m, SLOT(map(int, int)));
-
-                tableWidget->setItem(0, 0, new QTableWidgetItem(QString::number(date)));
-                tableView->setIndexWidget(tableView->model()->index(j, i), tableWidget);
+                // delete tableView->indexWidget(tableView->model()->index(j, i));
+                tableView->setIndexWidget(tableView->model()->index(j, i), NULL);
             }
+
+            int date = tableView->model()->index(j, i).data().toInt();
+            qDebug() << "tableview" << date;
+            QTableWidget* tableWidget = new QTableWidget(3, 2, ui->month_calendar);
+            tableWidget->setSpan(0, 0, 1, 2);
+            tableWidget->horizontalHeader()->setVisible(false);
+            tableWidget->verticalHeader()->setVisible(false);
+            tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers); // 不能编辑
+            tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+            tableWidget->horizontalHeader()->setStretchLastSection(true); // 设置占满并均分
+            tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+            tableWidget->verticalHeader()->setStretchLastSection(true); // 设置占满并均分
+            tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+            // QSignalMapper *m = new QSignalMapper(this);
+            // connect(tableWidget, SIGNAL(cellDoubleClicked(int,int)), m, SLOT(map(int, int)));
+
+            tableWidget->setItem(0, 0, new QTableWidgetItem(QString::number(date)));
+            tableView->setIndexWidget(tableView->model()->index(j, i), tableWidget);
         }
     }
     */
