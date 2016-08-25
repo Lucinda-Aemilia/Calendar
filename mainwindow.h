@@ -50,6 +50,18 @@ private slots:
 
     void on_freezeCheckBox_stateChanged(int arg1);
 
+    void on_leftSwitchButton_clicked();
+
+    void on_rightSwitchButton_clicked();
+
+    void on_todayButton_clicked();
+
+    void on_quickCalendar_selectionChanged();
+
+    void on_month_calendar_selectionChanged();
+
+    void on_month_calendar_currentPageChanged(int year, int month);
+
 private:
     bool enumUserWindowsCB(HWND hwnd, LPARAM lParam);
     HWND findDesktopIconWnd();

@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QCalendarWidget>
 #include <QTableView>
+#include <QModelIndex>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -51,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // 将sqlmodel连接到日历
     ui->month_calendar->setCacheEventModel(cacheEventModel);
+    // 设置日历widget
+    on_month_calendar_currentPageChanged(0, 0);
 
 
     // 测试QCalendarWidget的tableView
@@ -120,7 +123,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent *event)
             event->type() == QEvent::FocusOut)
     {
         // QMouseEvent* mouseEvent = qobject_cast<QMouseEvent*>(event);
-        qDebug() << "MainWindow::eventFilter" << event->type() << mFrozen;
+        // qDebug() << "MainWindow::eventFilter" << event->type() << mFrozen;
         if (mFrozen)
             return true;
     }
@@ -400,4 +403,74 @@ void MainWindow::on_freezeCheckBox_stateChanged(int arg1)
         freeze(true);
     else
         freeze(false);
+}
+
+// 将日历转到上个月的本日
+void MainWindow::on_leftSwitchButton_clicked()
+{
+    QDate date = ui->month_calendar->selectedDate();
+    date = date.addMonths(-1);
+    ui->quickCalendar->setSelectedDate(date);
+}
+
+void MainWindow::on_rightSwitchButton_clicked()
+{
+    QDate date = ui->month_calendar->selectedDate();
+    date = date.addMonths(1);
+    ui->quickCalendar->setSelectedDate(date);
+}
+
+void MainWindow::on_todayButton_clicked()
+{
+    ui->quickCalendar->setSelectedDate(QDate::currentDate());
+}
+
+void MainWindow::on_quickCalendar_selectionChanged()
+{
+    ui->month_calendar->setSelectedDate(ui->quickCalendar->selectedDate());
+}
+
+void MainWindow::on_month_calendar_selectionChanged()
+{
+    ui->quickCalendar->setSelectedDate(ui->month_calendar->selectedDate());
+}
+
+void MainWindow::on_month_calendar_currentPageChanged(int year, int month)
+{
+    /*
+    QTableView *tableView = ui->month_calendar->findChild<QTableView*>("qt_calendar_calendarview");
+    int height = tableView->horizontalHeader()->count();
+    int width = tableView->verticalHeader()->count();
+
+    if (tableView->indexWidget(tableView->model()->index(1, 1)) == NULL)
+    {
+        for (int i = 1; i < height; i++)
+        {
+            for (int j = 1; j < width; j++)
+            {
+                // QComboBox *comBox = new QComboBox();
+                // comBox->addItem("Y");
+                // comBox->addItem("N");
+                int date = tableView->model()->index(j, i).data().toInt();
+                qDebug() << "tableview" << date;
+                QTableWidget* tableWidget = new QTableWidget(3, 2, ui->month_calendar);
+                tableWidget->setSpan(0, 0, 1, 2);
+                tableWidget->horizontalHeader()->setVisible(false);
+                tableWidget->verticalHeader()->setVisible(false);
+                tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers); // 不能编辑
+                tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+                tableWidget->horizontalHeader()->setStretchLastSection(true); // 设置占满并均分
+                tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+                tableWidget->verticalHeader()->setStretchLastSection(true); // 设置占满并均分
+                tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+                QSignalMapper *m = new QSignalMapper(this);
+                connect(tableWidget, SIGNAL(cellDoubleClicked(int,int)), m, SLOT(map(int, int)));
+
+                tableWidget->setItem(0, 0, new QTableWidgetItem(QString::number(date)));
+                tableView->setIndexWidget(tableView->model()->index(j, i), tableWidget);
+            }
+        }
+    }
+    */
 }

@@ -22,15 +22,72 @@ EditEventDialog::~EditEventDialog()
     delete ui;
 }
 
-void EditEventDialog::init(Event *event, const QDateTime& startDate,
+Event* EditEventDialog::getEvent()
+{
+    qDebug() << "EditEventDialog::~EditEventDialog()";
+    // 先写添加事件
+    // 如果有repeat，我需要在这里手动添加
+    Event* event = new Event(mName, mStartDate, mEndDate, mDescription,
+                             mLocation, mColor, mRepeat);
+    mCacheEventModel->addEvent(event);
+
+    // 接下来，如果是编辑，而且有改变，那么就删除原来的事件，直接添加一些。
+}
+
+void EditEventDialog::init(CacheEventModel* cacheEventModel, Event *event, const QDateTime& startDate,
                            const QDateTime& endDate)
 {
+    mCacheEventModel = cacheEventModel;
+
+    // 设置初值（如果是edit）或者默认值
     if (event != NULL)
     {
         ui->dialogButtonBox->addButton(QDialogButtonBox::Save);
+
+        ui->eventNameLineEdit->setText(event->name());
+        ui->startDateTimeEdit->setDateTime(event->startDate());
+        ui->endDateTimeEdit->setDateTime(event->endDate());
+
+        QStringList repeatList(event->repeat().split(','));
+        if (repeatList.at(0).toInt() != -1)
+            ui->repeatCheckBox->setChecked(true);
+        else
+            ui->repeatCheckBox->setChecked(false);
+
+        ui->locationLineEdit->setText(event->location());
+        ui->descriptionTextEdit->setPlainText(event->description());
+
+        if (event->color() == Qt::white)
+            ui->colorComboBox->setCurrentIndex(0);
+        else if (event->color() == Qt::red)
+            ui->colorComboBox->setCurrentIndex(1);
+        else if (event->color() == Qt::green)
+            ui->colorComboBox->setCurrentIndex(2);
+        else if (event->color() == Qt::blue)
+            ui->colorComboBox->setCurrentIndex(3);
+        else if (event->color() == Qt::cyan)
+            ui->colorComboBox->setCurrentIndex(4);
+        else if (event->color() == Qt::magenta)
+            ui->colorComboBox->setCurrentIndex(5);
+        else if (event->color() == Qt::yellow)
+            ui->colorComboBox->setCurrentIndex(6);
+        else if (event->color() == Qt::gray)
+            ui->colorComboBox->setCurrentIndex(7);
+        else if (event->color() == Qt::lightGray)
+            ui->colorComboBox->setCurrentIndex(8);
     }
 
-    // 设置初值（如果是edit）或者默认值
+    else
+    {
+        ui->eventNameLineEdit->setText(tr("Untitled Event"));
+        ui->startDateTimeEdit->setDateTime(startDate);
+        ui->endDateTimeEdit->setDateTime(endDate);
+        ui->repeatCheckBox->setChecked(false);
+        ui->locationLineEdit->setText("");
+        ui->descriptionTextEdit->setPlainText("");
+        ui->colorComboBox->setCurrentIndex(3);
+
+    }
 }
 
 // 结束的时间日期必须比开始的时间日期大
@@ -46,9 +103,15 @@ void EditEventDialog::on_repeatCheckBox_stateChanged(int arg1)
     // qDebug() << "EditEventDialog::on_repeatCheckBox_stateChanged" << arg1;
 
     if (arg1 == Qt::Unchecked)
+    {
         ui->repetitionGroupBox->hide();
+        mRepeat = -1;
+    }
     else if (arg1 == Qt::Checked)
+    {
         ui->repetitionGroupBox->show();
+        mRepeat = 1;
+    }
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 }
 
@@ -144,4 +207,17 @@ QString EditEventDialog::getWeekDayName(const QDate &date)
     }
 
     return dayName;
+}
+
+void EditEventDialog::on_repeatComboBox_currentIndexChanged(int index)
+{
+    if (index == 1)
+        ui->repeatTimeLabel->setText(getWeekDayName(ui->startDateTimeEdit->date()));
+    else
+        ui->repeatTimeLabel->setText("");
+}
+
+void EditEventDialog::on_colorComboBox_currentTextChanged(const QString &arg1)
+{
+    mColor = QColor(arg1);
 }

@@ -53,26 +53,36 @@ void EventCalendar::setCacheEventModel(CacheEventModel* cacheEventModel)
 void EventCalendar::addNote(const QDate &date)
 {
     qDebug()<<"come in addNote"<<endl;
+    /*
     QString memo = QInputDialog::getText(this,
             "Memo", "Description:" );
-
+    */
     EditEventDialog* editEventDialog = new EditEventDialog(this);
-    editEventDialog->init();
-    int result = editEventDialog->exec();
-    delete editEventDialog;
+    editEventDialog->init(m_cacheEventModel, NULL, QDateTime(date, QTime::currentTime()),
+                          QDateTime(date, QTime::currentTime()));
 
-    if( !memo.isEmpty() ){
+    int result = editEventDialog->exec();
+
+    // delete editEventDialog;
+
+    // if( !memo.isEmpty() ){
+    if (result == QDialog::Accepted)
+    {
+        Event* newEvent = editEventDialog->getEvent();
+        /*
         QBrush brush;
         brush.setColor(Qt::yellow);
 
         QTextCharFormat cf = this->dateTextFormat(date);
         cf.setBackground(brush);
         this->setDateTextFormat(date, cf);
+        */
 
+        /*
         Event* event = new Event(memo, QDateTime(date, QTime(0, 0)),
                                  QDateTime(date, QTime(23, 59, 59)));
         m_cacheEventModel->addEvent(event);
-
+        */
     }
 
 }

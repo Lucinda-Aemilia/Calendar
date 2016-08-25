@@ -2,6 +2,7 @@
 #define EDITEVENTDIALOG_H
 
 #include "event.h"
+#include "cacheeventmodel.h"
 
 #include <QDialog>
 
@@ -17,8 +18,9 @@ public:
     enum EditFlag { create, edit };
     explicit EditEventDialog(QWidget *parent = 0);
     ~EditEventDialog();
-    void init(Event* event = NULL, const QDateTime &startDate = QDateTime::currentDateTime(),
+    void init(CacheEventModel* cacheEventModel, Event* event = NULL, const QDateTime &startDate = QDateTime::currentDateTime(),
               const QDateTime &endDate = QDateTime::currentDateTime().addSecs(3600));
+    Event* getEvent();
 
 private slots:
     void on_startDateTimeEdit_dateTimeChanged(const QDateTime &dateTime);
@@ -43,6 +45,10 @@ private slots:
 
     void on_startDateTimeEdit_dateChanged(const QDate &date);
 
+    void on_repeatComboBox_currentIndexChanged(int index);
+
+    void on_colorComboBox_currentTextChanged(const QString &arg1);
+
 private:
     QString getWeekDayName(const QDate& date);
 
@@ -53,7 +59,9 @@ private:
     QString mDescription;
     QString mLocation;
     QColor mColor;
-    int mRepeat;
+    QString mRepeat;
+
+    CacheEventModel* mCacheEventModel;
 };
 
 #endif // EDITEVENTDIALOG_H
