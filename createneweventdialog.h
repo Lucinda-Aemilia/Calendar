@@ -7,7 +7,7 @@
 #include <QDialog>
 
 namespace Ui {
-class EditEventDialog;
+class CreateNewEventDialog;
 }
 
 class CreateNewEventDialog : public QDialog
@@ -15,7 +15,7 @@ class CreateNewEventDialog : public QDialog
     Q_OBJECT
 
 public:
-    enum EditFlag { create, edit };
+
     explicit CreateNewEventDialog(QWidget *parent = 0);
     ~CreateNewEventDialog();
     void init(CacheEventModel* cacheEventModel, Event* event = NULL, const QDateTime &startDate = QDateTime::currentDateTime(),
@@ -59,10 +59,10 @@ private slots:
     void on_repeatEndTimeRadioButton_toggled(bool checked);
 
 private:
+
     QString getWeekDayName(const QDate& date);
 
-    Ui::EditEventDialog *ui;
-    EditFlag mEditFlag;
+    Ui::CreateNewEventDialog *ui;
     QString mName;
     QDateTime mStartDate, mEndDate;
     QString mDescription;

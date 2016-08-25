@@ -22,6 +22,12 @@ public:
     QDate curDate() const;
     void setCurDate(const QDate& curDate);
 
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dropEvent(QDropEvent *event);
+
 signals:
     void curDateChanged(const QDate& curDate);
 
@@ -31,6 +37,10 @@ private slots:
     void refreshFiles();
 
     void on_addEventPushButton_clicked();
+
+    void on_eventComboBox_currentIndexChanged(int index);
+
+    void on_eventComboBox_activated(int index);
 
 private:
     Ui::CalendarEventFileWidget *ui;

@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     eventcalendar.cpp \
     cacheeventmodel.cpp \
     createneweventdialog.cpp \
-    calendareventfilewidget.cpp
+    calendareventfilewidget.cpp \
+    vieweventdialog.cpp
 
 HEADERS  += mainwindow.h \
     eventdbcontract.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     eventcalendar.h \
     cacheeventmodel.h \
     createneweventdialog.h \
-    calendareventfilewidget.h
+    calendareventfilewidget.h \
+    vieweventdialog.h
 
 FORMS    += mainwindow.ui \
     createneweventdialog.ui \

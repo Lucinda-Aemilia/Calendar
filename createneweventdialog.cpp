@@ -6,7 +6,7 @@
 
 CreateNewEventDialog::CreateNewEventDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::EditEventDialog)
+    ui(new Ui::CreateNewEventDialog)
 {
     ui->setupUi(this);
 
@@ -42,54 +42,18 @@ void CreateNewEventDialog::init(CacheEventModel* cacheEventModel, Event *event, 
 
     // 设置初值（如果是edit）或者默认值
     if (event != NULL)
-    {
-        ui->dialogButtonBox->addButton(QDialogButtonBox::Save);
+        event = NULL;
 
-        ui->eventNameLineEdit->setText(event->name());
-        ui->startDateTimeEdit->setDateTime(event->startDate());
-        ui->endDateTimeEdit->setDateTime(event->endDate());
+    ui->eventNameLineEdit->setText(tr("Untitled Event"));
+    ui->startDateTimeEdit->setDateTime(startDate);
+    ui->endDateTimeEdit->setDateTime(endDate);
+    ui->repeatCheckBox->setChecked(false);
+    ui->locationLineEdit->setText("");
+    ui->descriptionTextEdit->setPlainText("");
+    ui->colorComboBox->setCurrentIndex(3);
 
-        QStringList repeatList(event->repeat().split(','));
-        if (repeatList.at(0).toInt() != -1)
-            ui->repeatCheckBox->setChecked(true);
-        else
-            ui->repeatCheckBox->setChecked(false);
+    ui->repeatCheckBox->setChecked(false);
 
-        ui->locationLineEdit->setText(event->location());
-        ui->descriptionTextEdit->setPlainText(event->description());
-
-        if (event->color() == Qt::white)
-            ui->colorComboBox->setCurrentIndex(0);
-        else if (event->color() == Qt::red)
-            ui->colorComboBox->setCurrentIndex(1);
-        else if (event->color() == Qt::green)
-            ui->colorComboBox->setCurrentIndex(2);
-        else if (event->color() == Qt::blue)
-            ui->colorComboBox->setCurrentIndex(3);
-        else if (event->color() == Qt::cyan)
-            ui->colorComboBox->setCurrentIndex(4);
-        else if (event->color() == Qt::magenta)
-            ui->colorComboBox->setCurrentIndex(5);
-        else if (event->color() == Qt::yellow)
-            ui->colorComboBox->setCurrentIndex(6);
-        else if (event->color() == Qt::gray)
-            ui->colorComboBox->setCurrentIndex(7);
-        else if (event->color() == Qt::lightGray)
-            ui->colorComboBox->setCurrentIndex(8);
-    }
-
-    else
-    {
-        ui->eventNameLineEdit->setText(tr("Untitled Event"));
-        ui->startDateTimeEdit->setDateTime(startDate);
-        ui->endDateTimeEdit->setDateTime(endDate);
-        ui->repeatCheckBox->setChecked(false);
-        ui->locationLineEdit->setText("");
-        ui->descriptionTextEdit->setPlainText("");
-        ui->colorComboBox->setCurrentIndex(3);
-
-        ui->repeatCheckBox->setChecked(false);
-    }
 }
 
 // 结束的时间日期必须比开始的时间日期大
