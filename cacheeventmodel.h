@@ -25,6 +25,7 @@ public:
 
 public slots:
     void refreshOneDay(const QDate& date);
+    void refreshEventInDays(Event* event);
 
 private:
     void readOneYear(int year);

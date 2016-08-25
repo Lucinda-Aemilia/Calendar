@@ -1,4 +1,5 @@
 #include "cacheeventmodel.h"
+#include "event.h"
 
 #include <QDebug>
 
@@ -22,9 +23,67 @@ void CacheEventModel::addEvent(Event *event)
 {
     qDebug() << "CacheEventModel::addEvent  " << event->name();
     SqlEventModel::addEventToDb(event);
-    for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
+    refreshEventInDays(event);
+
+    // 如果event有重复
+    QStringList repeatList(event->repeat().split(','));
+    int times = repeatList.at(3).toInt();
+    int frequency = repeatList.at(2).toInt();
+    QString time(repeatList.at(1));
+    int id = event->id();
+
+    QString repeat = QString("%1,%2,%3,%4").arg(id).arg(time).arg(frequency).arg(times);
+    event->setRepeat(repeat);
+    QDateTime startDate(event->startDate());
+    QDateTime endDate(event->endDate());
+
+    if (time == "day")
     {
-        refreshOneDay(i);
+        for (int i = 1; i < times; i++)
+        {
+            Event* newEvent = new Event(event->name(), startDate.addDays(frequency * i),
+                            endDate.addDays(frequency * i),
+                            event->description(), event->location(), event->color(),
+                            repeat);
+            SqlEventModel::addEventToDb(newEvent);
+            refreshEventInDays(newEvent);
+        }
+    }
+    else if (time == "week")
+    {
+        for (int i = 1; i < times; i++)
+        {
+            Event* newEvent = new Event(event->name(), startDate.addDays(frequency * i * 7),
+                            endDate.addDays(frequency * i * 7),
+                            event->description(), event->location(), event->color(),
+                            repeat);
+            SqlEventModel::addEventToDb(newEvent);
+            refreshEventInDays(newEvent);
+        }
+    }
+    else if (time == "month")
+    {
+        for (int i = 1; i < times; i++)
+        {
+            Event* newEvent = new Event(event->name(), startDate.addMonths(frequency * i),
+                            endDate.addDays(frequency * i),
+                            event->description(), event->location(), event->color(),
+                            repeat);
+            SqlEventModel::addEventToDb(newEvent);
+            refreshEventInDays(newEvent);
+        }
+    }
+    else if (time == "year")
+    {
+        for (int i = 1; i < times; i++)
+        {
+            Event* newEvent = new Event(event->name(), startDate.addYears(frequency * i),
+                            endDate.addYears(frequency * i),
+                            event->description(), event->location(), event->color(),
+                            repeat);
+            SqlEventModel::addEventToDb(newEvent);
+            refreshEventInDays(newEvent);
+        }
     }
 }
 
@@ -35,6 +94,12 @@ void CacheEventModel::deleteEvent(Event *event)
     {
         refreshOneDay(i);
     }
+}
+
+void CacheEventModel::refreshEventInDays(Event* event)
+{
+    for (QDate i (event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
+        refreshOneDay(i);
 }
 
 void CacheEventModel::refreshOneDay(const QDate &date)

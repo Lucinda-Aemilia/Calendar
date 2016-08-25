@@ -273,12 +273,16 @@ void CreatNewEventDialog::generateRepeat()
                     times++;
                 break;
             case 2: // month
-                for (QDate i(mStartDate.date()); i <= endDate; i = i.addMonths(frequency))
+                for (int i = 0; mStartDate.date().addMonths(i*frequency) <= endDate; i++)
+                {
                     times++;
+                }
                 break;
             case 3: // year
-                for (QDate i(mStartDate.date()); i <= endDate; i = i.addYears(frequency))
+                for (int i = 0; mStartDate.date().addYears(i*frequency) <= endDate; i++)
+                {
                     times++;
+                }
                 break;
             }
         }

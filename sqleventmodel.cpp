@@ -96,6 +96,7 @@ void SqlEventModel::deleteEventFromDb(Event *event)
     query.exec();
 }
 
+// 添加时需要考虑重复的问题
 void SqlEventModel::addEventToDb(Event *event)
 {
     QSqlQuery query;
