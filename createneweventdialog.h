@@ -10,14 +10,14 @@ namespace Ui {
 class EditEventDialog;
 }
 
-class EditEventDialog : public QDialog
+class CreatNewEventDialog : public QDialog
 {
     Q_OBJECT
 
 public:
     enum EditFlag { create, edit };
-    explicit EditEventDialog(QWidget *parent = 0);
-    ~EditEventDialog();
+    explicit CreatNewEventDialog(QWidget *parent = 0);
+    ~CreatNewEventDialog();
     void init(CacheEventModel* cacheEventModel, Event* event = NULL, const QDateTime &startDate = QDateTime::currentDateTime(),
               const QDateTime &endDate = QDateTime::currentDateTime().addSecs(3600));
     Event* getEvent();

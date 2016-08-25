@@ -1,10 +1,10 @@
-#include "editeventdialog.h"
+#include "createneweventdialog.h"
 #include "ui_editeventdialog.h"
 
 #include <QDebug>
 #include <QRadioButton>
 
-EditEventDialog::EditEventDialog(QWidget *parent) :
+CreatNewEventDialog::CreatNewEventDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::EditEventDialog)
 {
@@ -18,12 +18,12 @@ EditEventDialog::EditEventDialog(QWidget *parent) :
    layout()->setSizeConstraint(QLayout::SetFixedSize);
 }
 
-EditEventDialog::~EditEventDialog()
+CreatNewEventDialog::~CreatNewEventDialog()
 {
     delete ui;
 }
 
-Event* EditEventDialog::getEvent()
+Event* CreatNewEventDialog::getEvent()
 {
     qDebug() << "EditEventDialog::~EditEventDialog()";
     // 先写添加事件
@@ -35,7 +35,7 @@ Event* EditEventDialog::getEvent()
     // 接下来，如果是编辑，而且有改变，那么就删除原来的事件，直接添加一些。
 }
 
-void EditEventDialog::init(CacheEventModel* cacheEventModel, Event *event, const QDateTime& startDate,
+void CreatNewEventDialog::init(CacheEventModel* cacheEventModel, Event *event, const QDateTime& startDate,
                            const QDateTime& endDate)
 {
     mCacheEventModel = cacheEventModel;
@@ -93,14 +93,14 @@ void EditEventDialog::init(CacheEventModel* cacheEventModel, Event *event, const
 }
 
 // 结束的时间日期必须比开始的时间日期大
-void EditEventDialog::on_startDateTimeEdit_dateTimeChanged(const QDateTime &dateTime)
+void CreatNewEventDialog::on_startDateTimeEdit_dateTimeChanged(const QDateTime &dateTime)
 {
     ui->endDateTimeEdit->setMinimumDateTime(dateTime);
     mStartDate = dateTime;
 }
 
 // 是否显示关于重复的groupbox
-void EditEventDialog::on_repeatCheckBox_stateChanged(int arg1)
+void CreatNewEventDialog::on_repeatCheckBox_stateChanged(int arg1)
 {
     // qDebug() << "EditEventDialog::on_repeatCheckBox_stateChanged" << arg1;
 
@@ -119,14 +119,14 @@ void EditEventDialog::on_repeatCheckBox_stateChanged(int arg1)
 }
 
 // 重复的结束日期必须大于结束的日期
-void EditEventDialog::on_endDateTimeEdit_dateChanged(const QDate &date)
+void CreatNewEventDialog::on_endDateTimeEdit_dateChanged(const QDate &date)
 {
     ui->repeatEndDateEdit->setMinimumDate(date);
 }
 
 // 如果为全天，则使两个datetimeedit disable。
 // 设置开始和结束时间
-void EditEventDialog::on_allDayCheckBox_stateChanged(int arg1)
+void CreatNewEventDialog::on_allDayCheckBox_stateChanged(int arg1)
 {
     if (arg1 == Qt::Unchecked)
     {
@@ -143,46 +143,46 @@ void EditEventDialog::on_allDayCheckBox_stateChanged(int arg1)
 }
 
 // 改变后面显示的星期数
-void EditEventDialog::on_repeatEndDateEdit_dateChanged(const QDate &date)
+void CreatNewEventDialog::on_repeatEndDateEdit_dateChanged(const QDate &date)
 {
     ui->repeatEndDateLabel->setText(getWeekDayName(date));
     generateRepeat();
 }
 
-void EditEventDialog::on_eventNameLineEdit_textChanged(const QString &arg1)
+void CreatNewEventDialog::on_eventNameLineEdit_textChanged(const QString &arg1)
 {
     mName = arg1;
 }
 
 // 改结束时间
-void EditEventDialog::on_endDateTimeEdit_dateTimeChanged(const QDateTime &dateTime)
+void CreatNewEventDialog::on_endDateTimeEdit_dateTimeChanged(const QDateTime &dateTime)
 {
     mEndDate = dateTime;
 }
 
-void EditEventDialog::on_locationLineEdit_textChanged(const QString &arg1)
+void CreatNewEventDialog::on_locationLineEdit_textChanged(const QString &arg1)
 {
     mLocation = arg1;
 }
 
-void EditEventDialog::on_descriptionTextEdit_textChanged()
+void CreatNewEventDialog::on_descriptionTextEdit_textChanged()
 {
     mDescription = ui->descriptionTextEdit->toPlainText();
 }
 
-void EditEventDialog::on_clorComboBox_currentIndexChanged(const QString &arg1)
+void CreatNewEventDialog::on_clorComboBox_currentIndexChanged(const QString &arg1)
 {
     mColor = QColor(arg1);
 }
 
 
 
-void EditEventDialog::on_startDateTimeEdit_dateChanged(const QDate &date)
+void CreatNewEventDialog::on_startDateTimeEdit_dateChanged(const QDate &date)
 {
     ui->repeatTimeLabel->setText(getWeekDayName(date));
 }
 
-QString EditEventDialog::getWeekDayName(const QDate &date)
+QString CreatNewEventDialog::getWeekDayName(const QDate &date)
 {
     QString dayName;
     switch (date.dayOfWeek())
@@ -213,7 +213,7 @@ QString EditEventDialog::getWeekDayName(const QDate &date)
     return dayName;
 }
 
-void EditEventDialog::on_repeatComboBox_currentIndexChanged(int index)
+void CreatNewEventDialog::on_repeatComboBox_currentIndexChanged(int index)
 {
     if (index == 1)
         ui->repeatTimeLabel->setText(getWeekDayName(ui->startDateTimeEdit->date()));
@@ -222,12 +222,12 @@ void EditEventDialog::on_repeatComboBox_currentIndexChanged(int index)
     generateRepeat();
 }
 
-void EditEventDialog::on_colorComboBox_currentTextChanged(const QString &arg1)
+void CreatNewEventDialog::on_colorComboBox_currentTextChanged(const QString &arg1)
 {
     mColor = QColor(arg1);
 }
 
-void EditEventDialog::generateRepeat()
+void CreatNewEventDialog::generateRepeat()
 {
     QString repeat;
     if (ui->repeatCheckBox->checkState() == Qt::Unchecked)
@@ -289,22 +289,22 @@ void EditEventDialog::generateRepeat()
     qDebug() << "Repeat style:" << mRepeat;
 }
 
-void EditEventDialog::on_frequencyComboBox_currentIndexChanged(int index)
+void CreatNewEventDialog::on_frequencyComboBox_currentIndexChanged(int index)
 {
     generateRepeat();
 }
 
-void EditEventDialog::on_repeatTimesRadioButton_toggled(bool checked)
+void CreatNewEventDialog::on_repeatTimesRadioButton_toggled(bool checked)
 {
     generateRepeat();
 }
 
-void EditEventDialog::on_repeatTimesSpinBox_valueChanged(int arg1)
+void CreatNewEventDialog::on_repeatTimesSpinBox_valueChanged(int arg1)
 {
     generateRepeat();
 }
 
-void EditEventDialog::on_repeatEndTimeRadioButton_toggled(bool checked)
+void CreatNewEventDialog::on_repeatEndTimeRadioButton_toggled(bool checked)
 {
     generateRepeat();
 }

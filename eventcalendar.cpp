@@ -1,5 +1,5 @@
 #include "eventcalendar.h"
-#include "editeventdialog.h"
+#include "createneweventdialog.h"
 
 #include <QtWidgets>
 #include <QInputDialog>
@@ -57,7 +57,7 @@ void EventCalendar::addNote(const QDate &date)
     QString memo = QInputDialog::getText(this,
             "Memo", "Description:" );
     */
-    EditEventDialog* editEventDialog = new EditEventDialog(this);
+    CreatNewEventDialog* editEventDialog = new CreatNewEventDialog(this);
     editEventDialog->init(m_cacheEventModel, NULL, QDateTime(date, QTime::currentTime()),
                           QDateTime(date, QTime::currentTime()));
 
