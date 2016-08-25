@@ -2,6 +2,7 @@
 #include "ui_editeventdialog.h"
 
 #include <QDebug>
+#include <QRadioButton>
 
 EditEventDialog::EditEventDialog(QWidget *parent) :
     QDialog(parent),
@@ -87,6 +88,7 @@ void EditEventDialog::init(CacheEventModel* cacheEventModel, Event *event, const
         ui->descriptionTextEdit->setPlainText("");
         ui->colorComboBox->setCurrentIndex(3);
 
+        ui->repeatCheckBox->setChecked(false);
     }
 }
 
@@ -113,6 +115,7 @@ void EditEventDialog::on_repeatCheckBox_stateChanged(int arg1)
         mRepeat = 1;
     }
     layout()->setSizeConstraint(QLayout::SetFixedSize);
+    generateRepeat();
 }
 
 // 重复的结束日期必须大于结束的日期
@@ -143,6 +146,7 @@ void EditEventDialog::on_allDayCheckBox_stateChanged(int arg1)
 void EditEventDialog::on_repeatEndDateEdit_dateChanged(const QDate &date)
 {
     ui->repeatEndDateLabel->setText(getWeekDayName(date));
+    generateRepeat();
 }
 
 void EditEventDialog::on_eventNameLineEdit_textChanged(const QString &arg1)
@@ -215,9 +219,92 @@ void EditEventDialog::on_repeatComboBox_currentIndexChanged(int index)
         ui->repeatTimeLabel->setText(getWeekDayName(ui->startDateTimeEdit->date()));
     else
         ui->repeatTimeLabel->setText("");
+    generateRepeat();
 }
 
 void EditEventDialog::on_colorComboBox_currentTextChanged(const QString &arg1)
 {
     mColor = QColor(arg1);
+}
+
+void EditEventDialog::generateRepeat()
+{
+    QString repeat;
+    if (ui->repeatCheckBox->checkState() == Qt::Unchecked)
+    {
+        repeat = "-1,,,";
+    }
+    else
+    {
+        repeat += "1,";
+        switch (ui->repeatComboBox->currentIndex())
+        {
+        case 0:
+            repeat += "day,";
+            break;
+        case 1:
+            repeat += "week,";
+            break;
+        case 2:
+            repeat += "month,";
+            break;
+        case 3:
+            repeat += "year,";
+            break;
+        }
+        repeat += QString::number(ui->frequencyComboBox->currentIndex() + 1) + ",";
+
+        // 从结束日期计算次数
+        int times = 0;
+        int frequency = ui->frequencyComboBox->currentIndex() + 1;
+        if (ui->repeatTimesRadioButton->isChecked())
+            times = ui->repeatTimesSpinBox->value();
+        else
+        {
+            QDate endDate(ui->repeatEndDateEdit->date());
+            switch (ui->repeatComboBox->currentIndex())
+            {
+            case 0: // day
+                for (QDate i(mStartDate.date()); i <= endDate; i = i.addDays(frequency))
+                    times++;
+                break;
+            case 1: // week
+                for (QDate i(mStartDate.date()); i <= endDate; i = i.addDays(7 * frequency))
+                    times++;
+                break;
+            case 2: // month
+                for (QDate i(mStartDate.date()); i <= endDate; i = i.addMonths(frequency))
+                    times++;
+                break;
+            case 3: // year
+                for (QDate i(mStartDate.date()); i <= endDate; i = i.addYears(frequency))
+                    times++;
+                break;
+            }
+        }
+        repeat += QString::number(times);
+    }
+
+    mRepeat = repeat;
+    qDebug() << "Repeat style:" << mRepeat;
+}
+
+void EditEventDialog::on_frequencyComboBox_currentIndexChanged(int index)
+{
+    generateRepeat();
+}
+
+void EditEventDialog::on_repeatTimesRadioButton_toggled(bool checked)
+{
+    generateRepeat();
+}
+
+void EditEventDialog::on_repeatTimesSpinBox_valueChanged(int arg1)
+{
+    generateRepeat();
+}
+
+void EditEventDialog::on_repeatEndTimeRadioButton_toggled(bool checked)
+{
+    generateRepeat();
 }

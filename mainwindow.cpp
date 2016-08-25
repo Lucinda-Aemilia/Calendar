@@ -464,8 +464,8 @@ void MainWindow::on_month_calendar_currentPageChanged(int year, int month)
                 tableWidget->verticalHeader()->setStretchLastSection(true); // 设置占满并均分
                 tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-                QSignalMapper *m = new QSignalMapper(this);
-                connect(tableWidget, SIGNAL(cellDoubleClicked(int,int)), m, SLOT(map(int, int)));
+                // QSignalMapper *m = new QSignalMapper(this);
+                // connect(tableWidget, SIGNAL(cellDoubleClicked(int,int)), m, SLOT(map(int, int)));
 
                 tableWidget->setItem(0, 0, new QTableWidgetItem(QString::number(date)));
                 tableView->setIndexWidget(tableView->model()->index(j, i), tableWidget);

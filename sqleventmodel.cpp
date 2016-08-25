@@ -48,7 +48,7 @@ ORDER BY %3, %5, %4, %6")
 
         int id = query.value(EventDbContract::ID).toInt();
 
-        int repeat = query.value(EventDbContract::REPEAT).toInt();
+        QString repeat = query.value(EventDbContract::REPEAT).toString();
 
         Event *event = new Event(name, startDate, endDate, description, location,
                                  color, repeat, id);
@@ -239,7 +239,7 @@ void SqlEventModel::onColorChanged(const QColor &color)
         emit oneDayChanged(i);
 }
 
-void SqlEventModel::onRepeatChanged(const int& repeat)
+void SqlEventModel::onRepeatChanged(const QString& repeat)
 {
     Event* event = qobject_cast<Event*>(QObject::sender());
     QSqlQuery query(QString("UPDATE %1 SET %2='%3' WHERE %4='%5'")
@@ -280,7 +280,7 @@ void SqlEventModel::createConnection()
             .arg(EventDbContract::LOCATION)
             .arg(EventDbContract::COLOR)
             .arg(EventDbContract::ID);
-    queryString += QString("%1 INT, %2 TEXT)")
+    queryString += QString("%1 TEXT, %2 TEXT)")
             .arg(EventDbContract::REPEAT)
             .arg(EventDbContract::DESCRIPTION);
     // We store the time as seconds because it's easier to query.

@@ -24,7 +24,7 @@ public slots:
     void onDescriptionChanged(const QString &description);
     void onLocationChanged(const QString &location);
     void onColorChanged(const QColor &color);
-    void onRepeatChanged(const int& repeat);
+    void onRepeatChanged(const QString &repeat);
 
     void deleteEventFromDb(Event* event);
     void addEventToDb(Event* event);

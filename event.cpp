@@ -1,7 +1,7 @@
 #include "event.h"
 
 Event::Event(QString name, QDateTime startDate, QDateTime endDate, QString description,
-             QString location, QColor color, int repeat, int id, QObject *parent) :
+             QString location, QColor color, QString repeat, int id, QObject *parent) :
     mName(name), mStartDate(startDate), mEndDate(endDate), mDescription(description),
     mLocation(location), mColor(color), mRepeat(repeat), mId(id), QObject(parent)
 { }
@@ -98,12 +98,12 @@ void Event::setId(const int &id)
     }
 }
 
-int Event::repeat() const
+QString Event::repeat() const
 {
     return mRepeat;
 }
 
-void Event::setRepeat(const int &repeat)
+void Event::setRepeat(const QString &repeat)
 {
     if (repeat != mRepeat)
     {

@@ -21,6 +21,7 @@ public:
     void init(CacheEventModel* cacheEventModel, Event* event = NULL, const QDateTime &startDate = QDateTime::currentDateTime(),
               const QDateTime &endDate = QDateTime::currentDateTime().addSecs(3600));
     Event* getEvent();
+    void generateRepeat();
 
 private slots:
     void on_startDateTimeEdit_dateTimeChanged(const QDateTime &dateTime);
@@ -48,6 +49,14 @@ private slots:
     void on_repeatComboBox_currentIndexChanged(int index);
 
     void on_colorComboBox_currentTextChanged(const QString &arg1);
+
+    void on_frequencyComboBox_currentIndexChanged(int index);
+
+    void on_repeatTimesRadioButton_toggled(bool checked);
+
+    void on_repeatTimesSpinBox_valueChanged(int arg1);
+
+    void on_repeatEndTimeRadioButton_toggled(bool checked);
 
 private:
     QString getWeekDayName(const QDate& date);
