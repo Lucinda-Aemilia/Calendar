@@ -30,10 +30,10 @@ public slots:
     */
 
 protected:
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dragMoveEvent(QDragMoveEvent *event);
-    void dragLeaveEvent(QDragLeaveEvent *event);
-    void dropEvent(QDropEvent *event);
+    void dragEnterEvent(QDragEnterEvent* event);
+    void dragMoveEvent(QDragMoveEvent* event);
+    void dragLeaveEvent(QDragLeaveEvent* event);
+    void dropEvent(QDropEvent* event);
 
 signals:
     void curDateChanged(const QDate& curDate);
@@ -56,7 +56,7 @@ private:
     Ui::CalendarEventFileWidget *ui;
     QDate mCurDate;
     CacheEventModel* mCacheEventModel;
-    QList<Event*> mEvents;
+    QList<QSharedPointer<Event>> mEvents;
 };
 
 #endif // CALENDAREVENTFILEWIDGET_H

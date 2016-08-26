@@ -11,7 +11,7 @@ ViewEventDialog::ViewEventDialog(QWidget *parent) :
     setButtonsToViewSet();
 }
 
-void ViewEventDialog::init(CacheEventModel *cacheEventModel, Event *event)
+void ViewEventDialog::init(CacheEventModel *cacheEventModel, QSharedPointer<Event> event)
 {
     fillWithEvent(event);
 

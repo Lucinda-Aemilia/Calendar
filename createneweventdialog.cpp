@@ -22,7 +22,7 @@ CreateNewEventDialog::~CreateNewEventDialog()
     delete ui;
 }
 
-void CreateNewEventDialog::fillWithEvent(Event *event)
+void CreateNewEventDialog::fillWithEvent(QSharedPointer<Event> event)
 {
     ui->eventNameLineEdit->setText(event->name());
     ui->startDateTimeEdit->setDateTime(event->startDate());
@@ -155,17 +155,17 @@ void CreateNewEventDialog::setButtonsToEditSet()
 
 }
 
-Event* CreateNewEventDialog::getEvent()
+QSharedPointer<Event> CreateNewEventDialog::getEvent()
 {
-    qDebug() << "Event* CreateNewEventDialog::getEvent()";
+    qDebug() << "QSharedPointer<Event> CreateNewEventDialog::getEvent()";
     // 先写添加事件
     // repeat自动处理了
-    Event* event = new Event(mName, mStartDate, mEndDate, mDescription,
-                             mLocation, mColor, mRepeat);
+    QSharedPointer<Event> event(new Event(mName, mStartDate, mEndDate, mDescription,
+                             mLocation, mColor, mRepeat));
     mCacheEventModel->addEvent(event);
 }
 
-void CreateNewEventDialog::init(CacheEventModel* cacheEventModel, Event *event, const QDateTime& startDate,
+void CreateNewEventDialog::init(CacheEventModel* cacheEventModel, QSharedPointer<Event> event, const QDateTime& startDate,
                            const QDateTime& endDate)
 {
     mCacheEventModel = cacheEventModel;

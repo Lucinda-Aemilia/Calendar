@@ -16,7 +16,7 @@ class ViewEventDialog : public CreateNewEventDialog
 
 public:
     explicit ViewEventDialog(QWidget *parent = 0);
-    void init(CacheEventModel *cacheEventModel, Event *event);
+    void init(CacheEventModel *cacheEventModel, QSharedPointer<Event> event);
     ~ViewEventDialog();
 
 private:

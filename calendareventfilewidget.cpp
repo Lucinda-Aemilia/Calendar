@@ -41,7 +41,7 @@ void CalendarEventFileWidget::dragEnterEvent(QDragEnterEvent *event)
 
     emit changed(event->mimeData());
     */
-    // qDebug() << "CalendarEventFileWidget::dragEnterEvent(QDragEnterEvent *event)";
+    // qDebug() << "CalendarEventFileWidget::dragEnterEvent(QDragEnterQSharedPointer<Event> event)";
     event->acceptProposedAction();
 }
 //! [dragEnterEvent() function]
@@ -67,7 +67,7 @@ void CalendarEventFileWidget::dropEvent(QDropEvent *event)
         for (int i = 0; i < urlList.size(); ++i)
         {
             QString url = urlList.at(i).path();
-            qDebug() << "CalendarEventFileWidget::dropEvent(QDropEvent *event)" << url;
+            qDebug() << "CalendarEventFileWidget::dropEvent(QDropQSharedPointer<Event> event)" << url;
 
             // 处理目录格式
             if (url.at(0) == '/')
@@ -172,12 +172,12 @@ void CalendarEventFileWidget::onCurDateChanged(const QDate& curDate)
 void CalendarEventFileWidget::on_addEventPushButton_clicked()
 {
     CreateNewEventDialog* dialog = new CreateNewEventDialog(this);
-    dialog->init(mCacheEventModel, NULL, QDateTime(mCurDate, QTime::currentTime()),
+    dialog->init(mCacheEventModel, QSharedPointer<Event>(NULL), QDateTime(mCurDate, QTime::currentTime()),
                           QDateTime(mCurDate, QTime::currentTime()));
     int result = dialog->exec();
     if (result == QDialog::Accepted)
     {
-        Event* event = dialog->getEvent();
+        QSharedPointer<Event> event = dialog->getEvent();
     }
 
     /*
@@ -192,7 +192,7 @@ void CalendarEventFileWidget::on_addEventPushButton_clicked()
     // if( !memo.isEmpty() ){
     if (result == QDialog::Accepted)
     {
-        Event* newEvent = editEventDialog->getEvent();
+        QSharedPointer<Event> newEvent = editEventDialog->getEvent();
     */
 }
 
@@ -213,7 +213,7 @@ void CalendarEventFileWidget::on_eventComboBox_activated(int index)
     int result = dialog->exec();
     if (result = QDialog::Accepted)
     {
-        Event* event = dialog->getEvent();
+        QSharedPointer<Event> event = dialog->getEvent();
 
     }
     refreshEvents(curDate());

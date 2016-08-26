@@ -115,7 +115,7 @@ MainWindow::MainWindow(QWidget *parent) :
     windowDefaultPalette = palette();
 }
 
-bool MainWindow::eventFilter(QObject* obj, QEvent *event)
+bool MainWindow::eventFilter(QObject* obj, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseButtonDblClick ||
@@ -130,7 +130,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent *event)
             event->type() == QEvent::FocusIn ||
             event->type() == QEvent::FocusOut)
     {
-        // QMouseEvent* mouseEvent = qobject_cast<QMouseEvent*>(event);
+        // QMouseQSharedPointer<Event> mouseEvent = qobject_cast<QMouseQSharedPointer<Event>>(event);
         // qDebug() << "MainWindow::eventFilter" << event->type() << mFrozen;
         if (mFrozen)
         {
@@ -146,7 +146,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent *event)
     {
         /*
         qDebug() << "MainWindow::eventFilter" << event->type();
-        QDragEnterEvent* myEvent = static_cast<QDragEnterEvent*>(event);
+        QDragEnterQSharedPointer<Event> myEvent = static_cast<QDragEnterQSharedPointer<Event>>(event);
         qDebug() << myEvent;
         */
     }

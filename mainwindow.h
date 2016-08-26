@@ -24,7 +24,7 @@ public:
 
     ~MainWindow();
 
-    bool eventFilter(QObject* obj, QEvent *event);
+    bool eventFilter(QObject* obj, QEvent* event);
 
 public slots:
     // 用于关联按钮和stackedwidget之间状态的槽函数

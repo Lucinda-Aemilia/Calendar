@@ -21,8 +21,8 @@ class CacheEventModel : public SqlEventModel
 
 public:
     CacheEventModel();
-    void addEvent(Event* event);
-    void deleteEvent(Event* event);
+    void addEvent(QSharedPointer<Event> event);
+    void deleteEvent(QSharedPointer<Event> event);
 };
 
 #endif // CACHEEVENTMODEL_H

@@ -19,7 +19,7 @@ DragFileComboBox::~DragFileComboBox()
 }
 
 //! [dragEnterEvent() function]
-void DragFileComboBox::dragEnterEvent(QDragEnterEvent *event)
+void DragFileComboBox::dragEnterEvent(QDragEnterEvent* event)
 {
     /*
     setText(tr("<drop content>"));
@@ -28,13 +28,13 @@ void DragFileComboBox::dragEnterEvent(QDragEnterEvent *event)
 
     emit changed(event->mimeData());
     */
-    qDebug() << "DragFileComboBox::dragEnterEvent(QDragEnterEvent *event)";
+    qDebug() << "DragFileComboBox::dragEnterEvent(QDragEnterQSharedPointer<Event> event)";
     event->acceptProposedAction();
 }
 //! [dragEnterEvent() function]
 
 //! [dragMoveEvent() function]
-void DragFileComboBox::dragMoveEvent(QDragMoveEvent *event)
+void DragFileComboBox::dragMoveEvent(QDragMoveEvent* event)
 {
     event->acceptProposedAction();
 }
@@ -51,14 +51,14 @@ void DragFileComboBox::dropEvent(QDropEvent *event)
 void DragFileComboBox::dragLeaveEvent(QDragLeaveEvent *event)
 {
     // clear();
-    qDebug() << "DragFileComboBox::dragLeaveEvent(QDragLeaveEvent *event)";
+    qDebug() << "DragFileComboBox::dragLeaveEvent(QDragLeaveQSharedPointer<Event> event)";
     event->accept();
 }
 //! [dragLeaveEvent() function]
 
 void DragFileComboBox::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << "DragFileComboBox::mousePressEvent(QGraphicsSceneMouseEvent *event)";
+    qDebug() << "DragFileComboBox::mousePressEvent(QGraphicsSceneMouseQSharedPointer<Event> event)";
     /*
     QMimeData *data = new QMimeData;
     // data->setColorData();
@@ -80,7 +80,7 @@ void DragFileComboBox::mousePressEvent(QMouseEvent *event)
 
 void DragFileComboBox::mouseMoveEvent(QMouseEvent *event)
 {
-    qDebug() << "DragFileComboBox::mouseMoveEvent(QMouseEvent *event)";
+    qDebug() << "DragFileComboBox::mouseMoveEvent(QMouseQSharedPointer<Event> event)";
 
     if (!(event->buttons() & Qt::LeftButton) ||
             // (event->pos() - mDragStartPosition).manhattanLength()

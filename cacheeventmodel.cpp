@@ -10,7 +10,7 @@ CacheEventModel::CacheEventModel() : SqlEventModel()
     // connect(this, SIGNAL(oneDayChanged(QDate)), this, SLOT(refreshOneDay(QDate)));
 }
 
-void CacheEventModel::addEvent(Event *event)
+void CacheEventModel::addEvent(QSharedPointer<Event> event)
 {
     qDebug() << "CacheEventModel::addEvent  " << event->name();
     SqlEventModel::addEventToDb(event);
@@ -35,10 +35,10 @@ void CacheEventModel::addEvent(Event *event)
     {
         for (int i = 1; i < times; i++)
         {
-            Event* newEvent = new Event(event->name(), startDate.addDays(frequency * i),
+            QSharedPointer<Event> newEvent(new Event(event->name(), startDate.addDays(frequency * i),
                             endDate.addDays(frequency * i),
                             event->description(), event->location(), event->color(),
-                            repeat);
+                            repeat));
             SqlEventModel::addEventToDb(newEvent);
         }
     }
@@ -46,10 +46,10 @@ void CacheEventModel::addEvent(Event *event)
     {
         for (int i = 1; i < times; i++)
         {
-            Event* newEvent = new Event(event->name(), startDate.addDays(frequency * i * 7),
+            QSharedPointer<Event> newEvent(new Event(event->name(), startDate.addDays(frequency * i * 7),
                             endDate.addDays(frequency * i * 7),
                             event->description(), event->location(), event->color(),
-                            repeat);
+                            repeat));
             SqlEventModel::addEventToDb(newEvent);
         }
     }
@@ -57,10 +57,10 @@ void CacheEventModel::addEvent(Event *event)
     {
         for (int i = 1; i < times; i++)
         {
-            Event* newEvent = new Event(event->name(), startDate.addMonths(frequency * i),
+            QSharedPointer<Event> newEvent(new Event(event->name(), startDate.addMonths(frequency * i),
                             endDate.addDays(frequency * i),
                             event->description(), event->location(), event->color(),
-                            repeat);
+                            repeat));
             SqlEventModel::addEventToDb(newEvent);
         }
     }
@@ -68,16 +68,16 @@ void CacheEventModel::addEvent(Event *event)
     {
         for (int i = 1; i < times; i++)
         {
-            Event* newEvent = new Event(event->name(), startDate.addYears(frequency * i),
+            QSharedPointer<Event> newEvent(new Event(event->name(), startDate.addYears(frequency * i),
                             endDate.addYears(frequency * i),
                             event->description(), event->location(), event->color(),
-                            repeat);
+                            repeat));
             SqlEventModel::addEventToDb(newEvent);
         }
     }
 }
 
-void CacheEventModel::deleteEvent(Event *event)
+void CacheEventModel::deleteEvent(QSharedPointer<Event> event)
 {
     SqlEventModel::deleteEventFromDb(event, -1);
 }

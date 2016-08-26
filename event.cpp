@@ -8,9 +8,10 @@ Event::Event(QString name, QDateTime startDate, QDateTime endDate, QString descr
     mLocation(location), mColor(color), mRepeat(repeat), mId(id), QObject(parent)
 { }
 
+// 我爱智能指针
 Event::~Event()
 {
-    qDebug() << "Event::~Event()";
+    // qDebug() << "Event::~Event()";
 }
 
 QString Event::name() const

@@ -19,9 +19,10 @@ public:
 
     explicit CreateNewEventDialog(QWidget *parent = 0);
     ~CreateNewEventDialog();
-    void init(CacheEventModel* cacheEventModel, Event* event = NULL, const QDateTime &startDate = QDateTime::currentDateTime(),
+    void init(CacheEventModel* cacheEventModel, QSharedPointer<Event> event = QSharedPointer<Event>(NULL),
+              const QDateTime &startDate = QDateTime::currentDateTime(),
               const QDateTime &endDate = QDateTime::currentDateTime().addSecs(3600));
-    Event* getEvent();
+    QSharedPointer<Event> getEvent();
     void generateRepeat();
 
 public slots:
@@ -67,7 +68,7 @@ private slots:
 protected:
 
     // 为了继承类的方便……
-    void fillWithEvent(Event* event);
+    void fillWithEvent(QSharedPointer<Event> event);
     void disableAllEdits(bool disable);
     void setButtonsToViewSet();
     void setButtonsToEditSet();
@@ -81,7 +82,7 @@ protected:
     QColor mColor;
     QString mRepeat;
 
-    Event* mCurEvent;
+    QSharedPointer<Event> mCurEvent;
 
     CacheEventModel* mCacheEventModel;
 };
