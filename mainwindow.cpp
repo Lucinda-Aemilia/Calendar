@@ -77,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint);
     // setAttribute(Qt::WA_TranslucentBackground, true);
     // setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    // ui->dayButton->setWindowFlags(Qt::WindowTransparentForInput);
 
     /*
     QList<QWidget*> lstChildren = findChildren<QWidget*>();

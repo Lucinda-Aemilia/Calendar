@@ -58,9 +58,16 @@ bool File::copyFileToPath(const QString &sourceDir, const QDate& date, bool cove
     return copyFileToPath(sourceDir, toDirName, coverFileIfExist);
 }
 
-QStringList File::getAllFileNames(const QDate &date)
+QList<QFileInfo> File::getAllFileNames(const QDate &date)
 {
     QString dirName(QDir::currentPath() + "/Appdata/" + date.toString("yyyy_MM_dd"));
     QDir dir(dirName);
-    return dir.entryList(QDir::Files);
+    QStringList nameList(dir.entryList(QDir::Files));
+    QList<QFileInfo> fileInfoList;
+
+    for (int i = 0; i < nameList.size(); i++)
+    {
+        fileInfoList.append(QFileInfo(dir, nameList.at(i)));
+    }
+    return fileInfoList;
 }

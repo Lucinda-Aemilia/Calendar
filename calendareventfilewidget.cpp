@@ -41,7 +41,7 @@ void CalendarEventFileWidget::dragEnterEvent(QDragEnterEvent *event)
 
     emit changed(event->mimeData());
     */
-    qDebug() << "CalendarEventFileWidget::dragEnterEvent(QDragEnterEvent *event)";
+    // qDebug() << "CalendarEventFileWidget::dragEnterEvent(QDragEnterEvent *event)";
     event->acceptProposedAction();
 }
 //! [dragEnterEvent() function]

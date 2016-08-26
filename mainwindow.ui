@@ -14,7 +14,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Calendar</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -47,7 +47,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Create</string>
+         <string>&amp;Create</string>
         </property>
         <property name="autoDefault">
          <bool>false</bool>
@@ -208,14 +208,14 @@
          <item>
           <widget class="QCheckBox" name="attachCheckBox">
            <property name="text">
-            <string>Attach To Desktop</string>
+            <string>&amp;Attach To Desktop</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QCheckBox" name="freezeCheckBox">
            <property name="text">
-            <string>Freeze</string>
+            <string>&amp;Freeze</string>
            </property>
           </widget>
          </item>
@@ -249,7 +249,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Today</string>
+           <string>&amp;Today</string>
           </property>
          </widget>
         </item>

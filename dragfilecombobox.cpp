@@ -67,23 +67,58 @@ void DragFileComboBox::mousePressEvent(QMouseEvent *event)
     drag->setMimeData(data);
     drag->start();
     */
-    QComboBox::mousePressEvent(event);
+    mDragStartPosition = event->pos();
+    /*
+    if (currentIndex() < 0)
+        setCurrentIndex(0);
+    else
+        setCurrentIndex(-1);
+    */
+    showPopup();
+    // QComboBox::mousePressEvent(event);
 }
 
 void DragFileComboBox::mouseMoveEvent(QMouseEvent *event)
 {
     qDebug() << "DragFileComboBox::mouseMoveEvent(QMouseEvent *event)";
+
+    if (!(event->buttons() & Qt::LeftButton) ||
+            // (event->pos() - mDragStartPosition).manhattanLength()
+                        // < QApplication::startDragDistance() ||
+            // < height() ||
+            count() == 0)
+    {
+        QComboBox::mouseMoveEvent(event);
+        return;
+    }
+
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData;
+
+    QString fileAbsolutePath = currentData().toString();
+    qDebug() << fileAbsolutePath;
+
+    QList<QUrl> fileList;
+    fileList.append(QUrl::fromLocalFile(fileAbsolutePath));
+    mimeData->setUrls(fileList);
+    // mimeData->setText("Hello World");
+    drag->setMimeData(mimeData);
+
+    Qt::DropAction dropAction = drag->exec(Qt::CopyAction | Qt::MoveAction);
+
     QComboBox::mouseMoveEvent(event);
 }
 
 void DragFileComboBox::refreshFileList(const QDate &date)
 {
+    qDebug() << "DragFileComboBox::refreshFileList(const QDate &date)";
     mDate = date;
     mFileList = File::getAllFileNames(date);
     clear();
     for (int i = 0; i < mFileList.size(); i++)
     {
         QFileInfo fileInfo(mFileList.at(i));
-        addItem(fileInfo.fileName());
+        addItem(fileInfo.fileName(), fileInfo.absoluteFilePath());
+        qDebug() << fileInfo.absoluteFilePath();
     }
 }

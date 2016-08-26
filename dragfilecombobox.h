@@ -8,6 +8,7 @@
 #include <QMimeData>
 #include <QDragEnterEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QFileInfo>
 
 namespace Ui {
 class DragFileComboBox;
@@ -33,7 +34,8 @@ public slots:
 private:
     Ui::DragFileComboBox *ui;
     QDate mDate;
-    QStringList mFileList;
+    QList<QFileInfo> mFileList;
+    QPoint mDragStartPosition;
 };
 
 #endif // DRAGFILECOMBOBOX_H
