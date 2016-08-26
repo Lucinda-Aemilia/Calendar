@@ -66,13 +66,16 @@ void CalendarEventFileWidget::dropEvent(QDropEvent *event)
         QString text;
         for (int i = 0; i < urlList.size(); ++i) {
             QString url = urlList.at(i).path();
-            text += url; // + QString('\n');
-        }
-        // 处理目录格式
-        text.remove(0, 1);
+            qDebug() << "CalendarEventFileWidget::dropEvent(QDropEvent *event)" << url;
 
-        qDebug() << "CalendarEventFileWidget::dropEvent(QDropEvent *event)" << text;
-        File::copyFileToPath(text, mCurDate, true);
+            // 处理目录格式
+            if (url.at(0) == '/')
+                url.remove(0, 1);
+            File::copyFileToPath(url, mCurDate, true);
+            // text += url; // + QString('\n');
+        }
+
+
 
         // 刷新文件列表
         ui->fileComboBox->refreshFileList(mCurDate);
@@ -132,7 +135,7 @@ void CalendarEventFileWidget::setCurDate(const QDate& curDate)
 
 void CalendarEventFileWidget::setCurDateInRange(bool inRange)
 {
-    qDebug() << "CalendarEventFileWidget::setCurDateInRange" << inRange;
+    // qDebug() << "CalendarEventFileWidget::setCurDateInRange" << inRange;
     if (inRange)
     {
         QPalette pe;
