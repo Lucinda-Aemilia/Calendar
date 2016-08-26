@@ -77,6 +77,10 @@ void SqlEventModel::deleteEventFromDb(QSharedPointer<Event> event, int deleteRep
     {
         QSqlQuery query;
         QString queryString;
+
+        // QString repeat = query.value(EventDbContract::REPEAT).toString();
+
+
         queryString = QString("SELECT * FROM %1 WHERE %2='%3' AND \
 %4='%5' AND %6='%7' AND %8='%9' AND ")
                 .arg(EventDbContract::TABLE_NAME)
@@ -101,8 +105,8 @@ void SqlEventModel::deleteEventFromDb(QSharedPointer<Event> event, int deleteRep
                     .arg(event->startDate().date().toString("yyyy-MM-dd"));
         }
 
-        qDebug() << "void SqlEventModel::deleteEventFromDb(QSharedPointer<Event> event, int deleteRepeatDirect)";
-        qDebug() << queryString;
+        // qDebug() << "void SqlEventModel::deleteEventFromDb(QSharedPointer<Event> event, int deleteRepeatDirect)";
+        // qDebug() << queryString;
 
         query.exec(queryString);
         if (query.isActive())
@@ -110,9 +114,16 @@ void SqlEventModel::deleteEventFromDb(QSharedPointer<Event> event, int deleteRep
             while (query.next())
             {
                 QString repeat = query.value(EventDbContract::REPEAT).toString();
-                int repeatFatherId = repeat.split(',').at(0).toInt();
-                qDebug() << repeatFatherId;
-                if (repeatFatherId == event->repeat().split(',').at(0).toInt())
+                int repeatFakeFatherId = repeat.split(',').at(0).toInt();
+                qDebug() << "repeatFakeFatherId" << repeat << repeatFakeFatherId;
+                int repeatFatherId;
+                if (repeatFakeFatherId == 1)
+                    repeatFatherId = event->id();
+                else
+                    repeatFatherId = repeatFakeFatherId;
+                int thisRepeatFatherId = repeat.split(',').at(0).toInt();
+                qDebug() << repeatFatherId << thisRepeatFatherId << repeat;
+                if (thisRepeatFatherId == repeatFatherId || thisRepeatFatherId == 1)
                 {
                     int id = query.value(EventDbContract::ID).toInt();
                     deleteEventFromDb(id);
@@ -135,6 +146,7 @@ void SqlEventModel::deleteEventFromDb(QSharedPointer<Event> event, int deleteRep
                 }
             }
         }
+        deleteEventFromDb(event->id());
     }
 }
 

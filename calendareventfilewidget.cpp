@@ -104,7 +104,7 @@ void CalendarEventFileWidget::dragLeaveEvent(QDragLeaveEvent *event)
 
 void CalendarEventFileWidget::refreshEvents(const QDate &date)
 {
-    // qDebug() << "CalendarEventFileWidget::refreshEvents" << date;
+    qDebug() << "CalendarEventFileWidget::refreshEvents" << date;
     if (date != curDate())
         return;
     mEvents = mCacheEventModel->eventsForDate(mCurDate);
@@ -214,11 +214,21 @@ void CalendarEventFileWidget::on_eventComboBox_activated(int index)
     if (result == QDialog::Accepted)
     {
         QSharedPointer<Event> event(dialog->getEvent());
-        refreshEvents(curDate());
+        // refreshEvents(curDate());
     }
-    else
-
-        refreshEvents(curDate());
+    // else
+        // refreshEvents(curDate());
+    // 需要强制刷新其他天
+    // 把最近三个月的都刷新一遍
+    refreshEvents(curDate());
+    QDate startDate1(curDate().addMonths(-1));
+    QDate endDate1(curDate().addMonths(1));
+    while (startDate1.day() >= 2)
+        startDate1 = startDate1.addDays(-1);
+    while (endDate1.day() <= 20)
+        endDate1 = endDate1.addDays(1);
+    for (QDate i(startDate1); i <= endDate1; i = i.addDays(1))
+        refreshEvents(i);
 }
 
 void CalendarEventFileWidget::onSelectionChanged(const QDate& curDisplayDate)
