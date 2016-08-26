@@ -2,9 +2,11 @@
 #include "ui_calendareventfilewidget.h"
 #include "createneweventdialog.h"
 #include "vieweventdialog.h"
+#include "file.h"
 
 #include <QDebug>
 #include <QDragMoveEvent>
+#include <QMimeData>
 
 CalendarEventFileWidget::CalendarEventFileWidget(CacheEventModel* cacheEventModel, QDate curDate, QWidget *parent) :
     mCacheEventModel(cacheEventModel),
@@ -51,36 +53,28 @@ void CalendarEventFileWidget::dragMoveEvent(QDragMoveEvent *event)
 //! [dropEvent() function part1]
 void CalendarEventFileWidget::dropEvent(QDropEvent *event)
 {
-    /*
     const QMimeData *mimeData = event->mimeData();
-//! [dropEvent() function part1]
+    //! [dropEvent() function part1]
 
-//! [dropEvent() function part2]
-    if (mimeData->hasImage()) {
-        setPixmap(qvariant_cast<QPixmap>(mimeData->imageData()));
-    } else if (mimeData->hasHtml()) {
-        setText(mimeData->html());
-        setTextFormat(Qt::RichText);
-    } else if (mimeData->hasText()) {
-        setText(mimeData->text());
-        setTextFormat(Qt::PlainText);
-    } else if (mimeData->hasUrls()) {
+    //! [dropEvent() function part2]
+    if (mimeData->hasUrls())
+    {
         QList<QUrl> urlList = mimeData->urls();
         QString text;
-        for (int i = 0; i < urlList.size() && i < 32; ++i) {
+        for (int i = 0; i < urlList.size(); ++i) {
             QString url = urlList.at(i).path();
-            text += url + QString("\n");
+            text += url; // + QString('\n');
         }
-        setText(text);
-    } else {
-        setText(tr("Cannot display data"));
-    }
-//! [dropEvent() function part2]
+        // 处理目录格式
+        text.remove(0, 1);
 
-//! [dropEvent() function part3]
-    setBackgroundRole(QPalette::Dark);
+        qDebug() << "CalendarEventFileWidget::dropEvent(QDropEvent *event)" << text;
+        File::copyFileToPath(text, mCurDate, true);
+    }
+    //! [dropEvent() function part2]
+
+    //! [dropEvent() function part3]
     event->acceptProposedAction();
-    */
 }
 //! [dropEvent() function part3]
 

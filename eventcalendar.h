@@ -36,6 +36,9 @@ protected:
 private slots:
     void addNote(const QDate & );
 
+    // 隐藏和显示控件
+    // void onSelectionChanged();
+
 private:
     QDate m_currentDate;
     QPen m_outlinePen;

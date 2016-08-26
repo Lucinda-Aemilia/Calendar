@@ -22,6 +22,11 @@ public:
     QDate curDate() const;
     void setCurDate(const QDate& curDate);
 
+    /*
+public slots:
+    void change
+    */
+
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
