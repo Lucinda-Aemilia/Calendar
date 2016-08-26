@@ -42,8 +42,6 @@ private slots:
 
     void on_descriptionTextEdit_textChanged();
 
-    void on_clorComboBox_currentIndexChanged(const QString &arg1);
-
     void on_startDateTimeEdit_dateChanged(const QDate &date);
 
     void on_repeatComboBox_currentIndexChanged(int index);
@@ -58,7 +56,18 @@ private slots:
 
     void on_repeatEndTimeRadioButton_toggled(bool checked);
 
-private:
+    void on_colorComboBox_currentIndexChanged(int index);
+
+    void on_colorComboBox_currentIndexChanged(const QString &arg1);
+
+protected:
+
+    // 为了继承类的方便……
+    void fillWithEvent(Event* event);
+    void disableAllEdits(bool disable);
+    void setButtonsToViewSet();
+    void setButtonsToEditSet();
+
     QString getWeekDayName(const QDate& date);
     Ui::CreateNewEventDialog *ui;
     QString mName;

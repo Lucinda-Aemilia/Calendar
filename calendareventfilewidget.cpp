@@ -1,5 +1,6 @@
 #include "calendareventfilewidget.h"
 #include "ui_calendareventfilewidget.h"
+#include "createneweventdialog.h"
 #include "vieweventdialog.h"
 
 #include <QDebug>
@@ -32,9 +33,11 @@ void CalendarEventFileWidget::dragEnterEvent(QDragEnterEvent *event)
     setText(tr("<drop content>"));
     setBackgroundRole(QPalette::Highlight);
 
-    event->acceptProposedAction();
+
     emit changed(event->mimeData());
     */
+    qDebug() << "CalendarEventFileWidget::dragEnterEvent(QDragEnterEvent *event)";
+    event->acceptProposedAction();
 }
 //! [dragEnterEvent() function]
 
@@ -91,7 +94,7 @@ void CalendarEventFileWidget::dragLeaveEvent(QDragLeaveEvent *event)
 
 void CalendarEventFileWidget::refreshEvents(const QDate &date)
 {
-    qDebug() << "CalendarEventFileWidget::refreshEvents" << date;
+    // qDebug() << "CalendarEventFileWidget::refreshEvents" << date;
     if (date != curDate())
         return;
     mEvents = mCacheEventModel->eventsForDate(mCurDate);
@@ -135,14 +138,29 @@ void CalendarEventFileWidget::onCurDateChanged(const QDate& curDate)
 
 void CalendarEventFileWidget::on_addEventPushButton_clicked()
 {
-    CreateNewEventDialog* dialog = new CreateNewEventDialog;
+    CreateNewEventDialog* dialog = new CreateNewEventDialog(this);
     dialog->init(mCacheEventModel, NULL, QDateTime(mCurDate, QTime::currentTime()),
                           QDateTime(mCurDate, QTime::currentTime()));
     int result = dialog->exec();
-    if (result = QDialog::Accepted)
+    if (result == QDialog::Accepted)
     {
         Event* event = dialog->getEvent();
     }
+
+    /*
+    CreateNewEventDialog* editEventDialog = new CreateNewEventDialog(this);
+    editEventDialog->init(m_cacheEventModel, NULL, QDateTime(date, QTime::currentTime()),
+                          QDateTime(date, QTime::currentTime()));
+
+    int result = editEventDialog->exec();
+
+    // delete editEventDialog;
+
+    // if( !memo.isEmpty() ){
+    if (result == QDialog::Accepted)
+    {
+        Event* newEvent = editEventDialog->getEvent();
+    */
 }
 
 // 实际上，需要进入浏览编辑界面
@@ -156,8 +174,8 @@ void CalendarEventFileWidget::on_eventComboBox_activated(int index)
     if (index != ui->eventComboBox->currentIndex())
         return;
 
-    // ViewEventDialog* dialog = new ViewEventDialog;
-    CreateNewEventDialog* dialog = new CreateNewEventDialog;
+    ViewEventDialog* dialog = new ViewEventDialog;
+    // CreateNewEventDialog* dialog = new CreateNewEventDialog;
     dialog->init(mCacheEventModel, mEvents.at(index));
     int result = dialog->exec();
     if (result = QDialog::Accepted)

@@ -11,6 +11,7 @@
 #include <QCalendarWidget>
 #include <QTableView>
 #include <QModelIndex>
+#include <QDragEnterEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -130,6 +131,18 @@ bool MainWindow::eventFilter(QObject* obj, QEvent *event)
         if (mFrozen)
             return true;
     }
+
+    if (event->type() == QEvent::DragEnter || event->type() == QEvent::DragLeave
+            || event->type() == QEvent::DragMove
+            || event->type() == QEvent::DragResponse || event->type() == QEvent::Drop)
+    {
+        /*
+        qDebug() << "MainWindow::eventFilter" << event->type();
+        QDragEnterEvent* myEvent = static_cast<QDragEnterEvent*>(event);
+        qDebug() << myEvent;
+        */
+    }
+
     return QMainWindow::eventFilter(obj, event);
 
 }
@@ -528,7 +541,7 @@ void MainWindow::on_month_calendar_currentPageChanged(int year, int month)
                    // continue;
                 }
 
-                qDebug() << "modify" << curYear << curMonth << curDate;
+                // qDebug() << "modify" << curYear << curMonth << curDate;
                 CalendarEventFileWidget* widget = qobject_cast<CalendarEventFileWidget*>
                         (tableView->indexWidget(tableView->model()->index(i, j)));
                 widget->setCurDate(QDate(curYear, curMonth, curDate));

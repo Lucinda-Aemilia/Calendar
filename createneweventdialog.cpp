@@ -1,8 +1,9 @@
 #include "createneweventdialog.h"
-#include "ui_editeventdialog.h"
+#include "ui_createneweventdialog.h"
 
 #include <QDebug>
 #include <QRadioButton>
+#include <QPushButton>
 
 CreateNewEventDialog::CreateNewEventDialog(QWidget *parent) :
     QDialog(parent),
@@ -10,12 +11,9 @@ CreateNewEventDialog::CreateNewEventDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->repeatCheckBox->setCheckState(Qt::Checked);
-    if (ui->repeatCheckBox->checkState() == Qt::Unchecked)
-        ui->repetitionGroupBox->hide();
-    else
-        ui->repetitionGroupBox->show();
-   layout()->setSizeConstraint(QLayout::SetFixedSize);
+    ui->repeatCheckBox->setCheckState(Qt::Unchecked);
+    ui->repetitionGroupBox->hide();
+    layout()->setSizeConstraint(QLayout::SetFixedSize);
 }
 
 CreateNewEventDialog::~CreateNewEventDialog()
@@ -23,26 +21,86 @@ CreateNewEventDialog::~CreateNewEventDialog()
     delete ui;
 }
 
+void CreateNewEventDialog::fillWithEvent(Event *event)
+{
+    ui->eventNameLineEdit->setText(event->name());
+    ui->startDateTimeEdit->setDateTime(event->startDate());
+    ui->endDateTimeEdit->setDateTime(event->endDate());
+
+    QStringList repeatList(event->repeat().split(','));
+    if (repeatList.at(0).toInt() != -1)
+        ui->repeatCheckBox->setChecked(true);
+    else
+        ui->repeatCheckBox->setChecked(false);
+
+    ui->locationLineEdit->setText(event->location());
+    ui->descriptionTextEdit->setPlainText(event->description());
+
+    if (event->color() == Qt::white)
+        ui->colorComboBox->setCurrentIndex(0);
+    else if (event->color() == Qt::red)
+        ui->colorComboBox->setCurrentIndex(1);
+    else if (event->color() == Qt::green)
+        ui->colorComboBox->setCurrentIndex(2);
+    else if (event->color() == Qt::blue)
+        ui->colorComboBox->setCurrentIndex(3);
+    else if (event->color() == Qt::cyan)
+        ui->colorComboBox->setCurrentIndex(4);
+    else if (event->color() == Qt::magenta)
+        ui->colorComboBox->setCurrentIndex(5);
+    else if (event->color() == Qt::yellow)
+        ui->colorComboBox->setCurrentIndex(6);
+    else if (event->color() == Qt::gray)
+        ui->colorComboBox->setCurrentIndex(7);
+    else if (event->color() == Qt::lightGray)
+        ui->colorComboBox->setCurrentIndex(8);
+}
+
+void CreateNewEventDialog::disableAllEdits(bool disable)
+{
+    ui->eventNameLineEdit->setDisabled(disable);
+    ui->startDateTimeEdit->setDisabled(disable);
+    ui->endDateTimeEdit->setDisabled(disable);
+    ui->allDayCheckBox->setDisabled(disable);
+    ui->repeatCheckBox->setDisabled(disable);
+    ui->locationLineEdit->setDisabled(disable);
+    ui->descriptionTextEdit->setDisabled(disable);
+    ui->colorComboBox->setDisabled(disable);
+    ui->eventDetailsGroupBox->setDisabled(disable);
+    ui->repetitionGroupBox->setDisabled(disable);
+}
+
+void CreateNewEventDialog::setButtonsToViewSet()
+{
+    ui->dialogButtonBox->clear();
+    ui->dialogButtonBox->addButton(tr("Ok"), QDialogButtonBox::AcceptRole);
+    ui->dialogButtonBox->addButton(tr("Edit"), QDialogButtonBox::ActionRole);
+    ui->dialogButtonBox->addButton(tr("Delete"), QDialogButtonBox::DestructiveRole);
+    ui->dialogButtonBox->addButton(tr("Close"), QDialogButtonBox::RejectRole);
+
+    QList<QAbstractButton*> list = ui->dialogButtonBox->buttons();
+    qDebug() << list.at(0);
+}
+
+void CreateNewEventDialog::setButtonsToEditSet()
+{
+
+}
+
 Event* CreateNewEventDialog::getEvent()
 {
-    // qDebug() << "EditEventDialog::~EditEventDialog()";
+    qDebug() << "Event* CreateNewEventDialog::getEvent()";
     // 先写添加事件
-    // 如果有repeat，我需要在这里手动添加
+    // repeat自动处理了
     Event* event = new Event(mName, mStartDate, mEndDate, mDescription,
                              mLocation, mColor, mRepeat);
     mCacheEventModel->addEvent(event);
-
-    // 接下来，如果是编辑，而且有改变，那么就删除原来的事件，直接添加一些。
 }
 
 void CreateNewEventDialog::init(CacheEventModel* cacheEventModel, Event *event, const QDateTime& startDate,
                            const QDateTime& endDate)
 {
     mCacheEventModel = cacheEventModel;
-
-    // 设置初值（如果是edit）或者默认值
-    if (event != NULL)
-        event = NULL;
 
     ui->eventNameLineEdit->setText(tr("Untitled Event"));
     ui->startDateTimeEdit->setDateTime(startDate);
@@ -54,6 +112,7 @@ void CreateNewEventDialog::init(CacheEventModel* cacheEventModel, Event *event, 
 
     ui->repeatCheckBox->setChecked(false);
 
+    generateRepeat();
 }
 
 // 结束的时间日期必须比开始的时间日期大
@@ -116,6 +175,8 @@ void CreateNewEventDialog::on_repeatEndDateEdit_dateChanged(const QDate &date)
 void CreateNewEventDialog::on_eventNameLineEdit_textChanged(const QString &arg1)
 {
     mName = arg1;
+    setWindowTitle(arg1);
+    generateRepeat();
 }
 
 // 改结束时间
@@ -134,7 +195,7 @@ void CreateNewEventDialog::on_descriptionTextEdit_textChanged()
     mDescription = ui->descriptionTextEdit->toPlainText();
 }
 
-void CreateNewEventDialog::on_clorComboBox_currentIndexChanged(const QString &arg1)
+void CreateNewEventDialog::on_colorComboBox_currentIndexChanged(const QString &arg1)
 {
     mColor = QColor(arg1);
 }
@@ -255,6 +316,30 @@ void CreateNewEventDialog::generateRepeat()
 
     mRepeat = repeat;
     qDebug() << "Repeat style:" << mRepeat;
+
+    // 计算summary
+    QString summary;
+    summary = ui->repeatComboBox->currentText();
+    if (ui->repeatComboBox->currentIndex() == 1) // week
+        summary += tr(", ") + getWeekDayName(ui->startDateTimeEdit->date());
+    else if (ui->repeatComboBox->currentIndex() == 2) // month
+    {
+        int day = ui->startDateTimeEdit->date().day();
+        summary += tr(", ") + QString::number(day);
+        if (day == 1)
+            summary += tr(" st");
+        else if (day == 2)
+            summary += tr(" nd");
+        else if (day == 3)
+            summary += tr(" rd");
+        else
+            summary += tr(" th");
+    }
+    else if (ui->repeatComboBox->currentIndex() == 3)
+    {
+        summary += tr(", ") + ui->startDateTimeEdit->date().toString("M.d");
+    }
+    ui->repeatSummaryLabel->setText(summary);
 }
 
 void CreateNewEventDialog::on_frequencyComboBox_currentIndexChanged(int index)
@@ -275,4 +360,9 @@ void CreateNewEventDialog::on_repeatTimesSpinBox_valueChanged(int arg1)
 void CreateNewEventDialog::on_repeatEndTimeRadioButton_toggled(bool checked)
 {
     generateRepeat();
+}
+
+void CreateNewEventDialog::on_colorComboBox_currentIndexChanged(int index)
+{
+
 }

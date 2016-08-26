@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>EditEventDialog</class>
+ <class>CreateNewEventDialog</class>
  <widget class="QDialog" name="CreateNewEventDialog">
   <property name="geometry">
    <rect>
@@ -562,7 +562,7 @@
   <connection>
    <sender>dialogButtonBox</sender>
    <signal>accepted()</signal>
-   <receiver>EditEventDialog</receiver>
+   <receiver>CreateNewEventDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -578,7 +578,7 @@
   <connection>
    <sender>dialogButtonBox</sender>
    <signal>rejected()</signal>
-   <receiver>EditEventDialog</receiver>
+   <receiver>CreateNewEventDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

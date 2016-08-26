@@ -25,8 +25,13 @@ void CacheEventModel::addEvent(Event *event)
     SqlEventModel::addEventToDb(event);
     refreshEventInDays(event);
 
-    // 如果event有重复
+
     QStringList repeatList(event->repeat().split(','));
+
+    if (repeatList.at(0).toInt() == -1)
+        return;
+
+    // 如果event有重复
     int times = repeatList.at(3).toInt();
     int frequency = repeatList.at(2).toInt();
     QString time(repeatList.at(1));
@@ -143,7 +148,7 @@ void CacheEventModel::readOneYear(int year)
 QList<Event*> CacheEventModel::eventsForDate(const QDate &date)
 {
     QMap<QDate, QList<Event*> >::iterator iter;
-    qDebug() << date;
+    // qDebug() << date;
 
     QDate newDate(date);
 
