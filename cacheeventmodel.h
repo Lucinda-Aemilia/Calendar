@@ -3,6 +3,8 @@
 
 #include "sqleventmodel.h"
 
+#include <QSharedPointer>
+
 #include <QObject>
 #include <QVector>
 #include <QPair>

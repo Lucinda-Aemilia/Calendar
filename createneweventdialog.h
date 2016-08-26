@@ -5,6 +5,7 @@
 #include "cacheeventmodel.h"
 
 #include <QDialog>
+#include <QSharedPointer>
 
 namespace Ui {
 class CreateNewEventDialog;

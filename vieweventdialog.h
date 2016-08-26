@@ -4,6 +4,7 @@
 #include "createneweventdialog.h"
 
 #include <QWidget>
+#include <QSharedPointer>
 
 namespace Ui {
 class ViewEventDialog;

@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QObject>
+#include <QSharedPointer>
 
 #include "event.h"
 #include "eventdbcontract.h"

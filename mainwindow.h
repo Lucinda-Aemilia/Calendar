@@ -7,6 +7,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QTableWidget>
+#include <QSharedPointer>
 
 namespace Ui {
 class MainWindow;

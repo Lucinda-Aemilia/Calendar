@@ -7,7 +7,7 @@ CacheEventModel::CacheEventModel() : SqlEventModel()
 {
     qDebug() << "CacheEventModel constructor";
 
-    connect(this, SIGNAL(oneDayChanged(QDate)), this, SLOT(refreshOneDay(QDate)));
+    // connect(this, SIGNAL(oneDayChanged(QDate)), this, SLOT(refreshOneDay(QDate)));
 }
 
 void CacheEventModel::addEvent(Event *event)

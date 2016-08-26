@@ -9,6 +9,7 @@
 #include <QDragEnterEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QFileInfo>
+#include <QSharedPointer>
 
 namespace Ui {
 class DragFileComboBox;

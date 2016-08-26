@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QString>
 #include <QColor>
+#include <QSharedPointer>
 
 class Event : public QObject
 {

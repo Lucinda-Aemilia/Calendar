@@ -10,6 +10,7 @@
 #include <qpen>
 #include <qbrush>
 #include <QVector>
+#include <QSharedPointer>
 
 QT_BEGIN_NAMESPACE
 class QDragEnterEvent;

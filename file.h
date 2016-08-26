@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QDate>
 #include <QStringList>
+#include <QSharedPointer>
 
 class File : public QObject
 {

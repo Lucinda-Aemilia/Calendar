@@ -2,6 +2,7 @@
 #define EVENTDBCONTRACT_H
 
 #include <QString>
+#include <QSharedPointer>
 
 class EventDbContract
 {

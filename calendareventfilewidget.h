@@ -5,6 +5,7 @@
 
 #include <QWidget>
 #include <QDate>
+#include <QSharedPointer>
 
 namespace Ui {
 class CalendarEventFileWidget;
