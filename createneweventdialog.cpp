@@ -135,13 +135,38 @@ void CreateNewEventDialog::deleteCurEvent()
     msgBox.setWindowTitle(tr("Delete the event"));
     msgBox.setText(tr("Do you really want to delete the event?"));
     // msgBox.setInformativeText(tr("Do you really want to delete the event?"));
-    msgBox.setStandardButtons(QMessageBox::Discard | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Cancel);
+    // msgBox.setStandardButtons(QMessageBox::Discard | QMessageBox::Cancel);
+    // msgBox.setDefaultButton(QMessageBox::Cancel);
+    /*
+    QPushButton* delCurButton = new QPushButton(tr("Only delete this event"));
+    QPushButton* delAllButton = new QPushButton(tr("Delete all events in this series"));
+    msgBox.addButton(delCurButton, QMessageBox::DestructiveRole);
+    if (mCurEvent->repeat().split(',').at(0).toInt() == -1) // 没有重复
+        msgBox.addButton(delAllButton, QMessageBox::NoRole);
+    msgBox.addButton(QMessageBox::Cancel);
+    */
+    if (mCurEvent->repeat().split(',').at(0).toInt() == -1) // 没有重复
+    {
+        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+        msgBox.setButtonText (QMessageBox::Ok, tr("Only delete this event"));
+        // msgBox.setButtonText (QMessageBox::Cancel, tr("Delete all events in this series"));
+    }
+    else
+    {
+        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setButtonText (QMessageBox::Ok, tr("Only delete this event"));
+        msgBox.setButtonText (QMessageBox::Discard, tr("Delete all events in this series"));
+    }
+
+    qDebug() << "before execution" << mCurEvent->name();
+
     int ret = msgBox.exec();
+    qDebug() << ret;
     switch (ret)
     {
-    case QMessageBox::Discard:
-        // Don't Save was clicked
+    case QMessageBox::Ok:
+        // Only delete this event was clicked
+        qDebug() << "Only delete this event was clicked";
         qDebug() << "mCurEvent is null: " << mCurEvent.isNull();
         if (mCurEvent.isNull())
         {
@@ -149,9 +174,24 @@ void CreateNewEventDialog::deleteCurEvent()
             break;
         }
         qDebug() << mCurEvent->name();
-        mCacheEventModel->deleteEvent(mCurEvent);
+        mCacheEventModel->deleteEvent(mCurEvent, 0);
         reject();
         break;
+
+    case QMessageBox::Discard:
+        // Delete all events in this series was clicked
+        qDebug() << "Delete all events in this series was clicked";
+        qDebug() << "mCurEvent is null: " << mCurEvent.isNull();
+        if (mCurEvent.isNull())
+        {
+            reject();
+            break;
+        }
+        qDebug() << mCurEvent->name();
+        mCacheEventModel->deleteEvent(mCurEvent, -1);
+        reject();
+        break;
+
     case QMessageBox::Cancel:
         // Cancel was clicked
         break;

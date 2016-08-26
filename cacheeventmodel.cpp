@@ -77,8 +77,8 @@ void CacheEventModel::addEvent(QSharedPointer<Event> event)
     }
 }
 
-void CacheEventModel::deleteEvent(QSharedPointer<Event> event)
+void CacheEventModel::deleteEvent(QSharedPointer<Event> event, int direc)
 {
-    SqlEventModel::deleteEventFromDb(event, -1);
+    SqlEventModel::deleteEventFromDb(event, direc);
 }
 

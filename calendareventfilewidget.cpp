@@ -104,7 +104,7 @@ void CalendarEventFileWidget::dragLeaveEvent(QDragLeaveEvent *event)
 
 void CalendarEventFileWidget::refreshEvents(const QDate &date)
 {
-    qDebug() << "CalendarEventFileWidget::refreshEvents" << date;
+    // qDebug() << "CalendarEventFileWidget::refreshEvents" << date;
     if (date != curDate())
         return;
     mEvents = mCacheEventModel->eventsForDate(mCurDate);

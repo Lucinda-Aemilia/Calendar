@@ -22,7 +22,7 @@ class CacheEventModel : public SqlEventModel
 public:
     CacheEventModel();
     void addEvent(QSharedPointer<Event> event);
-    void deleteEvent(QSharedPointer<Event> event);
+    void deleteEvent(QSharedPointer<Event> event, int direc);
 };
 
 #endif // CACHEEVENTMODEL_H
