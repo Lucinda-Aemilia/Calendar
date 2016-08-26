@@ -1,10 +1,17 @@
 #include "event.h"
 
+#include <QDebug>
+
 Event::Event(QString name, QDateTime startDate, QDateTime endDate, QString description,
              QString location, QColor color, QString repeat, int id, QObject *parent) :
     mName(name), mStartDate(startDate), mEndDate(endDate), mDescription(description),
     mLocation(location), mColor(color), mRepeat(repeat), mId(id), QObject(parent)
 { }
+
+Event::~Event()
+{
+    qDebug() << "Event::~Event()";
+}
 
 QString Event::name() const
 {

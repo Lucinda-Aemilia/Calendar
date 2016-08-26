@@ -24,6 +24,7 @@ public:
                    QDateTime endDate=QDateTime::currentDateTime(), QString description="",
                    QString location="", QColor color=QColor("blue"),
                    QString repeat="-1,,,", int id=-10, QObject *parent = 0);
+    ~Event();
 
     QString name() const;
     void setName(const QString &name);

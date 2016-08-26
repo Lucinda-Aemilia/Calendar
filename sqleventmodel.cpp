@@ -23,7 +23,7 @@ ORDER BY %3, %5, %4, %6")
                                      .arg(EventDbContract::START_TIME)
                                      .arg(EventDbContract::END_TIME);
     QSqlQuery query(queryStr);
-    qDebug() << queryStr;
+    // qDebug() << queryStr;
     if (!query.exec())
         qFatal("Query failed");
 
@@ -211,6 +211,9 @@ void SqlEventModel::addEventToDb(Event *event)
     connect(event, SIGNAL(endDateChanged(QDateTime)), this, SLOT(onEndDateChanged(QDateTime)));
     // to do
     connect(event, SIGNAL(repeatChanged(QString)), this, SLOT(onRepeatChanged(QString)));
+
+    for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
+        emit oneDayChanged(i);
 }
 
 void SqlEventModel::onEventNameChanged(const QString &name)

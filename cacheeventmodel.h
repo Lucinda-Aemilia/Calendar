@@ -19,17 +19,8 @@ class CacheEventModel : public SqlEventModel
 
 public:
     CacheEventModel();
-    QList<Event *> eventsForDate(const QDate &date);
     void addEvent(Event* event);
     void deleteEvent(Event* event);
-
-public slots:
-    void refreshOneDay(const QDate& date);
-    void refreshEventInDays(Event* event);
-
-private:
-    void readOneYear(int year);
-    std::map<QDate, QList<Event*> > mEvents;
 };
 
 #endif // CACHEEVENTMODEL_H

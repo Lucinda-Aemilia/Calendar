@@ -33,7 +33,6 @@ public slots:
 
 signals:
     void oneDayChanged(const QDate& date);
-    void oneDayRefreshed(const QDate& date);
 
 private:
     static void createConnection();

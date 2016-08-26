@@ -28,12 +28,6 @@ void CreateNewEventDialog::fillWithEvent(Event *event)
     ui->startDateTimeEdit->setDateTime(event->startDate());
     ui->endDateTimeEdit->setDateTime(event->endDate());
 
-    QStringList repeatList(event->repeat().split(','));
-    if (repeatList.at(0).toInt() != -1)
-        ui->repeatCheckBox->setChecked(true);
-    else
-        ui->repeatCheckBox->setChecked(false);
-
     ui->locationLineEdit->setText(event->location());
     ui->descriptionTextEdit->setPlainText(event->description());
 
@@ -57,6 +51,40 @@ void CreateNewEventDialog::fillWithEvent(Event *event)
         ui->colorComboBox->setCurrentIndex(8);
 
     // 还有一些要写
+    // repeat
+    QStringList repeatList(event->repeat().split(','));
+    int id = repeatList.at(0).toInt();
+    if (id != -1)
+        ui->repeatCheckBox->setChecked(true);
+    else
+    {
+        ui->repeatCheckBox->setChecked(false);
+        return;
+    }
+    ui->repeatStartDateEdit->setDate(event->startDate().date());
+    ui->repeatTimesRadioButton->setChecked(true);
+    int times = repeatList.at(3).toInt();
+    ui->repeatTimesSpinBox->setValue(times);
+    int frequency = repeatList.at(2).toInt();
+    ui->frequencyComboBox->setCurrentIndex(frequency - 1);
+    QString time(repeatList.at(1));
+
+    if (time == "day")
+    {
+        ui->repeatComboBox->setCurrentIndex(0);
+    }
+    else if (time == "week")
+    {
+        ui->repeatComboBox->setCurrentIndex(1);
+    }
+    else if (time == "month")
+    {
+        ui->repeatComboBox->setCurrentIndex(2);
+    }
+    else if (time == "year")
+    {
+        ui->repeatComboBox->setCurrentIndex(3);
+    }
 
     mCurEvent = event;
 }
@@ -99,8 +127,9 @@ void CreateNewEventDialog::setButtonsToViewSet()
 void CreateNewEventDialog::deleteCurEvent()
 {
     QMessageBox msgBox;
-    msgBox.setText(tr("Delete the event"));
-    msgBox.setInformativeText(tr("Do you really want to delete the event?"));
+    msgBox.setWindowTitle(tr("Delete the event"));
+    msgBox.setText(tr("Do you really want to delete the event?"));
+    // msgBox.setInformativeText(tr("Do you really want to delete the event?"));
     msgBox.setStandardButtons(QMessageBox::Discard | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Cancel);
     int ret = msgBox.exec();
@@ -110,7 +139,7 @@ void CreateNewEventDialog::deleteCurEvent()
         // Don't Save was clicked
         qDebug() << mCurEvent->name();
         mCacheEventModel->deleteEvent(mCurEvent);
-        // reject();
+        reject();
         break;
     case QMessageBox::Cancel:
         // Cancel was clicked
