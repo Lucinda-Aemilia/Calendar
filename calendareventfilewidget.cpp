@@ -230,9 +230,12 @@ void CalendarEventFileWidget::on_eventComboBox_activated(int index)
     for (QDate i(startDate1); i <= endDate1; i = i.addDays(1))
         refreshEvents(i);
     // 还需要强制翻页
-    // emit forceChangeCalendarPage(curDate().year(), curDate().month() - 1);
-    // emit forceChangeCalendarPage(curDate().year(), curDate().month() + 1);
+    // QDate thisDate(mCurDate);
+    // emit forceChangeCalendarPage(startDate1.year(), startDate1.month() - 1);
+    // emit forceChangeCalendarPage(endDate1.year(), endDate1.month() + 1);
+    qDebug() << "force changed" << mCurDate;
     emit forceChangeCalendarPage(mCurDate.year(), mCurDate.month() - 1);
+    qDebug() << "force changed" << mCurDate;
     emit forceChangeCalendarPage(mCurDate.year(), mCurDate.month() + 1);
     qDebug() << "force changed";
 }

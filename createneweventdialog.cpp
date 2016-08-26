@@ -117,16 +117,32 @@ void CreateNewEventDialog::setButtonsToViewSet()
     ui->dialogButtonBox->addButton(tr("Close"), QDialogButtonBox::RejectRole);
 
     QList<QAbstractButton*> list = ui->dialogButtonBox->buttons();
-    qDebug() << list.at(0);
+    // qDebug() << list.at(0);
     QPushButton* deleteButton = ui->dialogButtonBox->button(QDialogButtonBox::Discard);
+    QPushButton* editButton;
+
     for (int i = 0; i < list.size(); i++)
         if (list.at(i)->text() == tr("Delete"))
             deleteButton = qobject_cast<QPushButton*>(list.at(i));
+        else if (list.at(i)->text() == tr("Edit"))
+            editButton = qobject_cast<QPushButton*>(list.at(i));
     if (deleteButton)
     {
         qDebug() << deleteButton->text();
         connect(deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteCurEvent()));
     }
+    if (editButton)
+    {
+        connect(editButton, SIGNAL(clicked(bool)), this, SLOT(setButtonsToEditSet()));
+    }
+}
+
+void CreateNewEventDialog::setButtonsToEditSet()
+{
+    disableAllEdits(false);
+    ui->dialogButtonBox->clear();
+    ui->dialogButtonBox->addButton(tr("Save"), QDialogButtonBox::AcceptRole);
+    ui->dialogButtonBox->addButton(tr("Discard all changes"), QDialogButtonBox::RejectRole);
 }
 
 void CreateNewEventDialog::deleteCurEvent()
@@ -199,11 +215,6 @@ void CreateNewEventDialog::deleteCurEvent()
         // should never be reached
         break;
     }
-}
-
-void CreateNewEventDialog::setButtonsToEditSet()
-{
-
 }
 
 QSharedPointer<Event> CreateNewEventDialog::getEvent()

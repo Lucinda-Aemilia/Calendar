@@ -65,13 +65,15 @@ private slots:
 
     void on_colorComboBox_currentIndexChanged(const QString &arg1);
 
+protected slots:
+    void setButtonsToViewSet();
+    void setButtonsToEditSet();
+
 protected:
 
     // 为了继承类的方便……
     void fillWithEvent(QSharedPointer<Event> event);
     void disableAllEdits(bool disable);
-    void setButtonsToViewSet();
-    void setButtonsToEditSet();
 
     QString getWeekDayName(const QDate& date);
     Ui::CreateNewEventDialog *ui;
