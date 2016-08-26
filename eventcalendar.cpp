@@ -135,7 +135,7 @@ void EventCalendar::paintCell(QPainter *painter, const QRect &rect, const QDate 
 
 
     // 手画日期之类的
-    if (events.size() > 0)
+    if (events.size() > 0 && date != this->selectedDate())
     {
         // memo色背景
         QColor memoColor(events.at(0)->color());

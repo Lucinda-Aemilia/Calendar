@@ -518,7 +518,7 @@
          <enum>QFrame::Sunken</enum>
         </property>
         <property name="currentIndex">
-         <number>4</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="dayPage">
          <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -590,8 +590,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>812</width>
-               <height>788</height>
+               <width>832</width>
+               <height>798</height>
               </rect>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_6">

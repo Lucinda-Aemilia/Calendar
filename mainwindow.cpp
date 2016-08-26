@@ -463,6 +463,8 @@ void MainWindow::on_quickCalendar_selectionChanged()
 void MainWindow::on_month_calendar_selectionChanged()
 {
     ui->quickCalendar->setSelectedDate(ui->month_calendar->selectedDate());
+
+    // 更新控件的隐藏和显示情况
 }
 
 void MainWindow::on_month_calendar_currentPageChanged(int year, int month)
@@ -507,6 +509,16 @@ void MainWindow::on_month_calendar_currentPageChanged(int year, int month)
 
                 CalendarEventFileWidget* widget = new CalendarEventFileWidget(
                             cacheEventModel, QDate(curYear, curMonth, curDate));
+
+                // 更新控件的隐藏显示情况
+                connect(ui->month_calendar, SIGNAL(clicked(QDate)),
+                        widget, SLOT(onSelectionChanged(QDate)));
+                widget->onSelectionChanged(ui->month_calendar->selectedDate());
+
+                // 更新控件字体颜色
+                // qDebug() << "widget->setCurDateInRange" << curMonth << month;
+                widget->setCurDateInRange(curMonth == month);
+
                 tableView->setIndexWidget(tableView->model()->index(i, j), widget);
             }
         }
@@ -545,6 +557,14 @@ void MainWindow::on_month_calendar_currentPageChanged(int year, int month)
                 CalendarEventFileWidget* widget = qobject_cast<CalendarEventFileWidget*>
                         (tableView->indexWidget(tableView->model()->index(i, j)));
                 widget->setCurDate(QDate(curYear, curMonth, curDate));
+
+                // 更新控件的隐藏显示
+                widget->onSelectionChanged(ui->month_calendar->selectedDate());
+
+                // 更新控件字体颜色
+                // qDebug() << "widget->setCurDateInRange" << curMonth << month;
+                widget->setCurDateInRange(curMonth == month);
+
             }
         }
     }

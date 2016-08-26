@@ -24,6 +24,9 @@ CalendarEventFileWidget::CalendarEventFileWidget(CacheEventModel* cacheEventMode
     connect(this, SIGNAL(curDateChanged(QDate)), this, SLOT(onCurDateChanged(QDate)));
     // connect(mCacheEventModel, SIGNAL(OneDayChanged(QDate)), this, SLOT(refreshEvents(QDate)));
 
+    // 刷新文件列表
+    ui->fileComboBox->refreshFileList(mCurDate);
+
     // 拖拽
     setAcceptDrops(true);
 }
@@ -70,6 +73,9 @@ void CalendarEventFileWidget::dropEvent(QDropEvent *event)
 
         qDebug() << "CalendarEventFileWidget::dropEvent(QDropEvent *event)" << text;
         File::copyFileToPath(text, mCurDate, true);
+
+        // 刷新文件列表
+        ui->fileComboBox->refreshFileList(mCurDate);
     }
     //! [dropEvent() function part2]
 
@@ -99,9 +105,9 @@ void CalendarEventFileWidget::refreshEvents(const QDate &date)
     }
 }
 
-void CalendarEventFileWidget::refreshFiles()
+void CalendarEventFileWidget::refreshFiles(const QDate &date)
 {
-
+    ui->fileComboBox->refreshFileList(date);
 }
 
 CalendarEventFileWidget::~CalendarEventFileWidget()
@@ -124,10 +130,33 @@ void CalendarEventFileWidget::setCurDate(const QDate& curDate)
 
 }
 
+void CalendarEventFileWidget::setCurDateInRange(bool inRange)
+{
+    qDebug() << "CalendarEventFileWidget::setCurDateInRange" << inRange;
+    if (inRange)
+    {
+        QPalette pe;
+        pe.setColor(QPalette::WindowText, Qt::black);
+        ui->curDateLabel->setPalette(pe);
+        ui->curDateLabel->setStyleSheet("color:black;");
+    }
+    else
+    {
+        QPalette pe;
+        pe.setColor(QPalette::WindowText, Qt::gray);
+        ui->curDateLabel->setPalette(pe);
+        ui->curDateLabel->setStyleSheet("color:gray;");
+    }
+}
+
 void CalendarEventFileWidget::onCurDateChanged(const QDate& curDate)
 {
     ui->curDateLabel->setText(curDate.toString("d"));
+
+    // 刷新事件
     refreshEvents(curDate);
+    // 刷新文件
+    refreshFiles(curDate);
 }
 
 void CalendarEventFileWidget::on_addEventPushButton_clicked()
@@ -175,5 +204,27 @@ void CalendarEventFileWidget::on_eventComboBox_activated(int index)
     if (result = QDialog::Accepted)
     {
         // Event* event = dialog->getEvent();
+    }
+}
+
+void CalendarEventFileWidget::onSelectionChanged(const QDate& curDisplayDate)
+{
+    if (curDisplayDate != mCurDate)
+    {
+        ui->eventLabel->hide();
+        ui->eventComboBox->hide();
+        ui->addEventPushButton->hide();
+        ui->fileLabel->hide();
+        ui->fileComboBox->hide();
+        ui->addFilePushButton->hide();
+    }
+    else
+    {
+        ui->eventLabel->show();
+        ui->eventComboBox->show();
+        ui->addEventPushButton->show();
+        ui->fileLabel->show();
+        ui->fileComboBox->show();
+        ui->addFilePushButton->show();
     }
 }

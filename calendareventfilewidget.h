@@ -21,6 +21,7 @@ public:
     ~CalendarEventFileWidget();
     QDate curDate() const;
     void setCurDate(const QDate& curDate);
+    void setCurDateInRange(bool inRange);
 
     /*
 public slots:
@@ -36,10 +37,13 @@ protected:
 signals:
     void curDateChanged(const QDate& curDate);
 
+public slots:
+    void onSelectionChanged(const QDate& curDisplayDate);
+
 private slots:
     void onCurDateChanged(const QDate& curDate);
     void refreshEvents(const QDate& date);
-    void refreshFiles();
+    void refreshFiles(const QDate& date);
 
     void on_addEventPushButton_clicked();
 

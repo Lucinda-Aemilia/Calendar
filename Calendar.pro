@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     createneweventdialog.cpp \
     calendareventfilewidget.cpp \
     vieweventdialog.cpp \
-    file.cpp
+    file.cpp \
+    dragfilecombobox.cpp
 
 HEADERS  += mainwindow.h \
     eventdbcontract.h \
@@ -33,12 +34,14 @@ HEADERS  += mainwindow.h \
     createneweventdialog.h \
     calendareventfilewidget.h \
     vieweventdialog.h \
-    file.h
+    file.h \
+    dragfilecombobox.h
 
 FORMS    += mainwindow.ui \
     createneweventdialog.ui \
     calendareventfilewidget.ui \
-    vieweventdialog.ui
+    vieweventdialog.ui \
+    dragfilecombobox.ui
 
 TRANSLATIONS += cn.ts
 
