@@ -23,6 +23,9 @@ public:
     Event* getEvent();
     void generateRepeat();
 
+public slots:
+    void deleteCurEvent();
+
 private slots:
     void on_startDateTimeEdit_dateTimeChanged(const QDateTime &dateTime);
 
@@ -76,6 +79,8 @@ protected:
     QString mLocation;
     QColor mColor;
     QString mRepeat;
+
+    Event* mCurEvent;
 
     CacheEventModel* mCacheEventModel;
 };

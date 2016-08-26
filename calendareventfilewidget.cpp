@@ -64,18 +64,25 @@ void CalendarEventFileWidget::dropEvent(QDropEvent *event)
     {
         QList<QUrl> urlList = mimeData->urls();
         QString text;
-        for (int i = 0; i < urlList.size(); ++i) {
+        for (int i = 0; i < urlList.size(); ++i)
+        {
             QString url = urlList.at(i).path();
             qDebug() << "CalendarEventFileWidget::dropEvent(QDropEvent *event)" << url;
 
             // 处理目录格式
             if (url.at(0) == '/')
                 url.remove(0, 1);
+
+            QFileInfo fileInfo(url);
+            if (fileInfo.isDir())
+            {
+                qDebug() << "Dir, failed";
+                continue;
+            }
+
             File::copyFileToPath(url, mCurDate, true);
             // text += url; // + QString('\n');
         }
-
-
 
         // 刷新文件列表
         ui->fileComboBox->refreshFileList(mCurDate);
@@ -207,7 +214,9 @@ void CalendarEventFileWidget::on_eventComboBox_activated(int index)
     if (result = QDialog::Accepted)
     {
         // Event* event = dialog->getEvent();
+
     }
+    mEvents = mCacheEventModel->eventsForDate(mCurDate);
 }
 
 void CalendarEventFileWidget::onSelectionChanged(const QDate& curDisplayDate)

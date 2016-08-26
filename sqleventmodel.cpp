@@ -11,7 +11,7 @@ SqlEventModel::SqlEventModel()
     createConnection();
 }
 
-QList<Event*> SqlEventModel::eventsForDate(const QDate &date)
+QList<Event *> SqlEventModel::eventsForDate(const QDate &date)
 {
     // 排序
     const QString queryStr = QString("SELECT * FROM %1 WHERE '%2' >= %3 AND '%2' <= %4 \
@@ -50,7 +50,7 @@ ORDER BY %3, %5, %4, %6")
 
         QString repeat = query.value(EventDbContract::REPEAT).toString();
 
-        Event *event = new Event(name, startDate, endDate, description, location,
+        Event* event = new Event(name, startDate, endDate, description, location,
                                  color, repeat, id);
         events.append(event);
     }
@@ -77,8 +77,8 @@ void SqlEventModel::deleteEventFromDb(Event *event, int deleteRepeatDirect)
     {
         QSqlQuery query;
         QString queryString;
-        queryString = QString("SELECT * FROM %1 ROM %1 WHERE %2='%3' AND  \
-%4='%5' AND %6='%7' AND %8='%9' AND")
+        queryString = QString("SELECT * FROM %1 WHERE %2='%3' AND \
+%4='%5' AND %6='%7' AND %8='%9' AND ")
                 .arg(EventDbContract::TABLE_NAME)
                 .arg(EventDbContract::NAME)
                 .arg(event->name())
@@ -89,7 +89,7 @@ void SqlEventModel::deleteEventFromDb(Event *event, int deleteRepeatDirect)
                 .arg(EventDbContract::END_TIME)
                 .arg(QTime(0, 0).secsTo(event->endDate().time()));
 
-        queryString += QString("%1='%2' AND %3='%4' AND %5='%6' AND %7='%8'")
+        queryString += QString("%1='%2' AND %3='%4'")
                 .arg(EventDbContract::LOCATION)
                 .arg(event->location())
                 .arg(EventDbContract::COLOR)
@@ -100,7 +100,9 @@ void SqlEventModel::deleteEventFromDb(Event *event, int deleteRepeatDirect)
             queryString += QString("AND %1>='%2'").arg(EventDbContract::START_DATE)
                     .arg(event->startDate().date().toString("yyyy-MM-dd"));
         }
-        queryString += ')';
+
+        qDebug() << "void SqlEventModel::deleteEventFromDb(Event *event, int deleteRepeatDirect)";
+        qDebug() << queryString;
 
         query.exec(queryString);
         if (query.isActive())
@@ -109,9 +111,10 @@ void SqlEventModel::deleteEventFromDb(Event *event, int deleteRepeatDirect)
             {
                 QString repeat = query.value(EventDbContract::REPEAT).toString();
                 int repeatFatherId = repeat.split(',').at(0).toInt();
+                qDebug() << repeatFatherId;
                 if (repeatFatherId == event->repeat().split(',').at(0).toInt())
                 {
-                    int id = query.value(EventDbContract::REPEAT).toInt();
+                    int id = query.value(EventDbContract::ID).toInt();
                     deleteEventFromDb(id);
                 }
             }

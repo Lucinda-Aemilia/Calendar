@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QVector>
 #include <QPair>
-#include <QMap>
+#include <map>
 #include <QDate>
 /*
  * 启动时自动读取今年和前后两年内数据。
@@ -19,7 +19,7 @@ class CacheEventModel : public SqlEventModel
 
 public:
     CacheEventModel();
-    QList<Event*> eventsForDate(const QDate &date);
+    QList<Event *> eventsForDate(const QDate &date);
     void addEvent(Event* event);
     void deleteEvent(Event* event);
 
@@ -29,7 +29,7 @@ public slots:
 
 private:
     void readOneYear(int year);
-    QMap<QDate, QList<Event*> > mEvents;
+    std::map<QDate, QList<Event*> > mEvents;
 };
 
 #endif // CACHEEVENTMODEL_H

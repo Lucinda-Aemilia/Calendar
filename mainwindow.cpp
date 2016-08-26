@@ -12,6 +12,8 @@
 #include <QTableView>
 #include <QModelIndex>
 #include <QDragEnterEvent>
+#include <QEvent>
+#include <QDesktopWidget>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -78,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // setAttribute(Qt::WA_TranslucentBackground, true);
     // setAttribute(Qt::WA_TransparentForMouseEvents, true);
     // ui->dayButton->setWindowFlags(Qt::WindowTransparentForInput);
+    ui->attachCheckBox->hide();
 
     /*
     QList<QWidget*> lstChildren = findChildren<QWidget*>();
@@ -130,7 +133,11 @@ bool MainWindow::eventFilter(QObject* obj, QEvent *event)
         // QMouseEvent* mouseEvent = qobject_cast<QMouseEvent*>(event);
         // qDebug() << "MainWindow::eventFilter" << event->type() << mFrozen;
         if (mFrozen)
+        {
+            qDebug() << "MainWindow::eventFilter";
+            QApplication::sendEvent(QApplication::desktop(), event);
             return true;
+        }
     }
 
     if (event->type() == QEvent::DragEnter || event->type() == QEvent::DragLeave
@@ -170,11 +177,16 @@ void MainWindow::freeze(bool frozen)
         }
         */
 
-        setWindowFlags(Qt::FramelessWindowHint);
+        // setWindowFlags(Qt::FramelessWindowHint);
         // windowFlags();
         // setAttribute(Qt::WA_TranslucentBackground, true);
         // setAttribute(Qt::WA_TransparentForMouseEvents, true);
-        show();
+        // setWindowFlags(Qt::WindowTransparentForInput);
+        // show();
+
+        // QMouseEvent event(QEvent::MouseButtonPress, pos, 0, 0, 0);
+        // Application::sendEvent(QApplication::desktop(), &event);
+        mFrozen = true;
     }
     else if (!frozen && mFrozen)
     {
@@ -193,12 +205,13 @@ void MainWindow::freeze(bool frozen)
         }
         */
 
-        setWindowFlags(Qt::Window);
+        // setWindowFlags(Qt::Window);
         // setAttribute(Qt::WA_TranslucentBackground, false);
-        // setAttribute(Qt::WA_TransparentForMouseEvents, false);
-        show();
+        setAttribute(Qt::WA_TransparentForMouseEvents, false);
+        // show();
+
+        mFrozen = false;
     }
-    mFrozen = frozen;
 }
 
 void MainWindow::attachToDesktop()

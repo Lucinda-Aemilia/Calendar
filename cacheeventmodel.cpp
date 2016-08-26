@@ -15,6 +15,8 @@ CacheEventModel::CacheEventModel() : SqlEventModel()
         readOneYear(i);
     }
 
+    // qDebug() << mEvents.count();
+
     // 当某个event被改变时，刷新当日
     connect(this, SIGNAL(oneDayChanged(QDate)), this, SLOT(refreshOneDay(QDate)));
 }
@@ -94,7 +96,7 @@ void CacheEventModel::addEvent(Event *event)
 
 void CacheEventModel::deleteEvent(Event *event)
 {
-    SqlEventModel::deleteEventFromDb(event);
+    SqlEventModel::deleteEventFromDb(event, -1);
     for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
     {
         refreshOneDay(i);
@@ -109,21 +111,31 @@ void CacheEventModel::refreshEventInDays(Event* event)
 
 void CacheEventModel::refreshOneDay(const QDate &date)
 {
-    QMap<QDate, QList<Event*> >::iterator iter;
+    std::map<QDate, QList<Event*> >::iterator iter;
+    qDebug() << date;
+    mEvents.clear();
+    qDebug() << mEvents.size();
+
+
+    // qDebug() << mEvents.count();
     iter = mEvents.find(date);
     if (iter == mEvents.end())
         readOneYear(date.year());
 
     iter = mEvents.find(date);
-    // 删除这些events
 
-    QList<Event*> events = iter.value();
+    /*
+    // 删除这些events
+    // QList<Event*> events = iter.value();
+    QList<Event*> events = iter->second;
     for (int i = 0; i != events.size(); i++)
     {
         delete events.at(i);
     }
+    */
 
-    iter.value() = SqlEventModel::eventsForDate(date);
+    // iter.value() = SqlEventModel::eventsForDate(date);
+    iter->second = SqlEventModel::eventsForDate(date);
 
     qDebug() << "refresh on day" << date;
     emit oneDayRefreshed(date);
@@ -132,14 +144,15 @@ void CacheEventModel::refreshOneDay(const QDate &date)
 void CacheEventModel::readOneYear(int year)
 {
     qDebug() << "CacheEventModel::readOneYear";
-    QMap<QDate, QList<Event*> >::iterator iter;
+    std::map<QDate, QList<Event*> >::iterator iter;
     for (QDate i(year, 1, 1); i.year() == year; i = i.addDays(1))
     {
         iter = mEvents.find(i);
         if (iter == mEvents.end())
         {
             QList<Event*> events = SqlEventModel::eventsForDate(i);
-            mEvents.insert(i, events);
+            // mEvents.insert(i, events);
+            mEvents.insert(std::pair<QDate, QList<Event*> >(i, events));
             emit(oneDayRefreshed(i));
         }
     }
@@ -147,7 +160,7 @@ void CacheEventModel::readOneYear(int year)
 
 QList<Event*> CacheEventModel::eventsForDate(const QDate &date)
 {
-    QMap<QDate, QList<Event*> >::iterator iter;
+    std::map<QDate, QList<Event*> >::iterator iter;
     // qDebug() << date;
 
     QDate newDate(date);
@@ -160,7 +173,8 @@ QList<Event*> CacheEventModel::eventsForDate(const QDate &date)
         flag = true;
     }
     iter = mEvents.find(date);
-    return iter.value();
+    // return iter.value();
+    return iter->second;
 
     // 也许这样写不好
     if (flag)

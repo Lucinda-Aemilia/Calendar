@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QRadioButton>
 #include <QPushButton>
+#include <QMessageBox>
 
 CreateNewEventDialog::CreateNewEventDialog(QWidget *parent) :
     QDialog(parent),
@@ -54,6 +55,10 @@ void CreateNewEventDialog::fillWithEvent(Event *event)
         ui->colorComboBox->setCurrentIndex(7);
     else if (event->color() == Qt::lightGray)
         ui->colorComboBox->setCurrentIndex(8);
+
+    // 还有一些要写
+
+    mCurEvent = event;
 }
 
 void CreateNewEventDialog::disableAllEdits(bool disable)
@@ -80,6 +85,40 @@ void CreateNewEventDialog::setButtonsToViewSet()
 
     QList<QAbstractButton*> list = ui->dialogButtonBox->buttons();
     qDebug() << list.at(0);
+    QPushButton* deleteButton = ui->dialogButtonBox->button(QDialogButtonBox::Discard);
+    for (int i = 0; i < list.size(); i++)
+        if (list.at(i)->text() == tr("Delete"))
+            deleteButton = qobject_cast<QPushButton*>(list.at(i));
+    if (deleteButton)
+    {
+        qDebug() << deleteButton->text();
+        connect(deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteCurEvent()));
+    }
+}
+
+void CreateNewEventDialog::deleteCurEvent()
+{
+    QMessageBox msgBox;
+    msgBox.setText(tr("Delete the event"));
+    msgBox.setInformativeText(tr("Do you really want to delete the event?"));
+    msgBox.setStandardButtons(QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+    int ret = msgBox.exec();
+    switch (ret)
+    {
+    case QMessageBox::Discard:
+        // Don't Save was clicked
+        qDebug() << mCurEvent->name();
+        mCacheEventModel->deleteEvent(mCurEvent);
+        // reject();
+        break;
+    case QMessageBox::Cancel:
+        // Cancel was clicked
+        break;
+    default:
+        // should never be reached
+        break;
+    }
 }
 
 void CreateNewEventDialog::setButtonsToEditSet()
