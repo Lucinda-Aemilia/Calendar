@@ -37,6 +37,7 @@ protected:
 
 signals:
     void curDateChanged(const QDate& curDate);
+    void forceChangeCalendarPage(int year, int month);
 
 public slots:
     void onSelectionChanged(const QDate& curDisplayDate);

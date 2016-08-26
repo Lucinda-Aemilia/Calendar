@@ -527,6 +527,9 @@ void MainWindow::on_month_calendar_currentPageChanged(int year, int month)
                 // 更新控件的隐藏显示情况
                 connect(ui->month_calendar, SIGNAL(clicked(QDate)),
                         widget, SLOT(onSelectionChanged(QDate)));
+                // 强制刷新
+                connect(widget, SIGNAL(forceChangeCalendarPage(int,int)),
+                        ui->month_calendar, SLOT(setCurrentPage(int,int)));
                 widget->onSelectionChanged(ui->month_calendar->selectedDate());
 
                 // 更新控件字体颜色
