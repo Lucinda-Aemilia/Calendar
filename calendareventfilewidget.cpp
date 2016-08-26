@@ -234,9 +234,11 @@ void CalendarEventFileWidget::on_eventComboBox_activated(int index)
     // emit forceChangeCalendarPage(startDate1.year(), startDate1.month() - 1);
     // emit forceChangeCalendarPage(endDate1.year(), endDate1.month() + 1);
     qDebug() << "force changed" << mCurDate;
-    emit forceChangeCalendarPage(mCurDate.year(), mCurDate.month() - 1);
+    // emit forceChangeCalendarPage(mCurDate.year(), mCurDate.month() - 1);
+    emit forceChangeCalendarPagePrevious();
     qDebug() << "force changed" << mCurDate;
-    emit forceChangeCalendarPage(mCurDate.year(), mCurDate.month() + 1);
+    // emit forceChangeCalendarPage(mCurDate.year(), mCurDate.month() + 1);
+    emit forceChangeCalendarPageNext();
     qDebug() << "force changed";
 }
 
