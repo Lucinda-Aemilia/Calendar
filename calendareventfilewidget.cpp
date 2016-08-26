@@ -20,7 +20,7 @@ CalendarEventFileWidget::CalendarEventFileWidget(CacheEventModel* cacheEventMode
     // 保持events的同步
     refreshEvents(mCurDate);
     // connect((qobject_cast<SqlEventModel*>mCacheEventModel), SIGNAL(OneDayRefreshed(QDate)), this, SLOT(refreshEvents(QDate)));
-    connect(mCacheEventModel, SIGNAL(oneDayRefreshed(QDate)), this, SLOT(refreshEvents(QDate)));
+    connect(mCacheEventModel, SIGNAL(oneDayChanged(QDate)), this, SLOT(refreshEvents(QDate)));
     connect(this, SIGNAL(curDateChanged(QDate)), this, SLOT(onCurDateChanged(QDate)));
     // connect(mCacheEventModel, SIGNAL(OneDayChanged(QDate)), this, SLOT(refreshEvents(QDate)));
 

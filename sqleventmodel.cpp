@@ -5,6 +5,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QColor>
+#include <QSharedPointer>
 
 SqlEventModel::SqlEventModel()
 {
