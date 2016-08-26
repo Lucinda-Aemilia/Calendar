@@ -177,7 +177,7 @@ void CalendarEventFileWidget::on_addEventPushButton_clicked()
     int result = dialog->exec();
     if (result == QDialog::Accepted)
     {
-        QSharedPointer<Event> event = dialog->getEvent();
+        QSharedPointer<Event> event(dialog->getEvent());
     }
 
     /*
@@ -192,7 +192,7 @@ void CalendarEventFileWidget::on_addEventPushButton_clicked()
     // if( !memo.isEmpty() ){
     if (result == QDialog::Accepted)
     {
-        QSharedPointer<Event> newEvent = editEventDialog->getEvent();
+        QSharedPointer<Event> newEvent(editEventDialog->getEvent());
     */
 }
 
@@ -211,12 +211,14 @@ void CalendarEventFileWidget::on_eventComboBox_activated(int index)
     // CreateNewEventDialog* dialog = new CreateNewEventDialog;
     dialog->init(mCacheEventModel, mEvents.at(index));
     int result = dialog->exec();
-    if (result = QDialog::Accepted)
+    if (result == QDialog::Accepted)
     {
-        QSharedPointer<Event> event = dialog->getEvent();
-
+        QSharedPointer<Event> event(dialog->getEvent());
+        refreshEvents(curDate());
     }
-    refreshEvents(curDate());
+    else
+
+        refreshEvents(curDate());
 }
 
 void CalendarEventFileWidget::onSelectionChanged(const QDate& curDisplayDate)

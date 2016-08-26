@@ -24,6 +24,10 @@ CreateNewEventDialog::~CreateNewEventDialog()
 
 void CreateNewEventDialog::fillWithEvent(QSharedPointer<Event> event)
 {
+    mCurEvent = event;
+    qDebug() << "Is null" << mCurEvent.isNull();
+    qDebug() << "mCurEventName" << mCurEvent->name();
+
     ui->eventNameLineEdit->setText(event->name());
     ui->startDateTimeEdit->setDateTime(event->startDate());
     ui->endDateTimeEdit->setDateTime(event->endDate());
@@ -86,7 +90,8 @@ void CreateNewEventDialog::fillWithEvent(QSharedPointer<Event> event)
         ui->repeatComboBox->setCurrentIndex(3);
     }
 
-    mCurEvent = event;
+    // mCurEvent.QSharedPointer<Event>(event);
+    // mCurEvent.reset(event.data());
 }
 
 void CreateNewEventDialog::disableAllEdits(bool disable)
@@ -137,6 +142,12 @@ void CreateNewEventDialog::deleteCurEvent()
     {
     case QMessageBox::Discard:
         // Don't Save was clicked
+        qDebug() << "mCurEvent is null: " << mCurEvent.isNull();
+        if (mCurEvent.isNull())
+        {
+            reject();
+            break;
+        }
         qDebug() << mCurEvent->name();
         mCacheEventModel->deleteEvent(mCurEvent);
         reject();
@@ -163,6 +174,7 @@ QSharedPointer<Event> CreateNewEventDialog::getEvent()
     QSharedPointer<Event> event(new Event(mName, mStartDate, mEndDate, mDescription,
                              mLocation, mColor, mRepeat));
     mCacheEventModel->addEvent(event);
+    return event;
 }
 
 void CreateNewEventDialog::init(CacheEventModel* cacheEventModel, QSharedPointer<Event> event, const QDateTime& startDate,

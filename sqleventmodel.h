@@ -19,6 +19,7 @@ public:
 
 public slots:
     // 可以用 qobject_cast<chatDialog*>(QObject::sender()) 获得sender
+    /*
     void onEventNameChanged(const QString &name);
     void onStartDateChanged(const QDateTime &startDate);
     void onEndDateChanged(const QDateTime &endDate);
@@ -26,6 +27,7 @@ public slots:
     void onLocationChanged(const QString &location);
     void onColorChanged(const QColor &color);
     void onRepeatChanged(const QString &repeat);
+    */
 
     void deleteEventFromDb(QSharedPointer<Event> event, int deleteRepeatDirect); // 默认只删除自己
     void deleteEventFromDb(QSharedPointer<Event> event);
@@ -34,6 +36,7 @@ public slots:
 
 signals:
     void oneDayChanged(const QDate& date);
+    void oneDayRefreshed(const QDate& date);
 
 private:
     static void createConnection();

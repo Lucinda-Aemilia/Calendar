@@ -75,7 +75,7 @@ void EventCalendar::addNote(const QDate &date)
     // if( !memo.isEmpty() ){
     if (result == QDialog::Accepted)
     {
-        QSharedPointer<Event> newEvent = editEventDialog->getEvent();
+        QSharedPointer<Event> newEvent(editEventDialog->getEvent());
         /*
         QBrush brush;
         brush.setColor(Qt::yellow);
@@ -86,8 +86,8 @@ void EventCalendar::addNote(const QDate &date)
         */
 
         /*
-        QSharedPointer<Event> event = new Event(memo, QDateTime(date, QTime(0, 0)),
-                                 QDateTime(date, QTime(23, 59, 59)));
+        QSharedPointer<Event> event(new Event(memo, QDateTime(date, QTime(0, 0)),
+                                 QDateTime(date, QTime(23, 59, 59))));
         m_cacheEventModel->addEvent(event);
         */
     }
@@ -109,7 +109,7 @@ void EventCalendar::paintCell(QPainter *painter, const QRect &rect, const QDate 
     // qDebug() << "come in paintCell" << endl;
     QCalendarWidget::paintCell(painter, rect, date);
 
-    QList<QSharedPointer<Event>> events = m_cacheEventModel->eventsForDate(date);
+    QList<QSharedPointer<Event>> events(m_cacheEventModel->eventsForDate(date));
 
     QFont font;
     font.setFamily("Microsoft Yahei UI");

@@ -116,6 +116,22 @@ void SqlEventModel::deleteEventFromDb(QSharedPointer<Event> event, int deleteRep
                 {
                     int id = query.value(EventDbContract::ID).toInt();
                     deleteEventFromDb(id);
+
+                    // 发出信号，改变某些天
+                    QDate startDate(query.value(EventDbContract::START_DATE)
+                                                .toDateTime().date());
+                    QDate endDate(query.value(EventDbContract::END_DATE)
+                                                .toDateTime().date());
+
+                    qDebug() << startDate << endDate;
+
+                    for (QDate i(startDate); i <= endDate; i = i.addDays(1))
+                    {
+                        qDebug() << i;
+                        // emit oneDayChanged(i);
+                        // emit oneDayRefreshed(i);
+                    }
+
                 }
             }
         }
@@ -165,6 +181,17 @@ void SqlEventModel::deleteEventFromDb(QSharedPointer<Event> event)
             .arg(event->id());
     query.prepare(queryString);
     query.exec();
+
+    // 发出信号
+
+    qDebug() << event->name();
+    qDebug() << event->startDate();
+    for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
+    {
+        // emit oneDayChanged(i);
+        // emit oneDayRefreshed(i);
+    }
+
 }
 
 // 添加时需要考虑重复的问题
@@ -206,16 +233,20 @@ void SqlEventModel::addEventToDb(QSharedPointer<Event> event)
     event->setId(query.value(EventDbContract::ID).toInt());
 
     // 连接槽函数
+
+    /*
     connect(event.data(), SIGNAL(nameChanged(QString)), this, SLOT(onEventNameChanged(QString)));
     connect(event.data(), SIGNAL(startDateChanged(QDateTime)), this, SLOT(onStartDateChanged(QDateTime)));
     connect(event.data(), SIGNAL(endDateChanged(QDateTime)), this, SLOT(onEndDateChanged(QDateTime)));
     // to do
     connect(event.data(), SIGNAL(repeatChanged(QString)), this, SLOT(onRepeatChanged(QString)));
+    */
 
     for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
         emit oneDayChanged(i);
 }
 
+/*
 void SqlEventModel::onEventNameChanged(const QString &name)
 {
     QSharedPointer<Event> event(qobject_cast<Event*>(QObject::sender()));
@@ -335,6 +366,7 @@ void SqlEventModel::onRepeatChanged(const QString& repeat)
     for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
         emit oneDayChanged(i);
 }
+*/
 
 /*
     Defines a helper function to open a connection to an
