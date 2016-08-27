@@ -194,6 +194,13 @@ void CalendarEventFileWidget::on_addEventPushButton_clicked()
     {
         QSharedPointer<Event> newEvent(editEventDialog->getEvent());
     */
+    qDebug() << "force changed" << mCurDate;
+    // emit forceChangeCalendarPage(mCurDate.year(), mCurDate.month() - 1);
+    emit forceChangeCalendarPagePrevious();
+    qDebug() << "force changed" << mCurDate;
+    // emit forceChangeCalendarPage(mCurDate.year(), mCurDate.month() + 1);
+    emit forceChangeCalendarPageNext();
+    qDebug() << "force changed";
 }
 
 // 实际上，需要进入浏览编辑界面

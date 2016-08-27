@@ -102,10 +102,19 @@ void CreateNewEventDialog::disableAllEdits(bool disable)
     ui->allDayCheckBox->setDisabled(disable);
     ui->repeatCheckBox->setDisabled(disable);
     ui->locationLineEdit->setDisabled(disable);
-    ui->descriptionTextEdit->setDisabled(disable);
+    // ui->descriptionTextEdit->setDisabled(disable);
+    // 设置描述的宽度
+    ui->descriptionTextEdit->setReadOnly(disable);
     ui->colorComboBox->setDisabled(disable);
-    ui->eventDetailsGroupBox->setDisabled(disable);
-    ui->repetitionGroupBox->setDisabled(disable);
+    // ui->eventDetailsGroupBox->setDisabled(disable);
+    // ui->repetitionGroupBox->setDisabled(disable);
+    ui->repeatComboBox->setDisabled(disable);
+    ui->frequencyComboBox->setDisabled(disable);
+    ui->repeatStartDateEdit->setDisabled(disable);
+    ui->repeatTimesRadioButton->setDisabled(disable);
+    ui->repeatTimesSpinBox->setDisabled(disable);
+    ui->repeatEndTimeRadioButton->setDisabled(disable);
+    ui->repeatEndDateEdit->setDisabled(disable);
 }
 
 void CreateNewEventDialog::setButtonsToViewSet()
@@ -143,6 +152,35 @@ void CreateNewEventDialog::setButtonsToEditSet()
     ui->dialogButtonBox->clear();
     ui->dialogButtonBox->addButton(tr("Save"), QDialogButtonBox::AcceptRole);
     ui->dialogButtonBox->addButton(tr("Discard all changes"), QDialogButtonBox::RejectRole);
+
+    QPushButton* saveButton;
+    QPushButton* discardButton;
+    QList<QAbstractButton*> list = ui->dialogButtonBox->buttons();
+    for (int i = 0; i < list.size(); i++)
+        if (list.at(i)->text() == tr("Save"))
+            saveButton = qobject_cast<QPushButton*>(list.at(i));
+        else if (list.at(i)->text() == tr("Discard all changes"))
+            discardButton = qobject_cast<QPushButton*>(list.at(i));
+
+    if (saveButton)
+    {
+        qDebug() << saveButton->text();
+        connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(saveThisEvent()));
+
+    }
+    if (discardButton)
+    {
+
+    }
+}
+
+void CreateNewEventDialog::saveThisEvent()
+{
+    qDebug() << "CreateNewEventDialog::saveThisEvent()";
+    // deleteCurEvent();
+    mCacheEventModel->deleteEvent(mCurEvent, -1);
+    // 因为它最后自己调了event，我可以不管
+    // QSharedPointer<Event> event(getEvent());
 }
 
 void CreateNewEventDialog::deleteCurEvent()

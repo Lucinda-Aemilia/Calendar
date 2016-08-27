@@ -78,6 +78,7 @@ private:
 
     QSize windowMinSize, windowMaxSize;
     QPalette windowDefaultPalette;
+    QPoint windowPos;
     int windowFlags;
 };
 

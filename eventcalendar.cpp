@@ -91,7 +91,8 @@ void EventCalendar::addNote(const QDate &date)
         m_cacheEventModel->addEvent(event);
         */
     }
-
+    showPreviousMonth();
+    showNextMonth();
 }
 
 void EventCalendar::setColor(QColor& color)

@@ -255,7 +255,9 @@ void SqlEventModel::addEventToDb(QSharedPointer<Event> event)
     */
 
     for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
-        emit oneDayChanged(i);
+    {
+        // emit oneDayChanged(i);
+    }
 }
 
 /*

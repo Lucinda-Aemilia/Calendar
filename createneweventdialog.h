@@ -68,6 +68,7 @@ private slots:
 protected slots:
     void setButtonsToViewSet();
     void setButtonsToEditSet();
+    void saveThisEvent();
 
 protected:
 

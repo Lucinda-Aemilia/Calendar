@@ -186,6 +186,8 @@ void MainWindow::freeze(bool frozen)
 
         // QMouseEvent event(QEvent::MouseButtonPress, pos, 0, 0, 0);
         // Application::sendEvent(QApplication::desktop(), &event);
+        this->move(windowPos);
+        show();
         mFrozen = true;
     }
     else if (!frozen && mFrozen)
@@ -193,6 +195,7 @@ void MainWindow::freeze(bool frozen)
         // layout()->setSizeConstraint(QLayout::SetNoConstraint);
         this->setMinimumSize(windowMinSize);
         this->setMaximumSize(windowMaxSize);
+        windowPos = this->pos();
 
         /*
         QList<QWidget*> lstChildren = findChildren<QWidget*>();
@@ -477,7 +480,6 @@ void MainWindow::on_quickCalendar_selectionChanged()
 void MainWindow::on_month_calendar_selectionChanged()
 {
     ui->quickCalendar->setSelectedDate(ui->month_calendar->selectedDate());
-
     // 更新控件的隐藏和显示情况
 }
 
