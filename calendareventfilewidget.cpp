@@ -276,3 +276,24 @@ void CalendarEventFileWidget::setFileBoxDrags(bool toggled)
     qDebug() << "CalendarEventFileWidget::setFileBoxDrags(bool toggled)" << toggled;
     ui->fileComboBox->setAcceptDrops(toggled);
 }
+
+// 语言
+void CalendarEventFileWidget::changeEvent(QEvent *event)
+{
+    qDebug() << "CalendarEventFileWidget::changeEvent(QEvent *event)" << event->type();
+    if (event->type() == QEvent::LanguageChange)
+    {
+        retranslateUi();
+    }
+
+    QWidget::changeEvent(event);
+}
+
+void CalendarEventFileWidget::retranslateUi()
+{
+    // ui->eventLabel->setText(tr(ui->eventLabel->text().toStdString().c_str()));
+    ui->eventLabel->setText(tr("Event"));
+    ui->retranslateUi(this);
+    // ui->eventLabel->setText(QApplication::translate("", "Event"));
+    // ui->eventLabel->setText("活动");
+}

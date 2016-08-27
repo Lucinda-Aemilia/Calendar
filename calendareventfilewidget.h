@@ -34,6 +34,9 @@ protected:
     void dragMoveEvent(QDragMoveEvent* event);
     void dragLeaveEvent(QDragLeaveEvent* event);
     void dropEvent(QDropEvent* event);
+    // 翻译
+    void changeEvent(QEvent* event);
+    void retranslateUi();
 
 signals:
     void curDateChanged(const QDate& curDate);

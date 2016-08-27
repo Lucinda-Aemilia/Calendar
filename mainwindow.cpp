@@ -939,6 +939,7 @@ void MainWindow::onLanguageActionTriggered(bool toggled)
             QTranslator translator;
             translator.load("cn.qm");
             qApp->installTranslator(&translator);
+            refreshLanguage();
             ui->retranslateUi(this);
         }
     }
@@ -950,7 +951,12 @@ void MainWindow::onLanguageActionTriggered(bool toggled)
             QTranslator translator;
             // translator.load();
             qApp->installTranslator(&translator);
+            refreshLanguage();
             ui->retranslateUi(this);
         }
     }
+}
+
+void MainWindow::refreshLanguage()
+{
 }

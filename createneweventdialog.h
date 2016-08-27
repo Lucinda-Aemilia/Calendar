@@ -72,6 +72,9 @@ protected slots:
 
 protected:
 
+    // 翻译
+    void changeEvent(QEvent* event);
+
     // 为了继承类的方便……
     void fillWithEvent(QSharedPointer<Event> event);
     void disableAllEdits(bool disable);

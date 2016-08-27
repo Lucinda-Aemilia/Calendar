@@ -15,6 +15,7 @@ CreateNewEventDialog::CreateNewEventDialog(QWidget *parent) :
     ui->repeatCheckBox->setCheckState(Qt::Unchecked);
     ui->repetitionGroupBox->hide();
     layout()->setSizeConstraint(QLayout::SetFixedSize);
+    ui->retranslateUi(this);
 }
 
 CreateNewEventDialog::~CreateNewEventDialog()
@@ -534,4 +535,16 @@ void CreateNewEventDialog::on_repeatEndTimeRadioButton_toggled(bool checked)
 void CreateNewEventDialog::on_colorComboBox_currentIndexChanged(int index)
 {
 
+}
+
+void CreateNewEventDialog::changeEvent(QEvent *event)
+{
+    qDebug() << "CreateNewEventDialog::changeEvent(QEvent *event)" << event->type();
+    if (event->type() == QEvent::LanguageChange)
+    {
+
+        ui->retranslateUi(this);
+    }
+
+    QDialog::changeEvent(event);
 }
