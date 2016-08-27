@@ -16,6 +16,7 @@ public:
     SqlEventModel();
 
     QList<QSharedPointer<Event> > eventsForDate(const QDate &date);
+    QList<QSharedPointer<Event> > allEvents();
 
 public slots:
     // 可以用 qobject_cast<chatDialog*>(QObject::sender()) 获得sender
@@ -26,8 +27,8 @@ public slots:
     void onDescriptionChanged(const QString &description);
     void onLocationChanged(const QString &location);
     void onColorChanged(const QColor &color);
-    void onRepeatChanged(const QString &repeat);
     */
+    void onRepeatChanged(QSharedPointer<Event> event, const QString& repeat);
 
     void deleteEventFromDb(QSharedPointer<Event> event, int deleteRepeatDirect); // 默认只删除自己
     void deleteEventFromDb(QSharedPointer<Event> event);

@@ -3,6 +3,7 @@
 #include "windows.h"
 #include "createneweventdialog.h"
 #include "calendareventfilewidget.h"
+#include "event.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -14,6 +15,9 @@
 #include <QDragEnterEvent>
 #include <QEvent>
 #include <QDesktopWidget>
+#include <QXmlStreamWriter>
+#include <QXmlStreamReader>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -119,6 +123,12 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(onActionEnableDragDropToggled(bool)));
     connect(ui->actionEnable_File_Drag_and_Drop, SIGNAL(toggled(bool)),
             this, SLOT(setMonthCalendarChildWidgetsDragDrop(bool)));
+
+    // import 和 export 相关槽函数
+    connect(ui->actionExport, SIGNAL(triggered(bool)),
+            this, SLOT(onActionExportTriggered()));
+    connect(ui->actionImport, SIGNAL(triggered(bool)),
+            this, SLOT(onActionImportTriggered()));
 }
 
 bool MainWindow::eventFilter(QObject* obj, QEvent* event)
@@ -514,6 +524,8 @@ void MainWindow::on_month_calendar_selectionChanged()
 {
     ui->quickCalendar->setSelectedDate(ui->month_calendar->selectedDate());
     // 更新控件的隐藏和显示情况
+    on_month_calendar_currentPageChanged(ui->month_calendar->yearShown(),
+                                         ui->month_calendar->monthShown());
 }
 
 void MainWindow::on_month_calendar_currentPageChanged(int year, int month)
@@ -677,6 +689,7 @@ void MainWindow::onActionEnableDragDropToggled(bool toggled)
     emit actionEnableDragDropToggled(toggled);
 }
 
+// 改变drag & drop
 void MainWindow::setMonthCalendarChildWidgetsDragDrop(bool toggled)
 {
     qDebug() << "MainWindow::setMonthCalendarChildWidgetsDragDrop(bool toggled)" << toggled;
@@ -701,5 +714,109 @@ void MainWindow::setMonthCalendarChildWidgetsDragDrop(bool toggled)
                 widget->setFileBoxDrags(toggled);
             }
         }
+    }
+}
+
+// 导出所有配置
+void MainWindow::onActionExportTriggered()
+{
+    QString filename = QFileDialog::getSaveFileName(this,
+            tr("Export all events to XML"), "./calendar_events.xml",
+            tr("XML files (*.xml)"));
+    QFile file(filename);
+    file.open(QIODevice::WriteOnly);
+    QXmlStreamWriter xmlWriter(&file);
+    xmlWriter.setAutoFormatting(true);
+    xmlWriter.writeStartDocument();
+
+    QList<QSharedPointer<Event>> events(cacheEventModel->allEvents());
+
+    /*
+    xmlWriter.writeStartElement("Parameters");
+    xmlWriter.writeTextElement("para1",QString::number(1));
+    xmlWriter.writeTextElement("para2",QString::number(2));
+    xmlWriter.writeTextElement("para3",QString::number(3));
+    */
+
+    for (int i = 0; i < events.size(); i++)
+    {
+        QSharedPointer<Event> event(events.at(i));
+        xmlWriter.writeStartElement(EventDbContract::TABLE_NAME);
+        xmlWriter.writeTextElement(EventDbContract::NAME, event->name());
+        xmlWriter.writeTextElement(EventDbContract::DESCRIPTION, event->description());
+        // 只写了datetime，不做区分了，因此少了几个
+        xmlWriter.writeTextElement(EventDbContract::START_DATE, event->startDate()
+                                   .toString("yyyy-MM-dd hh::mm::ss::zzz"));
+        xmlWriter.writeTextElement(EventDbContract::END_DATE, event->endDate()
+                                   .toString("yyyy-MM-dd hh::mm::ss::zzz"));
+        xmlWriter.writeTextElement(EventDbContract::LOCATION, event->location());
+        xmlWriter.writeTextElement(EventDbContract::COLOR, event->color().name());
+        xmlWriter.writeTextElement(EventDbContract::ID, QString::number(event->id()));
+        xmlWriter.writeTextElement(EventDbContract::REPEAT, event->repeat());
+        xmlWriter.writeEndElement();
+    }
+
+    xmlWriter.writeEndElement();
+    xmlWriter.writeEndDocument();
+    file.close();
+}
+
+void MainWindow::onActionImportTriggered()
+{
+    QString filename = QFileDialog::getOpenFileName(this,
+                                                    tr("Import XML"), ".",
+                                                    tr("XML files (*.xml)"));
+    QFile file(filename);
+    if (!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug() << "Error: Cannot read file " << qPrintable(filename)
+                 << ": " << qPrintable(file.errorString());
+    }
+    QXmlStreamReader xmlReader(&file);
+    xmlReader.readNext();
+    while(!xmlReader.atEnd())
+    {
+        if(xmlReader.isStartElement())
+        {
+            if(xmlReader.name() == "Parameters")
+            {
+                xmlReader.readNext();
+            }
+            else if (xmlReader.name() == "para1")
+            {
+                int para1 = xmlReader.readElementText().toInt();
+                xmlReader.readNext();
+            }
+            else if (xmlReader.name() == "preFilterCap")
+            {
+                int para2 = xmlReader.readElementText().toInt();
+                xmlReader.readNext();
+            }
+            else if (xmlReader.name() == "SADWindowSize")
+            {
+                int para3 = xmlReader.readElementText().toInt();
+                xmlReader.readNext();
+            }
+            else
+            {
+                xmlReader.raiseError(QObject::tr("Not a options file"));
+            }
+        }
+        else
+        {
+            xmlReader.readNext();
+        }
+    }
+    file.close();
+    if (xmlReader.hasError())
+    {
+        qDebug() << "Error: Failed to parse file "
+                 << qPrintable(filename) << ": "
+                 << qPrintable(xmlReader.errorString());
+    }
+    else if (file.error() != QFile::NoError)
+    {
+        qDebug() << "Error: Cannot read file " << qPrintable(filename)
+                 << ": " << qPrintable(file.errorString());
     }
 }

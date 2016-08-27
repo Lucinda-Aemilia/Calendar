@@ -13,8 +13,8 @@ CacheEventModel::CacheEventModel() : SqlEventModel()
 void CacheEventModel::addEvent(QSharedPointer<Event> event)
 {
     qDebug() << "CacheEventModel::addEvent  " << event->name();
-    SqlEventModel::addEventToDb(event);
 
+    SqlEventModel::addEventToDb(event);
     QStringList repeatList(event->repeat().split(','));
 
     if (repeatList.at(0).toInt() == -1)
@@ -28,6 +28,9 @@ void CacheEventModel::addEvent(QSharedPointer<Event> event)
 
     QString repeat = QString("%1,%2,%3,%4").arg(id).arg(time).arg(frequency).arg(times);
     event->setRepeat(repeat);
+    // 需要在这个时候更新repeat
+    SqlEventModel::onRepeatChanged(event, repeat);
+
     QDateTime startDate(event->startDate());
     QDateTime endDate(event->endDate());
 

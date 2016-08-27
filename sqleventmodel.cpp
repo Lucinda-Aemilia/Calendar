@@ -53,6 +53,59 @@ ORDER BY %3, %5, %4, %6")
 
         QSharedPointer<Event> event(new Event(name, startDate, endDate, description, location, color, repeat, id));
         events.append(event);
+
+    }
+
+    /*
+    qDebug() << "打印sql语句一共找到了多少events";
+    for (int i = 0; i < events.size(); i++)
+        qDebug() << events.at(i)->name();
+    */
+
+    return events;
+}
+
+// 返回所有事件
+QList<QSharedPointer<Event> > SqlEventModel::allEvents()
+{
+    // 排序
+    const QString queryStr = QString("SELECT * FROM %1 ORDER BY %2, %3, %4, %5")
+            .arg(EventDbContract::TABLE_NAME)
+            .arg(EventDbContract::START_DATE)
+            .arg(EventDbContract::START_TIME)
+            .arg(EventDbContract::END_DATE)
+            .arg(EventDbContract::END_TIME);
+
+    QSqlQuery query(queryStr);
+    // qDebug() << queryStr;
+    if (!query.exec())
+        qFatal("Query failed");
+
+    QList<QSharedPointer<Event>> events;
+    while (query.next())
+    {
+        QString name(query.value(EventDbContract::NAME).toString());
+
+        QDateTime startDate;
+        startDate.setDate(query.value(EventDbContract::START_DATE).toDate());
+        startDate.setTime(QTime(0, 0).addSecs(query.value(EventDbContract::START_TIME).toInt()));
+
+        QDateTime endDate;
+        endDate.setDate(query.value(EventDbContract::END_DATE).toDate());
+        endDate.setTime(QTime(0, 0).addSecs(query.value(EventDbContract::END_TIME).toInt()));
+
+        QString description(query.value(EventDbContract::DESCRIPTION).toString());
+
+        QString location(query.value(EventDbContract::LOCATION).toString());
+
+        QColor color(query.value(EventDbContract::COLOR).toString());
+
+        int id = query.value(EventDbContract::ID).toInt();
+
+        QString repeat = query.value(EventDbContract::REPEAT).toString();
+
+        QSharedPointer<Event> event(new Event(name, startDate, endDate, description, location, color, repeat, id));
+        events.append(event);
     }
 
     /*
@@ -114,7 +167,8 @@ void SqlEventModel::deleteEventFromDb(QSharedPointer<Event> event, int deleteRep
             while (query.next())
             {
                 QString repeat = query.value(EventDbContract::REPEAT).toString();
-                int repeatFakeFatherId = repeat.split(',').at(0).toInt();
+                // int repeatFakeFatherId = repeat.split(',').at(0).toInt();
+                /*
                 qDebug() << "repeatFakeFatherId" << repeat << repeatFakeFatherId;
                 int repeatFatherId;
                 if (repeatFakeFatherId == 1)
@@ -122,8 +176,11 @@ void SqlEventModel::deleteEventFromDb(QSharedPointer<Event> event, int deleteRep
                 else
                     repeatFatherId = repeatFakeFatherId;
                 int thisRepeatFatherId = repeat.split(',').at(0).toInt();
-                qDebug() << repeatFatherId << thisRepeatFatherId << repeat;
-                if (thisRepeatFatherId == repeatFatherId || thisRepeatFatherId == 1)
+                */
+                int repeatFatherId = event->repeat().split(',').at(0).toInt();
+                int thisRepeatFatherId = repeat.split(',').at(0).toInt();
+                qDebug() << "the father ids" << repeatFatherId << thisRepeatFatherId << repeat;
+                if (thisRepeatFatherId == repeatFatherId)
                 {
                     int id = query.value(EventDbContract::ID).toInt();
                     deleteEventFromDb(id);
@@ -243,6 +300,16 @@ void SqlEventModel::addEventToDb(QSharedPointer<Event> event)
                .arg(EventDbContract::ID));
     query.first();
     event->setId(query.value(EventDbContract::ID).toInt());
+
+    // 改变表中event的repeat
+    query.exec(QString("UPDATE %1 SET %2='%3' WHERE %4='%5'")
+                    .arg(EventDbContract::TABLE_NAME)
+                    .arg(EventDbContract::REPEAT)
+                    .arg(event->repeat())
+                    .arg(EventDbContract::ID)
+                    .arg(event->id()));
+    // query.exec();
+
 
     // 连接槽函数
 
@@ -365,10 +432,9 @@ void SqlEventModel::onColorChanged(const QColor &color)
     for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
         emit oneDayChanged(i);
 }
-
-void SqlEventModel::onRepeatChanged(const QString& repeat)
+*/
+void SqlEventModel::onRepeatChanged(QSharedPointer<Event> event, const QString& repeat)
 {
-    QSharedPointer<Event> event(qobject_cast<Event*>(QObject::sender()));
     QSqlQuery query(QString("UPDATE %1 SET %2='%3' WHERE %4='%5'")
                     .arg(EventDbContract::TABLE_NAME)
                     .arg(EventDbContract::REPEAT)
@@ -377,10 +443,11 @@ void SqlEventModel::onRepeatChanged(const QString& repeat)
                     .arg(event->id()));
     query.exec();
 
+    /*
     for (QDate i(event->startDate().date()); i <= event->endDate().date(); i = i.addDays(1))
         emit oneDayChanged(i);
+    */
 }
-*/
 
 /*
     Defines a helper function to open a connection to an
