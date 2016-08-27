@@ -113,6 +113,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // 记下default背景颜色
     windowDefaultPalette = palette();
+
+    // 设置拖拽相关的槽函数
+    connect(ui->actionEnable_File_Drag_and_Drop, SIGNAL(toggled(bool)),
+            this, SLOT(onActionEnableDragDropToggled(bool)));
+    connect(ui->actionEnable_File_Drag_and_Drop, SIGNAL(toggled(bool)),
+            this, SLOT(setMonthCalendarChildWidgetsDragDrop(bool)));
 }
 
 bool MainWindow::eventFilter(QObject* obj, QEvent* event)
@@ -134,8 +140,9 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event)
         // qDebug() << "MainWindow::eventFilter" << event->type() << mFrozen;
         if (mFrozen)
         {
-            qDebug() << "MainWindow::eventFilter";
-            QApplication::sendEvent(QApplication::desktop(), event);
+            // qDebug() << "MainWindow::eventFilter" << event->type();
+            // show();
+            // QApplication::sendEvent(QApplication::desktop(), event);
             return true;
         }
     }
@@ -161,6 +168,7 @@ void MainWindow::freeze(bool frozen)
     {
         windowMinSize = this->minimumSize();
         windowMaxSize = this->maximumSize();
+        windowPos = this->pos();
         QSize curSize(this->size());
         this->setMinimumSize(curSize);
         this->setMaximumSize(curSize);
@@ -186,8 +194,8 @@ void MainWindow::freeze(bool frozen)
 
         // QMouseEvent event(QEvent::MouseButtonPress, pos, 0, 0, 0);
         // Application::sendEvent(QApplication::desktop(), &event);
-        this->move(windowPos);
-        show();
+        // this->move(windowPos);
+        // show();
         mFrozen = true;
     }
     else if (!frozen && mFrozen)
@@ -215,6 +223,27 @@ void MainWindow::freeze(bool frozen)
 
         mFrozen = false;
     }
+}
+
+void MainWindow::showEvent(QShowEvent *event)
+{
+    // qDebug() << event->type();
+    if (mFrozen)
+    {
+        this->move(windowPos);
+    }
+    QMainWindow::showEvent(event);
+}
+
+void MainWindow::moveEvent(QMoveEvent *event)
+{
+    qDebug() << event->type();
+    if (mFrozen)
+    {
+        this->move(windowPos);
+        // return;
+    }
+    QMainWindow::moveEvent(event);
 }
 
 void MainWindow::attachToDesktop()
@@ -475,6 +504,10 @@ void MainWindow::on_todayButton_clicked()
 void MainWindow::on_quickCalendar_selectionChanged()
 {
     ui->month_calendar->setSelectedDate(ui->quickCalendar->selectedDate());
+    QDate date(ui->quickCalendar->selectedDate());
+    QLocale lo(QLocale::C);
+    ui->dateDisplayLabel->setText(lo.toDate(date.toString("yyyy-MM-dd"), "yyyy-MM-dd")
+                                  .toString("yyyy.M.d  dddd"));
 }
 
 void MainWindow::on_month_calendar_selectionChanged()
@@ -629,4 +662,44 @@ void MainWindow::on_month_calendar_currentPageChanged(int year, int month)
         }
     }
     */
+}
+
+void MainWindow::on_quickCalendar_activated(const QDate &date)
+{
+
+}
+
+void MainWindow::onActionEnableDragDropToggled(bool toggled)
+{
+    qDebug() << "MainWindow::onActionEnableDragDropToggled(bool toggled)" << toggled;
+    // 设置calendar本身的drag & drop
+    ui->month_calendar->setAcceptDrops(toggled);
+    emit actionEnableDragDropToggled(toggled);
+}
+
+void MainWindow::setMonthCalendarChildWidgetsDragDrop(bool toggled)
+{
+    qDebug() << "MainWindow::setMonthCalendarChildWidgetsDragDrop(bool toggled)" << toggled;
+    QTableView *tableView = ui->month_calendar->findChild<QTableView*>("qt_calendar_calendarview");
+    int height = tableView->horizontalHeader()->count();
+    int width = tableView->verticalHeader()->count();
+
+    // 如果不是null，则改变其drag & drop能力
+    if (tableView->indexWidget(tableView->model()->index(1, 1)) != NULL)
+    {
+        int flag = -1;
+        for (int i = 1; i < width; i++)
+        {
+            for (int j = 1; j < height; j++)
+            {
+                // qDebug() << "modify" << curYear << curMonth << curDate;
+                CalendarEventFileWidget* widget = qobject_cast<CalendarEventFileWidget*>
+                        (tableView->indexWidget(tableView->model()->index(i, j)));
+
+                // 更新其drag&drop能力
+                widget->setAcceptDrops(toggled);
+                widget->setFileBoxDrags(toggled);
+            }
+        }
+    }
 }

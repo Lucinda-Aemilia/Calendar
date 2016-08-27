@@ -270,3 +270,9 @@ void CalendarEventFileWidget::onSelectionChanged(const QDate& curDisplayDate)
         ui->addFilePushButton->show();
     }
 }
+
+void CalendarEventFileWidget::setFileBoxDrags(bool toggled)
+{
+    qDebug() << "CalendarEventFileWidget::setFileBoxDrags(bool toggled)" << toggled;
+    ui->fileComboBox->setAcceptDrops(toggled);
+}

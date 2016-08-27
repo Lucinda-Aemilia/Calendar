@@ -679,7 +679,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionImport"/>
-    <addaction name="actionE_xport"/>
+    <addaction name="actionExport"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -704,7 +704,7 @@
     <string>&amp;Import</string>
    </property>
   </action>
-  <action name="actionE_xport">
+  <action name="actionExport">
    <property name="text">
     <string>&amp;Export</string>
    </property>

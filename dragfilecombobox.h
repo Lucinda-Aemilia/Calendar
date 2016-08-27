@@ -22,10 +22,10 @@ class DragFileComboBox : public QComboBox
 public:
     explicit DragFileComboBox(QWidget *parent = 0);
     ~DragFileComboBox();
-    void dragEnterEvent(QDragEnterEvent* event);
-    void dragMoveEvent(QDragMoveEvent* event);
-    void dropEvent(QDropEvent* event);
-    void dragLeaveEvent(QDragLeaveEvent* event);
+    // void dragEnterEvent(QDragEnterEvent* event);
+    // void dragMoveEvent(QDragMoveEvent* event);
+    // void dropEvent(QDropEvent* event);
+    // void dragLeaveEvent(QDragLeaveEvent* event);
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
 

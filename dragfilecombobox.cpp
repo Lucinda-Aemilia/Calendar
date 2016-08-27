@@ -18,20 +18,12 @@ DragFileComboBox::~DragFileComboBox()
     delete ui;
 }
 
-//! [dragEnterEvent() function]
+/*
 void DragFileComboBox::dragEnterEvent(QDragEnterEvent* event)
 {
-    /*
-    setText(tr("<drop content>"));
-    setBackgroundRole(QPalette::Highlight);
-
-
-    emit changed(event->mimeData());
-    */
     qDebug() << "DragFileComboBox::dragEnterEvent(QDragEnterQSharedPointer<Event> event)";
     event->acceptProposedAction();
 }
-//! [dragEnterEvent() function]
 
 //! [dragMoveEvent() function]
 void DragFileComboBox::dragMoveEvent(QDragMoveEvent* event)
@@ -55,6 +47,7 @@ void DragFileComboBox::dragLeaveEvent(QDragLeaveEvent *event)
     event->accept();
 }
 //! [dragLeaveEvent() function]
+*/
 
 void DragFileComboBox::mousePressEvent(QMouseEvent *event)
 {
@@ -104,8 +97,10 @@ void DragFileComboBox::mouseMoveEvent(QMouseEvent *event)
     // mimeData->setText("Hello World");
     drag->setMimeData(mimeData);
 
-    Qt::DropAction dropAction = drag->exec(Qt::CopyAction | Qt::MoveAction);
+    // Qt::DropAction dropAction = drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction);
+    Qt::DropAction dropAction = drag->exec(Qt::CopyAction, Qt::CopyAction);
 
+    refreshFileList(mDate);
     QComboBox::mouseMoveEvent(event);
 }
 

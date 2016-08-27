@@ -43,6 +43,7 @@ signals:
 
 public slots:
     void onSelectionChanged(const QDate& curDisplayDate);
+    void setFileBoxDrags(bool toggled);
 
 private slots:
     void onCurDateChanged(const QDate& curDate);

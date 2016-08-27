@@ -74,7 +74,10 @@ private slots:
 
     void on_quickCalendar_activated(const QDate &date);
 
+    // 设置拖拽的开启
     void onActionEnableDragDropToggled(bool toggled);
+    
+    void onActionExport
 
 private:
     bool enumUserWindowsCB(HWND hwnd, LPARAM lParam);
