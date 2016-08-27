@@ -350,7 +350,7 @@ void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)
         tableWidget->setSpan(0, i, 1, 4);
         tableWidget->setSpan(1, i, 1, 4);
     }
-    tableWidget->clearSpans();
+    // tableWidget->clearSpans();
 
     /* 说明可以在表格里直接插入按钮
     tableWidget->setSpan(0, 0, 3, 1);
