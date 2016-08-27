@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QTableWidget>
 #include <QSharedPointer>
+#include <QTranslator>
 
 namespace Ui {
 class MainWindow;
@@ -106,6 +107,8 @@ private:
     QPalette windowDefaultPalette;
     QPoint windowPos;
     int windowFlags;
+
+    QTranslator englishTranslator, chineseTranslator;
 };
 
 #endif // MAINWINDOW_H

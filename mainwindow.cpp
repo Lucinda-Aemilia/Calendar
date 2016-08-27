@@ -77,19 +77,6 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "number of rows: " << tableView->model()->rowCount();
 
     // 设置固定到桌面和透明度
-    // windowFlags = windowFlags();
-    // attachToDesktop();
-    // setAttribute(Qt::WA_TranslucentBackground);
-    // setStyleSheet("background:transparent;");
-    // no window decorations
-    // setWindowFlags(Qt::WindowStaysOnTopHint);
-    // setWindowFlags(Qt::WindowStaysOnBottomHint);
-    // setAttribute(Qt::WA_OpaquePaintEvent,true);
-    // setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint);
-    // setAttribute(Qt::WA_TranslucentBackground, true);
-    // setAttribute(Qt::WA_TransparentForMouseEvents, true);
-    // ui->dayButton->setWindowFlags(Qt::WindowTransparentForInput);
-
     ui->attachCheckBox->hide();
 
     /*
@@ -103,14 +90,6 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     }
     */
-
-    // setWindowFlags(Qt::Tool);
-    // setWindowFlags(Qt::FramelessWindowHint);
-    /*
-    etWindowFlags(Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_TranslucentBackground, true);
-    setAttribute(Qt::WA_TransparentForMouseEvents, true);
-     * */
 
     // 设置是否冻结
     mFrozen = false;
@@ -141,6 +120,9 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(onLanguageActionTriggered(bool)));
     connect(ui->englishLanguageAction, SIGNAL(toggled(bool)),
             this, SLOT(onLanguageActionTriggered(bool)));
+
+    // englishTranslator.load("");
+    chineseTranslator.load("cn.qm");
 }
 
 bool MainWindow::eventFilter(QObject* obj, QEvent* event)
@@ -979,9 +961,7 @@ void MainWindow::onLanguageActionTriggered(bool toggled)
         ui->englishLanguageAction->setChecked(!toggled);
         if (toggled) // 切换为中文
         {
-            QTranslator translator;
-            translator.load("cn.qm");
-            qApp->installTranslator(&translator);
+            qApp->installTranslator(&chineseTranslator);
             refreshLanguage();
             ui->retranslateUi(this);
         }
@@ -991,9 +971,7 @@ void MainWindow::onLanguageActionTriggered(bool toggled)
         ui->chineseLanguageAction->setChecked(!toggled);
         if (toggled) // 切换为英文
         {
-            QTranslator translator;
-            // translator.load();
-            qApp->installTranslator(&translator);
+            qApp->installTranslator(&englishTranslator);
             refreshLanguage();
             ui->retranslateUi(this);
         }
