@@ -5,17 +5,55 @@
 #include <QRadioButton>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QPainter>
+#include <QPixmap>
+#include <QIcon>
+#include <QPen>
+#include <QBrush>
 
 CreateNewEventDialog::CreateNewEventDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CreateNewEventDialog)
 {
     ui->setupUi(this);
-
     ui->repeatCheckBox->setCheckState(Qt::Unchecked);
     ui->repetitionGroupBox->hide();
     layout()->setSizeConstraint(QLayout::SetFixedSize);
-    ui->retranslateUi(this);
+
+    // 初始化颜色
+    ui->colorComboBox->clear();
+    addItemWithIconFromColor(Qt::white, tr("White"));
+    /*
+    white
+    red
+    green
+    blue
+    cyan
+    magenta
+    yellow
+    gray
+    lightGray
+    */
+    addItemWithIconFromColor(Qt::red, tr("Red"));
+    addItemWithIconFromColor(Qt::green, tr("Green"));
+    addItemWithIconFromColor(Qt::blue, tr("Blue"));
+    addItemWithIconFromColor(Qt::cyan, tr("Cyan"));
+    addItemWithIconFromColor(Qt::magenta, tr("Magenta"));
+    addItemWithIconFromColor(Qt::yellow, tr("Yellow"));
+    addItemWithIconFromColor(Qt::gray, tr("Gray"));
+    addItemWithIconFromColor(Qt::lightGray, tr("Light Gray"));
+}
+
+void CreateNewEventDialog::addItemWithIconFromColor(const QColor& color, const QString& name)
+{
+    QPixmap pixmap(16, 16);
+    // pixmap = new QPixmap(200, 200);
+    // pixmap->load(":/castle.jpg");
+    QPainter painter(&pixmap);
+    painter.setBrush(QBrush(color));
+    painter.drawRect(0, 0, 15, 15);
+    QIcon icon(pixmap);
+    ui->colorComboBox->addItem(icon, name, color);
 }
 
 CreateNewEventDialog::~CreateNewEventDialog()
@@ -367,7 +405,7 @@ void CreateNewEventDialog::on_descriptionTextEdit_textChanged()
 
 void CreateNewEventDialog::on_colorComboBox_currentIndexChanged(const QString &arg1)
 {
-    mColor = QColor(arg1);
+    // mColor = QColor(arg1);
 }
 
 
@@ -419,7 +457,7 @@ void CreateNewEventDialog::on_repeatComboBox_currentIndexChanged(int index)
 
 void CreateNewEventDialog::on_colorComboBox_currentTextChanged(const QString &arg1)
 {
-    mColor = QColor(arg1);
+    // mColor = QColor(arg1);
 }
 
 void CreateNewEventDialog::generateRepeat()
@@ -534,7 +572,7 @@ void CreateNewEventDialog::on_repeatEndTimeRadioButton_toggled(bool checked)
 
 void CreateNewEventDialog::on_colorComboBox_currentIndexChanged(int index)
 {
-
+    mColor = ui->colorComboBox->currentData().value<QColor>();
 }
 
 void CreateNewEventDialog::changeEvent(QEvent *event)

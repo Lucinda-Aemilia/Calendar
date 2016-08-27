@@ -293,7 +293,7 @@ void CalendarEventFileWidget::retranslateUi()
 {
     // ui->eventLabel->setText(tr(ui->eventLabel->text().toStdString().c_str()));
     ui->eventLabel->setText(tr("Event"));
-    ui->retranslateUi(this);
+    // ui->retranslateUi(this);
     // ui->eventLabel->setText(QApplication::translate("", "Event"));
     // ui->eventLabel->setText("活动");
 }

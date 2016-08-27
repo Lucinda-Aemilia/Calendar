@@ -209,8 +209,12 @@ void MainWindow::freeze(bool frozen)
         // QPushButton button("Cancel freeze");
         // button.show();
 
-        QDialog dialog;
+        QDialog dialog(this, Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
         dialog.setModal(false);
+        dialog.setSizeGripEnabled(true);
+        dialog.setFixedSize(500, 10);
+        // dialog.setGeometry();
+        dialog.setWindowTitle(tr("Close this window to unlock the calendar"));
         // dialog.
         dialog.exec();
 
@@ -321,7 +325,7 @@ HWND MainWindow::findDesktopIconWnd()
 
 void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)
 {
-    tableWidget->setColumnCount(1 + dayNumber*4); // 一列显示日期，其余每天有4列
+    tableWidget->setColumnCount(1 + dayNumber); // 一列显示日期，其余每天有4列
     tableWidget->setRowCount(288 + 2); // 一行日期 + 一行comboBox + 24小时*12（5min）
     tableWidget->horizontalHeader()->setVisible(false); // 不显示表头
     tableWidget->verticalHeader()->setVisible(false);
@@ -354,25 +358,57 @@ void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)
     }
 
     // 设置最上面一行的日期
+    /*
     tableWidget->setSpan(0, 0, 2, 1);
     for (int i = 1; i <= dayNumber*4; i++)
     {
         tableWidget->setSpan(0, i, 1, 4);
         tableWidget->setSpan(1, i, 1, 4);
-    }
+    }*/
     // tableWidget->clearSpans();
 
     /* 说明可以在表格里直接插入按钮
     tableWidget->setSpan(0, 0, 3, 1);
-    QComboBox *comBox = new QComboBox();
-    comBox->addItem("Y");
-    comBox->addItem("N");
-    tableWidget->setCellWidget(0,0,comBox);
+
 
     tableWidget->setSpan(0, 2, 3, 3);
     QPushButton *btn = new QPushButton();
     tableWidget->setCellWidget(0, 2, btn);
     */
+    /*
+    QComboBox *comBox = new QComboBox();
+    comBox->addItem("Y");
+    comBox->addItem("N");
+    tableWidget->setCellWidget(0,0,comBox);
+    */
+    refreshCalendarTable(dayNumber, tableWidget);
+}
+
+void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
+{
+    tableWidget->clear();
+    tableWidget->clearSpans();
+
+    tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+    tableWidget->setColumnWidth(0, 115);
+    // QFont smallFont("Microsoft Yahei UI");
+    // smallFont.setPointSize(10);
+    for (int i = 0; i < 288; i += 12)
+    {
+        tableWidget->setSpan(i+2, 0, 12, 1);
+        QTime time(i/12, 0);
+        QTableWidgetItem* item = new QTableWidgetItem(time.toString("a h:mm"));
+        // item->setFont(smallFont);
+        item->setTextAlignment(Qt::AlignTop);
+        tableWidget->setItem(i+2, 0, item);
+    }
+
+    QDate curDate(ui->quickCalendar->selectedDate());
+    QTableWidgetItem* item = new QTableWidgetItem(curDate.toString("yyyy.M.d dddd"));
+    // item->setFont(smallFont);
+    item->setTextAlignment(Qt::AlignCenter);
+    // item->setTextAlignment(Qt::AlignVCenter);
+    tableWidget->setItem(0, 1, item);
 }
 
 void MainWindow::changeCurrentButtonToggleState(int index)

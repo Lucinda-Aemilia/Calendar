@@ -6,6 +6,7 @@
 
 #include <QDialog>
 #include <QSharedPointer>
+#include <QIcon>
 
 namespace Ui {
 class CreateNewEventDialog;
@@ -74,6 +75,8 @@ protected:
 
     // 翻译
     void changeEvent(QEvent* event);
+
+    void addItemWithIconFromColor(const QColor& color, const QString &name);
 
     // 为了继承类的方便……
     void fillWithEvent(QSharedPointer<Event> event);
