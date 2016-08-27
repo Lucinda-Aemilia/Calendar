@@ -563,28 +563,28 @@
         <location filename="mainwindow.cpp" line="733"/>
         <location filename="mainwindow.cpp" line="789"/>
         <source>Importing...</source>
-        <translation>导入中……</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="780"/>
         <location filename="mainwindow.cpp" line="919"/>
         <source>Finished</source>
-        <translation>完成</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="780"/>
         <source>Export finished.</source>
-        <translation>导出完成。</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="786"/>
         <source>Import XML</source>
-        <translation>导入XML文件</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="919"/>
         <source>Import finished.</source>
-        <translation>导入完成。</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -592,42 +592,42 @@
     <message>
         <location filename="createneweventdialog.cpp" line="385"/>
         <source>Monday</source>
-        <translation>周一</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="createneweventdialog.cpp" line="388"/>
         <source>Tuesday</source>
-        <translation>周二</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="createneweventdialog.cpp" line="391"/>
         <source>Wednesday</source>
-        <translation>周三</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="createneweventdialog.cpp" line="394"/>
         <source>Thursday</source>
-        <translation>周四</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="createneweventdialog.cpp" line="397"/>
         <source>Friday</source>
-        <translation>周五</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="createneweventdialog.cpp" line="400"/>
         <source>Saturday</source>
-        <translation>周六</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="createneweventdialog.cpp" line="403"/>
         <source>Sunday</source>
-        <translation>周日</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="870"/>
         <source>Not a options file</source>
-        <translation>这不是配置文件。</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
