@@ -83,6 +83,7 @@ private slots:
     void onActionImportTriggered();
     // 切换语言
     void onLanguageActionTriggered(bool toggled);
+    void refreshLanguage();
 
 private:
     bool enumUserWindowsCB(HWND hwnd, LPARAM lParam);

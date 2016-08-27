@@ -21,6 +21,8 @@
 #include <QDateTime>
 #include <QProgressDialog>
 #include <QMessageBox>
+#include <QAction>
+#include <QTranslator>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -132,6 +134,12 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(onActionExportTriggered()));
     connect(ui->actionImport, SIGNAL(triggered(bool)),
             this, SLOT(onActionImportTriggered()));
+
+    // 切换语言槽函数
+    connect(ui->chineseLanguageAction, SIGNAL(toggled(bool)),
+            this, SLOT(onLanguageActionTriggered(bool)));
+    connect(ui->englishLanguageAction, SIGNAL(toggled(bool)),
+            this, SLOT(onLanguageActionTriggered(bool)));
 }
 
 bool MainWindow::eventFilter(QObject* obj, QEvent* event)
@@ -350,7 +358,7 @@ void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)
         tableWidget->setSpan(0, i, 1, 4);
         tableWidget->setSpan(1, i, 1, 4);
     }
-    tableWidget->clearSpans();
+    // tableWidget->clearSpans();
 
     /* 说明可以在表格里直接插入按钮
     tableWidget->setSpan(0, 0, 3, 1);
@@ -917,4 +925,32 @@ void MainWindow::onActionImportTriggered()
 
     progressDialog.setValue(2);
     QMessageBox::information(this, tr("Finished") ,tr("Import finished."));
+}
+
+// 当状态改变，则切换语言
+void MainWindow::onLanguageActionTriggered(bool toggled)
+{
+    QAction* action = dynamic_cast<QAction*>(sender());
+    if (action == ui->chineseLanguageAction)
+    {
+        ui->englishLanguageAction->setChecked(!toggled);
+        if (toggled) // 切换为中文
+        {
+            QTranslator translator;
+            translator.load("cn.qm");
+            qApp->installTranslator(&translator);
+            ui->retranslateUi(this);
+        }
+    }
+    else
+    {
+        ui->chineseLanguageAction->setChecked(!toggled);
+        if (toggled) // 切换为英文
+        {
+            QTranslator translator;
+            // translator.load();
+            qApp->installTranslator(&translator);
+            ui->retranslateUi(this);
+        }
+    }
 }

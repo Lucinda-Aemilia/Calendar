@@ -685,7 +685,15 @@
     <property name="title">
      <string>&amp;Settings</string>
     </property>
+    <widget class="QMenu" name="menu_Language">
+     <property name="title">
+      <string>&amp;Language</string>
+     </property>
+     <addaction name="chineseLanguageAction"/>
+     <addaction name="englishLanguageAction"/>
+    </widget>
     <addaction name="actionEnable_File_Drag_and_Drop"/>
+    <addaction name="menu_Language"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSettings"/>
@@ -718,6 +726,25 @@
    </property>
    <property name="text">
     <string>Enable File Drag and Drop</string>
+   </property>
+  </action>
+  <action name="chineseLanguageAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">中文</string>
+   </property>
+  </action>
+  <action name="englishLanguageAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">English</string>
    </property>
   </action>
  </widget>
