@@ -89,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // setAttribute(Qt::WA_TranslucentBackground, true);
     // setAttribute(Qt::WA_TransparentForMouseEvents, true);
     // ui->dayButton->setWindowFlags(Qt::WindowTransparentForInput);
+
     ui->attachCheckBox->hide();
 
     /*
@@ -159,6 +160,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event)
     {
         // QMouseQSharedPointer<Event> mouseEvent = qobject_cast<QMouseQSharedPointer<Event>>(event);
         // qDebug() << "MainWindow::eventFilter" << event->type() << mFrozen;
+        /*
         if (mFrozen)
         {
             // qDebug() << "MainWindow::eventFilter" << event->type();
@@ -166,6 +168,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event)
             // QApplication::sendEvent(QApplication::desktop(), event);
             return true;
         }
+        */
     }
 
     if (event->type() == QEvent::DragEnter || event->type() == QEvent::DragLeave
@@ -185,40 +188,44 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event)
 
 void MainWindow::freeze(bool frozen)
 {
-    if (frozen && !mFrozen)
+    qDebug() << "MainWindow::freeze(bool frozen)" << frozen << mFrozen;
+    if (frozen)
     {
         windowMinSize = this->minimumSize();
         windowMaxSize = this->maximumSize();
         windowPos = this->pos();
+        // windowFlags = this->win;
         QSize curSize(this->size());
         this->setMinimumSize(curSize);
         this->setMaximumSize(curSize);
-        // layout()->setSizeConstraint(QLayout::SetFixedSize);
+        windowCurSize = curSize;
 
-        /*
-        QList<QWidget*> lstChildren = findChildren<QWidget*>();
-        foreach (QWidget* pWidget, lstChildren)
-        {
-            if (pWidget != ui->freezeCheckBox)
-            {
-                pWidget->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-            }
-        }
-        */
-
+        // setAttribute(Qt::WA_TransparentForMouseEvents);
+        setWindowFlags(Qt::WindowTransparentForInput);
         // setWindowFlags(Qt::FramelessWindowHint);
-        // windowFlags();
-        // setAttribute(Qt::WA_TranslucentBackground, true);
-        // setAttribute(Qt::WA_TransparentForMouseEvents, true);
-        // setWindowFlags(Qt::WindowTransparentForInput);
-        // show();
+        show();
 
-        // QMouseEvent event(QEvent::MouseButtonPress, pos, 0, 0, 0);
-        // Application::sendEvent(QApplication::desktop(), &event);
-        // this->move(windowPos);
-        // show();
-        mFrozen = true;
+        // QMessageBox::information(this, tr("Do not freeze"), tr("Do not freeze"));
+        // QPushButton button("Cancel freeze");
+        // button.show();
+
+        QDialog dialog;
+        dialog.setModal(false);
+        // dialog.
+        dialog.exec();
+
+
+
+        // setAttribute(Qt::WA_TransparentForMouseEvents, false);
+        setWindowFlags(Qt::Window | Qt::Widget);
+        show();
+        mFrozen = false;
+        ui->freezeCheckBox->setChecked(false);
+        this->setMinimumSize(windowMinSize);
+        this->setMaximumSize(windowMaxSize);
+
     }
+
     else if (!frozen && mFrozen)
     {
         // layout()->setSizeConstraint(QLayout::SetNoConstraint);
@@ -244,31 +251,37 @@ void MainWindow::freeze(bool frozen)
 
         mFrozen = false;
     }
+
 }
 
 void MainWindow::showEvent(QShowEvent *event)
 {
+    /*
     // qDebug() << event->type();
     if (mFrozen)
     {
         this->move(windowPos);
     }
+    */
     QMainWindow::showEvent(event);
 }
 
 void MainWindow::moveEvent(QMoveEvent *event)
 {
+    /*
     qDebug() << event->type();
     if (mFrozen)
     {
         this->move(windowPos);
         // return;
     }
+    */
     QMainWindow::moveEvent(event);
 }
 
-void MainWindow::attachToDesktop()
+void MainWindow::attachToDesktop(bool attach)
 {
+    /*
     if (!attachedToDesktop)
     {
         ui->opacityHorizontalSlider->setValue(100);
@@ -278,18 +291,7 @@ void MainWindow::attachToDesktop()
         attachedToDesktop = true;
     }
     setWindowOpacity();
-}
-
-void MainWindow::detachFromDesktop()
-{
-    if (attachedToDesktop)
-    {
-        SetParent((HWND)winId(), (HWND)0);
-        attachedToDesktop = false;
-        // 将palette设置回去
-        setPalette(windowDefaultPalette);
-    }
-    setWindowOpacity();
+    */
 }
 
 bool MainWindow::enumUserWindowsCB(HWND hwnd, LPARAM lParam)
@@ -424,6 +426,7 @@ void MainWindow::on_opacityHorizontalSlider_valueChanged(int value)
 void MainWindow::setWindowOpacity()
 {
     int value = ui->opacityHorizontalSlider->value();
+    /*
     if (!attachedToDesktop)
     {
         QMainWindow::setWindowOpacity(value / 100.0);
@@ -457,6 +460,8 @@ void MainWindow::setWindowOpacity()
             setAutoFillBackground(true);
         }
     }
+    */
+    QMainWindow::setWindowOpacity(value / 100.0);
     ui->windowOpacityLabel->setText(QString::number(value) + "%");
 }
 
@@ -476,17 +481,19 @@ void MainWindow::setChildWidgetsPalette(const QPalette &palette)
 void MainWindow::on_attachCheckBox_stateChanged(int arg1)
 {
     if (arg1 == Qt::Checked)
-        attachToDesktop();
+        attachToDesktop(true);
     else
-        detachFromDesktop();
+        attachToDesktop(false);
 }
 
 void MainWindow::on_freezeCheckBox_stateChanged(int arg1)
 {
+    /*
     if (arg1 == Qt::Checked)
         freeze(true);
     else
         freeze(false);
+    */
 }
 
 // 各种情况
@@ -959,4 +966,9 @@ void MainWindow::onLanguageActionTriggered(bool toggled)
 
 void MainWindow::refreshLanguage()
 {
+}
+
+void MainWindow::on_freezeCheckBox_toggled(bool checked)
+{
+    freeze(checked);
 }

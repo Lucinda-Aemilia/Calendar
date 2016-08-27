@@ -207,6 +207,9 @@
          </item>
          <item>
           <widget class="QCheckBox" name="attachCheckBox">
+           <property name="locale">
+            <locale language="Chinese" country="China"/>
+           </property>
            <property name="text">
             <string>&amp;Attach To Desktop</string>
            </property>
@@ -214,6 +217,9 @@
          </item>
          <item>
           <widget class="QCheckBox" name="freezeCheckBox">
+           <property name="locale">
+            <locale language="Chinese" country="China"/>
+           </property>
            <property name="text">
             <string>&amp;Freeze</string>
            </property>

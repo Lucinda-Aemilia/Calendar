@@ -43,7 +43,7 @@ void CacheEventModel::addEvent(QSharedPointer<Event> event)
                             event->description(), event->location(), event->color(),
                             repeat));
             SqlEventModel::addEventToDb(newEvent);
-        }
+         }
     }
     else if (time == "week")
     {

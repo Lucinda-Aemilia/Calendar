@@ -42,8 +42,8 @@ public slots:
     void activateSchedule(bool toggled);
     void changeCurrentButtonToggleState(int index);
 
-    void attachToDesktop();
-    void detachFromDesktop();
+    void attachToDesktop(bool attach);
+    // void detachFromDesktop();
 
     void setWindowOpacity();
 
@@ -85,6 +85,8 @@ private slots:
     void onLanguageActionTriggered(bool toggled);
     void refreshLanguage();
 
+    void on_freezeCheckBox_toggled(bool checked);
+
 private:
     bool enumUserWindowsCB(HWND hwnd, LPARAM lParam);
     HWND findDesktopIconWnd();
@@ -98,7 +100,7 @@ private:
     bool attachedToDesktop;
     bool mFrozen;
 
-    QSize windowMinSize, windowMaxSize;
+    QSize windowMinSize, windowMaxSize, windowCurSize;
     QPalette windowDefaultPalette;
     QPoint windowPos;
     int windowFlags;
