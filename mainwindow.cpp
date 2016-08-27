@@ -18,6 +18,9 @@
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include <QFileDialog>
+#include <QDateTime>
+#include <QProgressDialog>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -347,6 +350,7 @@ void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)
         tableWidget->setSpan(0, i, 1, 4);
         tableWidget->setSpan(1, i, 1, 4);
     }
+    tableWidget->clearSpans();
 
     /* 说明可以在表格里直接插入按钮
     tableWidget->setSpan(0, 0, 3, 1);
@@ -728,6 +732,7 @@ void MainWindow::onActionExportTriggered()
     QXmlStreamWriter xmlWriter(&file);
     xmlWriter.setAutoFormatting(true);
     xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement(EventDbContract::DB_NAME);
 
     QList<QSharedPointer<Event>> events(cacheEventModel->allEvents());
 
@@ -759,6 +764,8 @@ void MainWindow::onActionExportTriggered()
     xmlWriter.writeEndElement();
     xmlWriter.writeEndDocument();
     file.close();
+
+    QMessageBox::information(this, tr("Finished") ,tr("Export finished."));
 }
 
 void MainWindow::onActionImportTriggered()
@@ -766,35 +773,84 @@ void MainWindow::onActionImportTriggered()
     QString filename = QFileDialog::getOpenFileName(this,
                                                     tr("Import XML"), ".",
                                                     tr("XML files (*.xml)"));
+
+    QProgressDialog progressDialog(tr("Importing..."), "", 0, 2, this);
+    progressDialog.setCancelButton(NULL);
+    progressDialog.setWindowModality(Qt::WindowModal);
+    progressDialog.setValue(0);
+    progressDialog.resize(100, 100);
+    // progressDialog.setWindowFlags(Qt::FramelessWindowHint);
+    progressDialog.show();
+    // progressDialog.reset();
+
     QFile file(filename);
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
         qDebug() << "Error: Cannot read file " << qPrintable(filename)
                  << ": " << qPrintable(file.errorString());
     }
+
     QXmlStreamReader xmlReader(&file);
     xmlReader.readNext();
+
+    QString name, description, location, repeat;
+    QColor color;
+    QDateTime startDate, endDate;
+    int id;
+
     while(!xmlReader.atEnd())
     {
-        if(xmlReader.isStartElement())
+        qApp->processEvents();
+        if (xmlReader.isStartElement())
         {
-            if(xmlReader.name() == "Parameters")
+            if (xmlReader.name() == EventDbContract::DB_NAME)
             {
                 xmlReader.readNext();
             }
-            else if (xmlReader.name() == "para1")
+            else if (xmlReader.name() == EventDbContract::TABLE_NAME)
             {
-                int para1 = xmlReader.readElementText().toInt();
                 xmlReader.readNext();
             }
-            else if (xmlReader.name() == "preFilterCap")
+            else if (xmlReader.name() == EventDbContract::NAME)
             {
-                int para2 = xmlReader.readElementText().toInt();
+                name = xmlReader.readElementText();
                 xmlReader.readNext();
             }
-            else if (xmlReader.name() == "SADWindowSize")
+            else if (xmlReader.name() == EventDbContract::DESCRIPTION)
             {
-                int para3 = xmlReader.readElementText().toInt();
+                description = xmlReader.readElementText();
+                xmlReader.readNext();
+            }
+            else if (xmlReader.name() == EventDbContract::START_DATE)
+            {
+                startDate = QDateTime::fromString(xmlReader.readElementText(),
+                                                  "yyyy-MM-dd hh::mm::ss::zzz");
+                xmlReader.readNext();
+            }
+            else if (xmlReader.name() == EventDbContract::END_DATE)
+            {
+                endDate = QDateTime::fromString(xmlReader.readElementText(),
+                                                  "yyyy-MM-dd hh::mm::ss::zzz");
+                xmlReader.readNext();
+            }
+            else if (xmlReader.name() == EventDbContract::LOCATION)
+            {
+                location = xmlReader.readElementText();
+                xmlReader.readNext();
+            }
+            else if (xmlReader.name() == EventDbContract::COLOR)
+            {
+                color = QColor(xmlReader.readElementText());
+                xmlReader.readNext();
+            }
+            else if (xmlReader.name() == EventDbContract::ID)
+            {
+                id = xmlReader.readElementText().toInt();
+                xmlReader.readNext();
+            }
+            else if (xmlReader.name() == EventDbContract::REPEAT)
+            {
+                repeat = xmlReader.readElementText();
                 xmlReader.readNext();
             }
             else
@@ -802,21 +858,51 @@ void MainWindow::onActionImportTriggered()
                 xmlReader.raiseError(QObject::tr("Not a options file"));
             }
         }
+        else if (xmlReader.isEndElement() && xmlReader.name() == EventDbContract::TABLE_NAME)
+        {
+            qDebug() << "Parsed event from XML: " << name << description << id << repeat;
+
+            // 新建一个event，插入database中，且如果是重复事件，只插第一个
+            QStringList list(repeat.split(','));
+            int fatherId = list.at(0).toInt();
+            if (fatherId != -1 && fatherId != id) // 是重复事件，但不是第一个，不插了
+            {
+                xmlReader.readNext(); // 忘了之后死循环+10086
+                continue;
+            }
+
+            QSharedPointer<Event> event(new Event(name, startDate, endDate
+                                                  , description, location, color, repeat));
+            cacheEventModel->addEvent(event);
+            qDebug() << "After adding the parsed event to db" << event->id() << event->repeat();
+
+            xmlReader.readNext(); // 忘了之后死循环
+        }
         else
         {
             xmlReader.readNext();
         }
     }
     file.close();
+
+    // 需要刷新界面
+    ui->month_calendar->showPreviousMonth();
+    ui->month_calendar->showNextMonth();
+
     if (xmlReader.hasError())
     {
         qDebug() << "Error: Failed to parse file "
                  << qPrintable(filename) << ": "
                  << qPrintable(xmlReader.errorString());
+        return;
     }
     else if (file.error() != QFile::NoError)
     {
         qDebug() << "Error: Cannot read file " << qPrintable(filename)
                  << ": " << qPrintable(file.errorString());
+        return;
     }
+
+    progressDialog.setValue(2);
+    QMessageBox::information(this, tr("Finished") ,tr("Import finished."));
 }
