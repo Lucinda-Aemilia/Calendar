@@ -152,7 +152,12 @@ void MainWindow::initYearCalendars()
     ui->curYearLabel->setText(QString::number(year));
     for (int i = 0; i < 12; i++)
     {
-        yearCalendar[i]->setSelectedDate(QDate(year, i+1, 1));
+        QDate firstDate(year, i+1, 1);
+        // yearCalendar[i]->setSelectedDate(firstDate);
+        // yearCalendar[i]->setSelectionMode(QCalendarWidget::NoSelection);
+        // yearCalendar[i]->setGridVisible(false);
+        yearCalendar[i]->setMinimumDate(firstDate);
+        yearCalendar[i]->setMaximumDate(QDate(year, i+1, firstDate.daysInMonth()));
         qDebug() << i;
 
         QTableView *tableView = yearCalendar[i]->findChild<QTableView*>("qt_calendar_calendarview");
@@ -160,8 +165,13 @@ void MainWindow::initYearCalendars()
         tableView->setColumnWidth(0, 30);
         tableView->verticalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
         tableView->setRowHeight(0, 25);
+
         for (int j = 1; j < 7; j++)
-            tableView->setRowHeight(j, 25);
+        {
+            tableView->verticalHeader()->setSectionResizeMode(j, QHeaderView::Fixed);
+            tableView->setRowHeight(j, 33);
+        }
+
     }
     qDebug() << "MainWindow::initYearCalendars() end";
 }

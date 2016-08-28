@@ -16,7 +16,8 @@ EventCalendar::EventCalendar(QWidget* parent) : QCalendarWidget(parent)
     m_outlinePen.setColor(Qt::black);
     m_outlinePen.setStyle(Qt::DotLine);
     m_transparentBrush.setColor(Qt::transparent);
-    m_unActivatedDatePen.setColor(QColor("gray"));
+    // m_unActivatedDatePen.setColor(QColor("gray"));
+
     m_activatedDatePen.setColor(QColor("black"));
     m_hasMemoBrush.setColor(QColor("yellow"));
     setAcceptDrops(true);
@@ -173,7 +174,10 @@ void EventCalendar::paintCell(QPainter *painter, const QRect &rect, const QDate 
         if (date.month() == this->monthShown())
             painter->setPen(m_activatedDatePen);
         else
+        {
             painter->setPen(m_unActivatedDatePen);
+            return;
+        }
         painter->drawText(rect, Qt::AlignCenter, date.toString("d"));
 
     }
