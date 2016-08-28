@@ -181,7 +181,11 @@ void MainWindow::refreshSchedule()
         QList<QSharedPointer<Event>> events(cacheEventModel->eventsForDate(date));
         for (int j = 0; j < events.size(); j++)
         {
-            QListWidgetItem* item = new QListWidgetItem(events.at(j)->name());
+            QString text(events.at(j)->name() + '\n');
+            text.append(events.at(j)->startDate().toString("yyyy.M.d hh:mm") + " - "
+                        + events.at(j)->endDate().toString("yyyy.M.d hh:mm") + '\n');
+            text.append(events.at(j)->location());
+            QListWidgetItem* item = new QListWidgetItem(text);
             item->setBackgroundColor(events.at(j)->color().lighter(170));
             scheduleEventList[i]->addItem(item);
         }
@@ -839,7 +843,9 @@ void MainWindow::on_quickCalendar_selectionChanged()
     // QLocale locale  = QLocale(QLocale::Swedish, QLocale::Sweden); // set the locale you want here
     // QString swedishDate = locale.toString(date, "dddd, d MMMM yyyy");
     ui->dateDisplayLabel->setText(curLocale.toString(date, "yyyy.M.d  dddd"));
+    // 月
     refreshCalendarTable();
+    refreshSchedule();
 }
 
 void MainWindow::on_month_calendar_selectionChanged()

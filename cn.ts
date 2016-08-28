@@ -590,140 +590,197 @@
         <translation>年</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="722"/>
+        <location filename="mainwindow.ui" line="701"/>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="713"/>
+        <location filename="mainwindow.ui" line="784"/>
+        <location filename="mainwindow.ui" line="849"/>
+        <location filename="mainwindow.ui" line="914"/>
+        <location filename="mainwindow.ui" line="979"/>
+        <location filename="mainwindow.ui" line="1044"/>
+        <location filename="mainwindow.ui" line="1109"/>
+        <source>Events</source>
+        <translation>活动</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="733"/>
+        <location filename="mainwindow.ui" line="801"/>
+        <location filename="mainwindow.ui" line="866"/>
+        <location filename="mainwindow.ui" line="931"/>
+        <location filename="mainwindow.ui" line="996"/>
+        <location filename="mainwindow.ui" line="1061"/>
+        <location filename="mainwindow.ui" line="1126"/>
+        <source>Files</source>
+        <translation>文件</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="772"/>
+        <source>Date2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="837"/>
+        <source>Date3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="902"/>
+        <source>Date4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="967"/>
+        <source>Date5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1032"/>
+        <source>Date6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1097"/>
+        <source>Date7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1195"/>
         <source>January</source>
         <translation>一月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="762"/>
+        <location filename="mainwindow.ui" line="1235"/>
         <source>February</source>
         <translation>二月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="811"/>
+        <location filename="mainwindow.ui" line="1284"/>
         <source>March</source>
         <translation>三月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="852"/>
+        <location filename="mainwindow.ui" line="1325"/>
         <source>April</source>
         <translation>四月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="892"/>
+        <location filename="mainwindow.ui" line="1365"/>
         <source>May</source>
         <translation>五月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="932"/>
+        <location filename="mainwindow.ui" line="1405"/>
         <source>June</source>
         <translation>六月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="972"/>
+        <location filename="mainwindow.ui" line="1445"/>
         <source>July</source>
         <translation>七月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1012"/>
+        <location filename="mainwindow.ui" line="1485"/>
         <source>August</source>
         <translation>八月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1052"/>
+        <location filename="mainwindow.ui" line="1525"/>
         <source>September</source>
         <translation>九月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1092"/>
+        <location filename="mainwindow.ui" line="1565"/>
         <source>October</source>
         <translation>十月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1132"/>
+        <location filename="mainwindow.ui" line="1605"/>
         <source>November</source>
         <translation>十一月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1172"/>
+        <location filename="mainwindow.ui" line="1645"/>
         <source>December</source>
         <translation>十二月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1222"/>
+        <location filename="mainwindow.ui" line="1695"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1229"/>
+        <location filename="mainwindow.ui" line="1702"/>
         <source>&amp;Settings</source>
         <translation>设置(&amp;S)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1233"/>
+        <location filename="mainwindow.ui" line="1706"/>
         <source>&amp;Language</source>
         <translation>语言(&amp;F)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1255"/>
+        <location filename="mainwindow.ui" line="1728"/>
         <source>&amp;Import</source>
         <translation>导入(&amp;I)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1260"/>
+        <location filename="mainwindow.ui" line="1733"/>
         <source>&amp;Export</source>
         <translation>导出(&amp;E)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1271"/>
+        <location filename="mainwindow.ui" line="1744"/>
         <source>&amp;Enable File Drag and Drop</source>
         <oldsource>Enable File Drag and Drop</oldsource>
         <translation>启用文件拖拽(&amp;E)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="251"/>
+        <location filename="mainwindow.cpp" line="329"/>
         <source>Close this window to unlock the calendar</source>
         <translation>关闭此窗口以解锁日历</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="957"/>
+        <location filename="mainwindow.cpp" line="1050"/>
         <source>Export all events to XML</source>
         <translation>将所有活动导入XML文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="958"/>
-        <location filename="mainwindow.cpp" line="1019"/>
+        <location filename="mainwindow.cpp" line="1051"/>
+        <location filename="mainwindow.cpp" line="1112"/>
         <source>XML files (*.xml)</source>
         <translation>XML文件 (*.xml)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="965"/>
+        <location filename="mainwindow.cpp" line="1058"/>
         <source>Exporting...</source>
         <translation>导出中……</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1030"/>
+        <location filename="mainwindow.cpp" line="1123"/>
         <source>Importing...</source>
         <translation>导入中……</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1012"/>
-        <location filename="mainwindow.cpp" line="1154"/>
+        <location filename="mainwindow.cpp" line="1105"/>
+        <location filename="mainwindow.cpp" line="1247"/>
         <source>Finished</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1012"/>
+        <location filename="mainwindow.cpp" line="1105"/>
         <source>Export finished.</source>
         <translation>导出完成。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1018"/>
+        <location filename="mainwindow.cpp" line="1111"/>
         <source>Import XML</source>
         <translation>导入XML文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1154"/>
+        <location filename="mainwindow.cpp" line="1247"/>
         <source>Import finished.</source>
         <translation>导入完成。</translation>
     </message>
@@ -766,7 +823,7 @@
         <translation>周日</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1104"/>
+        <location filename="mainwindow.cpp" line="1197"/>
         <source>The file is not a valid profile.</source>
         <oldsource>Not a options file</oldsource>
         <translation>文件不是合法的日历配置文件。</translation>

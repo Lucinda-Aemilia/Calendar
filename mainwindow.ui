@@ -680,10 +680,13 @@
                <x>0</x>
                <y>0</y>
                <width>948</width>
-               <height>1583</height>
+               <height>1937</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_33">
+              <property name="spacing">
+               <number>30</number>
+              </property>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_7">
                 <item>
@@ -749,6 +752,13 @@
                </layout>
               </item>
               <item>
+               <widget class="Line" name="line_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
                <layout class="QVBoxLayout" name="verticalLayout_25">
                 <item>
                  <widget class="QLabel" name="scheduleDateLabel2">
@@ -805,6 +815,13 @@
                  </layout>
                 </item>
                </layout>
+              </item>
+              <item>
+               <widget class="Line" name="line_3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_27">
@@ -865,6 +882,13 @@
                </layout>
               </item>
               <item>
+               <widget class="Line" name="line_4">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
                <layout class="QVBoxLayout" name="verticalLayout_29">
                 <item>
                  <widget class="QLabel" name="scheduleDateLabel4">
@@ -921,6 +945,13 @@
                  </layout>
                 </item>
                </layout>
+              </item>
+              <item>
+               <widget class="Line" name="line_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_30">
@@ -981,6 +1012,13 @@
                </layout>
               </item>
               <item>
+               <widget class="Line" name="line_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
                <layout class="QVBoxLayout" name="verticalLayout_31">
                 <item>
                  <widget class="QLabel" name="scheduleDateLabel6">
@@ -1037,6 +1075,13 @@
                  </layout>
                 </item>
                </layout>
+              </item>
+              <item>
+               <widget class="Line" name="line_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_32">
