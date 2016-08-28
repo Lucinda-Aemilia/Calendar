@@ -307,7 +307,8 @@ void CreateNewEventDialog::init(CacheEventModel* cacheEventModel, QSharedPointer
 
     ui->eventNameLineEdit->setText(tr("Untitled Event"));
     ui->startDateTimeEdit->setDateTime(startDate);
-    ui->endDateTimeEdit->setDateTime(endDate);
+    if (startDate == endDate)
+        ui->endDateTimeEdit->setDateTime(endDate.addSecs(60 * 60));
     ui->repeatCheckBox->setChecked(false);
     ui->locationLineEdit->setText("");
     ui->descriptionTextEdit->setPlainText("");

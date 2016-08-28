@@ -87,7 +87,7 @@
          <locale language="English" country="UnitedStates"/>
         </property>
         <property name="firstDayOfWeek">
-         <enum>Qt::Sunday</enum>
+         <enum>Qt::Monday</enum>
         </property>
         <property name="gridVisible">
          <bool>false</bool>
@@ -319,14 +319,14 @@
         <item>
          <widget class="QLabel" name="dateDisplayLabel">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="minimumSize">
            <size>
-            <width>100</width>
+            <width>200</width>
             <height>50</height>
            </size>
           </property>
@@ -334,19 +334,6 @@
            <string>TextLabel</string>
           </property>
          </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">

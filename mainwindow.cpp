@@ -5,6 +5,7 @@
 #include "calendareventfilewidget.h"
 #include "event.h"
 #include "calendartableeventbutton.h"
+#include "vieweventdialog.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -305,6 +306,7 @@ HWND MainWindow::findDesktopIconWnd()
 
 void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)
 {
+    /*
     tableWidget->setColumnCount(1 + dayNumber); // 一列显示日期，其余每天有4列
     tableWidget->setRowCount(288 + 2); // 一行日期 + 一行comboBox + 24小时*12（5min）
     tableWidget->horizontalHeader()->setVisible(false); // 不显示表头
@@ -321,6 +323,7 @@ void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)
     {
         tableWidget->setRowHeight(i, 10);
     }
+    */
 
     // 设置最上面一行的日期
     /*
@@ -375,7 +378,7 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
     tableWidget->setRowHeight(1, 30);
     for (int i = 2; i < 288 + 2; i++)
     {
-        tableWidget->setRowHeight(i, 10);
+        tableWidget->setRowHeight(i, 7);
     }
 
     tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
@@ -447,6 +450,8 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
             // pushButton->data();
             CalendarTableEventButton* pushButton =
                     new CalendarTableEventButton(events.at(j));
+            connect(pushButton, SIGNAL(clicked(bool)),
+                    this, SLOT(onCalendarTableEventButtonClicked()));
             tableWidget->setIndexWidget(
                         tableWidget->model()->index(startRow + 2, i + 1), pushButton);
             qDebug() << date << startRow << endRow;
@@ -454,6 +459,21 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
             latestClearTime = endTime;
         }
     }
+}
+
+void MainWindow::onCalendarTableEventButtonClicked()
+{
+    ViewEventDialog* dialog = new ViewEventDialog;
+    CalendarTableEventButton* pushButton = dynamic_cast<CalendarTableEventButton*>(sender());
+    // CreateNewEventDialog* dialog = new CreateNewEventDialog;
+    dialog->init(cacheEventModel, pushButton->event());
+    int result = dialog->exec();
+    if (result == QDialog::Accepted)
+    {
+        QSharedPointer<Event> event(dialog->getEvent());
+        // refreshEvents(curDate());
+    }
+    refreshCalendarTable();
 }
 
 void MainWindow::changeCurrentButtonToggleState(int index)
@@ -467,13 +487,19 @@ void MainWindow::activateDay(bool toggled)
 {
     // qDebug() << "active day" << toggled;
     if (toggled)
+    {
         ui->stackedWidget->setCurrentIndex(0);
+        refreshCalendarTable();
+    }
 }
 
 void MainWindow::activateWeek(bool toggled)
 {
     if (toggled)
+    {
         ui->stackedWidget->setCurrentIndex(1);
+        refreshCalendarTable();
+    }
 }
 
 void MainWindow::activateMonth(bool toggled)
@@ -485,7 +511,10 @@ void MainWindow::activateMonth(bool toggled)
 void MainWindow::activateFourDays(bool toggled)
 {
     if (toggled)
+    {
         ui->stackedWidget->setCurrentIndex(3);
+        refreshCalendarTable();
+    }
 }
 
 void MainWindow::activateSchedule(bool toggled)
@@ -1087,4 +1116,5 @@ void MainWindow::on_createButton_clicked()
     }
     ui->month_calendar->showPreviousMonth();
     ui->month_calendar->showNextMonth();
+    refreshCalendarTable();
 }

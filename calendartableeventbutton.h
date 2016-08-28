@@ -18,6 +18,10 @@ class CalendarTableEventButton : public QPushButton
 public:
     explicit CalendarTableEventButton(QSharedPointer<Event> event, QWidget *parent = 0);
     ~CalendarTableEventButton();
+    QSharedPointer<Event> event()
+    {
+        return mEvent;
+    }
 
 private:
     Ui::CalendarTableEventButton *ui;

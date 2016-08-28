@@ -56,6 +56,8 @@ public slots:
 
     void refreshCalendarTable(int dayNumber, QTableWidget* tableWidget);
     void refreshCalendarTable();
+    // 日历上的按钮被按下之后出现编辑页面
+    void onCalendarTableEventButtonClicked();
 
 private slots:
     void on_opacityHorizontalSlider_valueChanged(int value);
