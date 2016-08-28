@@ -31,6 +31,14 @@
     </message>
 </context>
 <context>
+    <name>CalendarTableEventButton</name>
+    <message>
+        <location filename="calendartableeventbutton.ui" line="16"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CreateNewEventDialog</name>
     <message>
         <location filename="createneweventdialog.ui" line="14"/>
@@ -459,29 +467,29 @@
         <translation>无标题活动</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="527"/>
-        <location filename="createneweventdialog.cpp" line="531"/>
-        <location filename="createneweventdialog.cpp" line="543"/>
+        <location filename="createneweventdialog.cpp" line="528"/>
+        <location filename="createneweventdialog.cpp" line="532"/>
+        <location filename="createneweventdialog.cpp" line="544"/>
         <source>, </source>
         <translation>，</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="533"/>
+        <location filename="createneweventdialog.cpp" line="534"/>
         <source> st</source>
         <translation>日</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="535"/>
+        <location filename="createneweventdialog.cpp" line="536"/>
         <source> nd</source>
         <translation>日</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="537"/>
+        <location filename="createneweventdialog.cpp" line="538"/>
         <source> rd</source>
         <translation>日</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="539"/>
+        <location filename="createneweventdialog.cpp" line="540"/>
         <source> th</source>
         <translation>日</translation>
     </message>
@@ -524,17 +532,17 @@
     <message>
         <location filename="mainwindow.ui" line="214"/>
         <source>&amp;Attach To Desktop</source>
-        <translation>固定到桌面</translation>
+        <translation>固定到桌面(&amp;A)</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="224"/>
         <source>&amp;Freeze</source>
-        <translation>冻结窗口</translation>
+        <translation>冻结窗口(&amp;F)</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="258"/>
         <source>&amp;Today</source>
-        <translation>今天</translation>
+        <translation>今天(&amp;T)</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="288"/>
@@ -552,104 +560,170 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="380"/>
+        <location filename="mainwindow.ui" line="367"/>
         <source>Day</source>
         <translation>日</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="408"/>
+        <location filename="mainwindow.ui" line="395"/>
         <source>Week</source>
         <translation>周</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="436"/>
+        <location filename="mainwindow.ui" line="423"/>
         <source>Month</source>
         <translation>月</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="464"/>
+        <location filename="mainwindow.ui" line="451"/>
         <source>4 Days</source>
         <translation>4天</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="492"/>
+        <location filename="mainwindow.ui" line="479"/>
         <source>Schedule</source>
         <translation>日程</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="685"/>
+        <location filename="mainwindow.ui" line="501"/>
+        <source>Year</source>
+        <translation>年</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="722"/>
+        <source>January</source>
+        <translation>一月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="762"/>
+        <source>February</source>
+        <translation>二月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="811"/>
+        <source>March</source>
+        <translation>三月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="852"/>
+        <source>April</source>
+        <translation>四月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="892"/>
+        <source>May</source>
+        <translation>五月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="932"/>
+        <source>June</source>
+        <translation>六月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="972"/>
+        <source>July</source>
+        <translation>七月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1012"/>
+        <source>August</source>
+        <translation>八月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1052"/>
+        <source>September</source>
+        <translation>九月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1092"/>
+        <source>October</source>
+        <translation>十月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1132"/>
+        <source>November</source>
+        <translation>十一月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1172"/>
+        <source>December</source>
+        <translation>十二月</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1222"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="692"/>
+        <location filename="mainwindow.ui" line="1229"/>
         <source>&amp;Settings</source>
-        <translation>设置</translation>
+        <translation>设置(&amp;S)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="696"/>
+        <location filename="mainwindow.ui" line="1233"/>
         <source>&amp;Language</source>
         <translation>语言(&amp;F)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="718"/>
+        <location filename="mainwindow.ui" line="1255"/>
         <source>&amp;Import</source>
-        <translation>导入</translation>
+        <translation>导入(&amp;I)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="723"/>
+        <location filename="mainwindow.ui" line="1260"/>
         <source>&amp;Export</source>
-        <translation>导出</translation>
+        <translation>导出(&amp;E)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="734"/>
-        <source>Enable File Drag and Drop</source>
-        <translation>启用文件拖拽</translation>
+        <location filename="mainwindow.ui" line="1271"/>
+        <source>&amp;Enable File Drag and Drop</source>
+        <oldsource>Enable File Drag and Drop</oldsource>
+        <translation>启用文件拖拽(&amp;E)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="195"/>
+        <location filename="mainwindow.cpp" line="251"/>
         <source>Close this window to unlock the calendar</source>
         <translation>关闭此窗口以解锁日历</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="749"/>
+        <location filename="mainwindow.cpp" line="957"/>
         <source>Export all events to XML</source>
         <translation>将所有活动导入XML文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="750"/>
-        <location filename="mainwindow.cpp" line="811"/>
+        <location filename="mainwindow.cpp" line="958"/>
+        <location filename="mainwindow.cpp" line="1019"/>
         <source>XML files (*.xml)</source>
         <translation>XML文件 (*.xml)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="757"/>
+        <location filename="mainwindow.cpp" line="965"/>
         <source>Exporting...</source>
         <translation>导出中……</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="822"/>
+        <location filename="mainwindow.cpp" line="1030"/>
         <source>Importing...</source>
         <translation>导入中……</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="804"/>
-        <location filename="mainwindow.cpp" line="945"/>
+        <location filename="mainwindow.cpp" line="1012"/>
+        <location filename="mainwindow.cpp" line="1154"/>
         <source>Finished</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="804"/>
+        <location filename="mainwindow.cpp" line="1012"/>
         <source>Export finished.</source>
         <translation>导出完成。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="810"/>
+        <location filename="mainwindow.cpp" line="1018"/>
         <source>Import XML</source>
         <translation>导入XML文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="945"/>
+        <location filename="mainwindow.cpp" line="1154"/>
         <source>Import finished.</source>
         <translation>导入完成。</translation>
     </message>
@@ -657,44 +731,45 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="createneweventdialog.cpp" line="419"/>
+        <location filename="createneweventdialog.cpp" line="420"/>
         <source>Monday</source>
         <translation>周一</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="422"/>
+        <location filename="createneweventdialog.cpp" line="423"/>
         <source>Tuesday</source>
         <translation>周二</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="425"/>
+        <location filename="createneweventdialog.cpp" line="426"/>
         <source>Wednesday</source>
         <translation>周三</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="428"/>
+        <location filename="createneweventdialog.cpp" line="429"/>
         <source>Thursday</source>
         <translation>周四</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="431"/>
+        <location filename="createneweventdialog.cpp" line="432"/>
         <source>Friday</source>
         <translation>周五</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="434"/>
+        <location filename="createneweventdialog.cpp" line="435"/>
         <source>Saturday</source>
         <translation>周六</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="437"/>
+        <location filename="createneweventdialog.cpp" line="438"/>
         <source>Sunday</source>
         <translation>周日</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="896"/>
-        <source>Not a options file</source>
-        <translation>这不是配置文件。</translation>
+        <location filename="mainwindow.cpp" line="1104"/>
+        <source>The file is not a valid profile.</source>
+        <oldsource>Not a options file</oldsource>
+        <translation>文件不是合法的日历配置文件。</translation>
     </message>
 </context>
 <context>

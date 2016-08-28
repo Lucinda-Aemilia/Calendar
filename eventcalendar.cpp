@@ -120,6 +120,8 @@ void EventCalendar::paintCell(QPainter *painter, const QRect &rect, const QDate 
     font.setPointSize(9);
     painter->setFont(font);
 
+    qDebug() << date << this->selectedDate();
+
     // 先画是否被选中
     if (date == this->selectedDate())
     {

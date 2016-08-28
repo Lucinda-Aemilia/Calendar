@@ -6,6 +6,7 @@
 #include "event.h"
 #include "calendartableeventbutton.h"
 #include "vieweventdialog.h"
+#include "file.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -26,6 +27,7 @@
 #include <QAction>
 #include <QPushButton>
 #include <QTranslator>
+#include <QListWidgetItem>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -62,6 +64,29 @@ MainWindow::MainWindow(QWidget *parent) :
     for (int i = 0; i < 12; i++)
         yearCalendar[i]->setCacheEventModel(cacheEventModel);
     initYearCalendars();
+
+    // 初始化listwidget和label
+    scheduleDateLabel[0] = ui->scheduleDateLabel1;
+    scheduleEventList[0] = ui->scheduleEventList1;
+    scheduleFileList[0] = ui->scheduleFileList1;
+    scheduleDateLabel[1] = ui->scheduleDateLabel2;
+    scheduleEventList[1] = ui->scheduleEventList2;
+    scheduleFileList[1] = ui->scheduleFileList2;
+    scheduleDateLabel[2] = ui->scheduleDateLabel3;
+    scheduleEventList[2] = ui->scheduleEventList3;
+    scheduleFileList[2] = ui->scheduleFileList3;
+    scheduleDateLabel[3] = ui->scheduleDateLabel4;
+    scheduleEventList[3] = ui->scheduleEventList4;
+    scheduleFileList[3] = ui->scheduleFileList4;
+    scheduleDateLabel[4] = ui->scheduleDateLabel5;
+    scheduleEventList[4] = ui->scheduleEventList5;
+    scheduleFileList[4] = ui->scheduleFileList5;
+    scheduleDateLabel[5] = ui->scheduleDateLabel6;
+    scheduleEventList[5] = ui->scheduleEventList6;
+    scheduleFileList[5] = ui->scheduleFileList6;
+    scheduleDateLabel[6] = ui->scheduleDateLabel7;
+    scheduleEventList[6] = ui->scheduleEventList7;
+    scheduleFileList[6] = ui->scheduleFileList7;
 
     // 设置切换按钮和stackwidget的关联
     connect(ui->dayButton, SIGNAL(toggled(bool)), this, SLOT(activateDay(bool))); qDebug() << 1;
@@ -144,16 +169,66 @@ MainWindow::MainWindow(QWidget *parent) :
     initInterface();
 }
 
+// 刷新schedule
+void MainWindow::refreshSchedule()
+{
+    QDate date(ui->quickCalendar->selectedDate());
+    for (int i = 0; i < 7; i++, date = date.addDays(1))
+    {
+        scheduleDateLabel[i]->setText(curLocale.toString(date, "yyyy.M.d dddd"));
+        scheduleEventList[i]->clear();
+        // scheduleFileList[i]->clear();
+        QList<QSharedPointer<Event>> events(cacheEventModel->eventsForDate(date));
+        for (int j = 0; j < events.size(); j++)
+        {
+            QListWidgetItem* item = new QListWidgetItem(events.at(j)->name());
+            item->setBackgroundColor(events.at(j)->color().lighter(170));
+            scheduleEventList[i]->addItem(item);
+        }
+        // scheduleEventList[i]->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        scheduleEventList[i]->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        int height = scheduleEventList[i]->sizeHintForRow(0) * scheduleEventList[i]->count()
+                + 2 * scheduleEventList[i]->frameWidth();
+        height = height < 26 ? 26 : height;
+        scheduleEventList[i]->setFixedHeight(height);
+        qDebug() << scheduleEventList[i]->sizeHintForRow(0) << scheduleEventList[i]->count();
+    }
+
+    date = ui->quickCalendar->selectedDate();
+    for (int i = 0; i < 7; i++, date = date.addDays(1))
+    {
+        // scheduleDateLabel[i]->setText(curLocale.toString(date, "yyyy.M.d dddd"));
+        // scheduleFileList[i]->clear();
+        scheduleFileList[i]->clear();
+        // QList<QSharedPointer<Event>> events(cacheEventModel->eventsForDate(date));
+        QList<QFileInfo> fileList(File::getAllFileNames(date));
+
+        for (int j = 0; j < fileList.size(); j++)
+        {
+            QListWidgetItem* item = new QListWidgetItem(fileList.at(j).fileName());
+            scheduleFileList[i]->addItem(item);
+        }
+        // scheduleFileList[i]->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        scheduleFileList[i]->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        int height = scheduleFileList[i]->sizeHintForRow(0) * scheduleFileList[i]->count()
+                + 2 * scheduleFileList[i]->frameWidth();
+        height = height < 26 ? 26 : height;
+        scheduleFileList[i]->setFixedHeight(height);
+        qDebug() << scheduleFileList[i]->sizeHintForRow(0) << scheduleFileList[i]->count();
+    }
+}
+
 void MainWindow::initYearCalendars()
 {
     qDebug() << "MainWindow::initYearCalendars()";
-    int year = QDate::currentDate().year();
+    int year = ui->quickCalendar->selectedDate().year();
     qDebug() << year;
     ui->curYearLabel->setText(QString::number(year));
     for (int i = 0; i < 12; i++)
     {
         QDate firstDate(year, i+1, 1);
-        // yearCalendar[i]->setSelectedDate(firstDate);
+        // yearCalendar[i]->setSelectedDate(firstDate.addDays(1));
+        yearCalendar[i]->setSelectedDate(firstDate);
         // yearCalendar[i]->setSelectionMode(QCalendarWidget::NoSelection);
         // yearCalendar[i]->setGridVisible(false);
         yearCalendar[i]->setMinimumDate(firstDate);
@@ -608,13 +683,24 @@ void MainWindow::activateFourDays(bool toggled)
 void MainWindow::activateSchedule(bool toggled)
 {
     if (toggled)
+    {
         ui->stackedWidget->setCurrentIndex(4);
+        refreshSchedule();
+    }
 }
 
 void MainWindow::activateYear(bool toggled)
 {
     if (toggled)
+    {
         ui->stackedWidget->setCurrentIndex(5);
+        for (int i = 0; i < 12; i++)
+        {
+            QDate date(yearCalendar[i]->selectedDate());
+            yearCalendar[i]->setSelectedDate(date.addDays(1));
+            yearCalendar[i]->setSelectedDate(date);
+        }
+    }
 }
 
 MainWindow::~MainWindow()
@@ -724,7 +810,19 @@ void MainWindow::changeDisplayDate(int increment)
     else if (ui->stackedWidget->currentIndex() == 3) // 4 days
         date = date.addDays(increment * 4);
     else if (ui->stackedWidget->currentIndex() == 4) // schedule
+    {
         date = date.addDays(increment * 7);
+        ui->quickCalendar->setSelectedDate(date);
+        refreshSchedule();
+    }
+    else if (ui->stackedWidget->currentIndex() == 5) // year
+    {
+        date = date.addYears(increment);
+        ui->quickCalendar->setSelectedDate(date);
+        initYearCalendars();
+        // ui->stackedWidget->setCurrentIndex(0);
+        // ui->stackedWidget->setCurrentIndex(5);
+    }
 
     ui->quickCalendar->setSelectedDate(date);
 }
@@ -1092,7 +1190,8 @@ void MainWindow::onActionImportTriggered()
             }
             else
             {
-                xmlReader.raiseError(QObject::tr("Not a options file"));
+                xmlReader.raiseError(QObject::tr("The file is not a valid profile."));
+                return;
             }
         }
         else if (xmlReader.isEndElement() && xmlReader.name() == EventDbContract::TABLE_NAME)
@@ -1189,6 +1288,7 @@ void MainWindow::initInterface()
     // initCalendarTable();
     ui->quickCalendar->setLocale(curLocale);
     ui->month_calendar->setLocale(curLocale);
+    refreshSchedule();
 
 
     for (int i = 0; i < 12; i++)

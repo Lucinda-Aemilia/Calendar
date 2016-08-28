@@ -3,13 +3,15 @@
 
 #include "cacheeventmodel.h"
 #include "windows.h"
+#include "eventcalendar.h"
 
 #include <QMainWindow>
 #include <QPushButton>
 #include <QTableWidget>
 #include <QSharedPointer>
 #include <QTranslator>
-#include <eventcalendar.h>
+#include <QListWidget>
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -60,6 +62,8 @@ public slots:
     void refreshCalendarTable();
     // 日历上的按钮被按下之后出现编辑页面
     void onCalendarTableEventButtonClicked();
+    // 刷新schedule页面
+    void refreshSchedule();
 
 private slots:
     void on_opacityHorizontalSlider_valueChanged(int value);
@@ -108,6 +112,10 @@ private:
     Ui::MainWindow *ui;
     QPushButton* switchButtons[6];
     EventCalendar* yearCalendar[12];
+    QListWidget* scheduleEventList[7];
+    QListWidget* scheduleFileList[7];
+    QLabel* scheduleDateLabel[7];
+
     CacheEventModel* cacheEventModel;
     HWND desktopHwnd;
     bool attachedToDesktop;
