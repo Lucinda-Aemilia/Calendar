@@ -22,14 +22,16 @@ CalendarTableEventButton::CalendarTableEventButton(QSharedPointer<Event> event, 
     // QColor paleColor(mEvent->color());
     // paleColor.setAlphaF(0.3);
     // setStyleSheet(QString("background-color: %1;").arg(paleColor.name()));
-    setStyleSheet(QString("background-color: %1;").arg(mEvent->color().lighter(170).name()));
+    // setStyleSheet(QString("background-color: %1;").arg(mEvent->color().lighter(170).name()));
+    QString styleSheet(QString("QPushButton { background-color: %1; border-style: outset; \
+border-width: 2px; border-color: %2; } \
+QPushButton:pressed { \
+background-color: %3; border-style: inset;}")
+            .arg(mEvent->color().lighter(170).name())
+            .arg(mEvent->color().name())
+            .arg(mEvent->color().lighter(150).name()));
+    setStyleSheet(styleSheet);
 
-    /*
-    background-color: red;
-        border-style: outset;
-        border-width: 2px;
-        border-color: beige;
-        */
 }
 
 CalendarTableEventButton::~CalendarTableEventButton()

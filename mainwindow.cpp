@@ -364,9 +364,9 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
     tableWidget->clear();
     tableWidget->clearSpans();
 
-    tableWidget->setColumnCount(1 + dayNumber); // 一列显示日期，其余每天有4列
-    tableWidget->setRowCount(288 + 2); // 一行日期 + 一行comboBox + 24小时*12（5min）
-    tableWidget->horizontalHeader()->setVisible(false); // 不显示表头
+    tableWidget->setColumnCount(1 + dayNumber); // 一列显示日期，其余每天有1列
+    tableWidget->setRowCount(288 + 1); // 一行日期 + 一行comboBox + 24小时*12（5min）
+    tableWidget->horizontalHeader()->setVisible(true); // 不显示表头
     tableWidget->verticalHeader()->setVisible(false);
     tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers); // 不能编辑
     tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
@@ -374,9 +374,9 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
     tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     // 设置行高
     tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    tableWidget->setRowHeight(0, 50);
-    tableWidget->setRowHeight(1, 30);
-    for (int i = 2; i < 288 + 2; i++)
+    // tableWidget->setRowHeight(0, 50);
+    tableWidget->setRowHeight(0, 30);
+    for (int i = 1; i < 288 + 1; i++)
     {
         tableWidget->setRowHeight(i, 7);
     }
@@ -388,7 +388,7 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
 
     for (int i = 0; i < 288; i += 12)
     {
-        tableWidget->setSpan(i+2, 0, 12, 1);
+        tableWidget->setSpan(i+1, 0, 12, 1);
         QTime time(i/12, 0);
 
         QString timeName;
@@ -400,17 +400,22 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
         QTableWidgetItem* item = new QTableWidgetItem(timeName);
         // item->setFont(smallFont);
         item->setTextAlignment(Qt::AlignTop);
-        tableWidget->setItem(i+2, 0, item);
+        tableWidget->setItem(i+1, 0, item);
     }
 
     QDate date(ui->quickCalendar->selectedDate());
     qDebug() << "calendar table" << date;
+    QStringList horizontalLabels;
+    horizontalLabels.append("");
     for (int i = 0; i < dayNumber; i++, date = date.addDays(1))
     {
+        /*
         QTableWidgetItem* item = new QTableWidgetItem(curLocale.toString(date, "yyyy.M.d\ndddd"));
         // item->setFont(smallFont);
         item->setTextAlignment(Qt::AlignCenter);
         tableWidget->setItem(0, i + 1, item);
+        */
+        horizontalLabels.append(curLocale.toString(date, "yyyy.M.d\ndddd"));
 
         QList<QSharedPointer<Event>> events(cacheEventModel->eventsForDate(date));
         QTime latestClearTime(0, 0);
@@ -424,8 +429,23 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
 
             QTime startTime, endTime;
 
-            startTime = QTime(t1.hour(), startMinute);
-            endTime = QTime(t2.hour(), endMinute);
+            if (startMinute == 60)
+            {
+                if (t1.hour() == 23)
+                    continue;
+                startTime = QTime(t1.hour() + 1, 0);
+            }
+            else
+                startTime = QTime(t1.hour(), startMinute);
+            if (endMinute == 60)
+            {
+                if (t1.hour() == 23)
+                    endTime = QTime(23, 59, 59);
+                else
+                    endTime = QTime(t1.hour() + 1, 0);
+            }
+            else
+                endTime = QTime(t2.hour(), endMinute);
 
             qDebug() << date << t1 << t2 << startTime << endTime;
 
@@ -433,13 +453,16 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
                 continue;
             if (latestClearTime > startTime)
                 startTime = latestClearTime;
-            // 需要改
-            if (!startTime.isValid() || !endTime.isValid())
-                continue;
+
 
             int startRow = QTime(0, 0).secsTo(startTime) / 60 / 5;
             int endRow = QTime(0, 0).secsTo(endTime) / 60 / 5;
-            tableWidget->setSpan(startRow + 2, i + 1, endRow - startRow, 1);
+            if (endTime == QTime(23, 59, 59))
+            {
+                endRow++;
+                qDebug() << "舍入误差";
+            }
+            tableWidget->setSpan(startRow + 1, i + 1, endRow - startRow, 1);
             /*
             QTableWidgetItem* item =
                     new QTableWidgetItem(events.at(j)->name());
@@ -453,12 +476,14 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
             connect(pushButton, SIGNAL(clicked(bool)),
                     this, SLOT(onCalendarTableEventButtonClicked()));
             tableWidget->setIndexWidget(
-                        tableWidget->model()->index(startRow + 2, i + 1), pushButton);
+                        tableWidget->model()->index(startRow + 1, i + 1), pushButton);
             qDebug() << date << startRow << endRow;
 
             latestClearTime = endTime;
         }
     }
+    // 设置表头
+    tableWidget->setHorizontalHeaderLabels(horizontalLabels);
 }
 
 void MainWindow::onCalendarTableEventButtonClicked()
