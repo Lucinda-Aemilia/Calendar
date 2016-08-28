@@ -39,11 +39,13 @@ EventCalendar::EventCalendar(QWidget* parent) : QCalendarWidget(parent)
     */
     // 拖拽
     setAcceptDrops(true);
+    /*
     QList<QWidget*> lstChildren = findChildren<QWidget*>();
     foreach (QWidget* pWidget, lstChildren)
     {
         pWidget->setAcceptDrops(true);
     }
+    */
 }
 
 EventCalendar::~EventCalendar()
@@ -128,15 +130,17 @@ void EventCalendar::paintCell(QPainter *painter, const QRect &rect, const QDate 
     }
     else
     {
+
         painter->setPen(Qt::transparent);
         painter->setBrush(Qt::white);
         painter->drawRect(rect.adjusted(0, 0, -1, -1));
         painter->setPen(QPen(Qt::transparent));
+
     }
 
 
     // 手画日期之类的
-    if (events.size() > 0 && date != this->selectedDate())
+    if (events.size() > 0 && date != this->selectedDate() && date.month() == this->monthShown())
     {
         // memo色背景
         QColor memoColor(events.at(0)->color());
@@ -145,31 +149,33 @@ void EventCalendar::paintCell(QPainter *painter, const QRect &rect, const QDate 
         painter->drawRect(rect.adjusted(0, 0, -1, -1));
 
         // 日期和待办事项
-        /*
+
         if (date.month() == this->monthShown())
             painter->setPen(m_activatedDatePen);
         else
             painter->setPen(m_unActivatedDatePen);
         QString wordsToShow;
-        wordsToShow += date.toString("d") + '\n';
+        wordsToShow += date.toString("d");
+        /*
         for (int i = 0; i != events.size(); i++)
         {
             // painter->setPen(QPen(QColor(events.at(i)->color())));
             wordsToShow += events.at(i)->name() + '\n';
         }
-        painter->drawText(rect, Qt::AlignHCenter, wordsToShow);
         */
+        painter->drawText(rect, Qt::AlignCenter, wordsToShow);
+
     }
     else
     {
         // 写日期
-        /*
+
         if (date.month() == this->monthShown())
             painter->setPen(m_activatedDatePen);
         else
             painter->setPen(m_unActivatedDatePen);
         painter->drawText(rect, Qt::AlignCenter, date.toString("d"));
-        */
+
     }
 
 }

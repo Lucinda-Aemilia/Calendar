@@ -9,6 +9,7 @@
 #include <QTableWidget>
 #include <QSharedPointer>
 #include <QTranslator>
+#include <eventcalendar.h>
 
 namespace Ui {
 class MainWindow;
@@ -41,6 +42,7 @@ public slots:
     void activateMonth(bool toggled);
     void activateFourDays(bool toggled);
     void activateSchedule(bool toggled);
+    void activateYear(bool toggled);
     void changeCurrentButtonToggleState(int index);
 
     void attachToDesktop(bool attach);
@@ -80,6 +82,8 @@ private slots:
 
     void on_quickCalendar_activated(const QDate &date);
 
+    void initYearCalendars();
+
     // 设置拖拽的开启
     void onActionEnableDragDropToggled(bool toggled);
 
@@ -102,7 +106,8 @@ private:
 
 
     Ui::MainWindow *ui;
-    QPushButton* switchButtons[5];
+    QPushButton* switchButtons[6];
+    EventCalendar* yearCalendar[12];
     CacheEventModel* cacheEventModel;
     HWND desktopHwnd;
     bool attachedToDesktop;

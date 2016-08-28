@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     cacheEventModel(new CacheEventModel)
 {
     ui->setupUi(this);
-
+    setWindowState(Qt::WindowMaximized); // 全屏
     // layout()->setSizeConstraint(QLayout::SetFixedSize);
 
     // 初始化stackwidget相关
@@ -43,16 +43,36 @@ MainWindow::MainWindow(QWidget *parent) :
     switchButtons[2] = ui->monthButton;
     switchButtons[3] = ui->fourDaysButton;
     switchButtons[4] = ui->scheduleButton;
+    switchButtons[5] = ui->yearButton;
+
+    // 初始化year calendar相关
+    yearCalendar[0] = ui->yearCalendarWidget1;
+    yearCalendar[1] = ui->yearCalendarWidget2;
+    yearCalendar[2] = ui->yearCalendarWidget3;
+    yearCalendar[3] = ui->yearCalendarWidget4;
+    yearCalendar[4] = ui->yearCalendarWidget5;
+    yearCalendar[5] = ui->yearCalendarWidget6;
+    yearCalendar[6] = ui->yearCalendarWidget7;
+    yearCalendar[7] = ui->yearCalendarWidget8;
+    yearCalendar[8] = ui->yearCalendarWidget9;
+    yearCalendar[9] = ui->yearCalendarWidget10;
+    yearCalendar[10] = ui->yearCalendarWidget11;
+    yearCalendar[11] = ui->yearCalendarWidget12;
+    // 连接到数据库
+    for (int i = 0; i < 12; i++)
+        yearCalendar[i]->setCacheEventModel(cacheEventModel);
+    initYearCalendars();
 
     // 设置切换按钮和stackwidget的关联
-    connect(ui->dayButton, SIGNAL(toggled(bool)), this, SLOT(activateDay(bool)));
-    connect(ui->weekButton, SIGNAL(toggled(bool)), this, SLOT(activateWeek(bool)));
-    connect(ui->monthButton, SIGNAL(toggled(bool)), this, SLOT(activateMonth(bool)));
-    connect(ui->fourDaysButton, SIGNAL(toggled(bool)), this, SLOT(activateFourDays(bool)));
-    connect(ui->scheduleButton, SIGNAL(toggled(bool)), this, SLOT(activateSchedule(bool)));
+    connect(ui->dayButton, SIGNAL(toggled(bool)), this, SLOT(activateDay(bool))); qDebug() << 1;
+    connect(ui->weekButton, SIGNAL(toggled(bool)), this, SLOT(activateWeek(bool))); qDebug() << 2;
+    connect(ui->monthButton, SIGNAL(toggled(bool)), this, SLOT(activateMonth(bool))); qDebug() << 3;
+    connect(ui->fourDaysButton, SIGNAL(toggled(bool)), this, SLOT(activateFourDays(bool))); qDebug() << 4;
+    connect(ui->scheduleButton, SIGNAL(toggled(bool)), this, SLOT(activateSchedule(bool))); qDebug() << 5;
+    connect(ui->yearButton, SIGNAL(toggled(bool)), this, SLOT(activateYear(bool))); qDebug() << 6;
     connect(ui->stackedWidget, SIGNAL(currentChanged(int)),
-            this, SLOT(changeCurrentButtonToggleState(int)));
-    changeCurrentButtonToggleState(0);
+            this, SLOT(changeCurrentButtonToggleState(int))); qDebug() << 7;
+    changeCurrentButtonToggleState(0); qDebug() << 8;
 
     // 测试sql连接
     /*
@@ -61,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent) :
     cacheEventModel->addEventToDb(&event);
     qDebug() << "event id: " << event.id();
     */
-
+    qDebug() << "1";
     // 将sqlmodel连接到日历
     ui->month_calendar->setCacheEventModel(cacheEventModel);
     // 设置日历widget
@@ -122,6 +142,28 @@ MainWindow::MainWindow(QWidget *parent) :
     curLocale = QLocale(QLocale::English, QLocale::UnitedStates);
 
     initInterface();
+}
+
+void MainWindow::initYearCalendars()
+{
+    qDebug() << "MainWindow::initYearCalendars()";
+    int year = QDate::currentDate().year();
+    qDebug() << year;
+    ui->curYearLabel->setText(QString::number(year));
+    for (int i = 0; i < 12; i++)
+    {
+        yearCalendar[i]->setSelectedDate(QDate(year, i+1, 1));
+        qDebug() << i;
+
+        QTableView *tableView = yearCalendar[i]->findChild<QTableView*>("qt_calendar_calendarview");
+        tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+        tableView->setColumnWidth(0, 30);
+        tableView->verticalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+        tableView->setRowHeight(0, 25);
+        for (int j = 1; j < 7; j++)
+            tableView->setRowHeight(j, 25);
+    }
+    qDebug() << "MainWindow::initYearCalendars() end";
 }
 
 bool MainWindow::eventFilter(QObject* obj, QEvent* event)
@@ -378,7 +420,7 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
     tableWidget->setRowHeight(0, 30);
     for (int i = 1; i < 288 + 1; i++)
     {
-        tableWidget->setRowHeight(i, 7);
+        tableWidget->setRowHeight(i, 5);
     }
 
     tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
@@ -421,8 +463,19 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
         QTime latestClearTime(0, 0);
         for (int j = 0; j < events.size(); j++)
         {
-            QTime t1(events.at(j)->startDate().time());
-            QTime t2(events.at(j)->endDate().time());
+            QTime t1(events.at(j)->startDate().time().hour(),
+                     events.at(j)->startDate().time().minute());
+            QTime t2(events.at(j)->endDate().time().hour(),
+                     events.at(j)->endDate().time().minute());
+
+            if (t1 == t2) // 提醒
+            {
+                continue;
+            }
+            else if (t1 == QTime(0, 0) && t2 == QTime(23, 59)) // 全天事件
+            {
+                continue;
+            }
 
             int startMinute = std::floor(t1.minute() / 5.0 + 0.5) * 5;
             int endMinute = std::floor(t2.minute() / 5.0 + 0.5) * 5;
@@ -503,7 +556,7 @@ void MainWindow::onCalendarTableEventButtonClicked()
 
 void MainWindow::changeCurrentButtonToggleState(int index)
 {
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 6; i++)
         switchButtons[i]->setChecked(false);
     switchButtons[index]->setChecked(true);
 }
@@ -546,6 +599,12 @@ void MainWindow::activateSchedule(bool toggled)
 {
     if (toggled)
         ui->stackedWidget->setCurrentIndex(4);
+}
+
+void MainWindow::activateYear(bool toggled)
+{
+    if (toggled)
+        ui->stackedWidget->setCurrentIndex(5);
 }
 
 MainWindow::~MainWindow()
@@ -1118,6 +1177,13 @@ void MainWindow::initInterface()
     initCalendarTable(7, ui->weekTableWidget);
     initCalendarTable(4, ui->fourDaysTableWidget);
     // initCalendarTable();
+    ui->quickCalendar->setLocale(curLocale);
+    ui->month_calendar->setLocale(curLocale);
+
+
+    for (int i = 0; i < 12; i++)
+        yearCalendar[i]->setLocale(curLocale);
+
 }
 
 void MainWindow::on_freezeCheckBox_toggled(bool checked)
