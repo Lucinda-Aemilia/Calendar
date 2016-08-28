@@ -55,6 +55,7 @@ public slots:
     void setMonthCalendarChildWidgetsDragDrop(bool toggled);
 
     void refreshCalendarTable(int dayNumber, QTableWidget* tableWidget);
+    void refreshCalendarTable();
 
 private slots:
     void on_opacityHorizontalSlider_valueChanged(int value);
@@ -89,6 +90,8 @@ private slots:
     void initInterface();
 
     void on_freezeCheckBox_toggled(bool checked);
+
+    void on_createButton_clicked();
 
 private:
     bool enumUserWindowsCB(HWND hwnd, LPARAM lParam);

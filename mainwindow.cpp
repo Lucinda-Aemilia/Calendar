@@ -4,6 +4,7 @@
 #include "createneweventdialog.h"
 #include "calendareventfilewidget.h"
 #include "event.h"
+#include "calendartableeventbutton.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -22,6 +23,7 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 #include <QAction>
+#include <QPushButton>
 #include <QTranslator>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -174,8 +176,8 @@ void MainWindow::freeze(bool frozen)
         windowPos = this->pos();
         // windowFlags = this->win;
         QSize curSize(this->size());
-        this->setMinimumSize(curSize);
-        this->setMaximumSize(curSize);
+        // this->setMinimumSize(curSize);
+        // this->setMaximumSize(curSize);
         windowCurSize = curSize;
 
         // setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -203,8 +205,8 @@ void MainWindow::freeze(bool frozen)
         show();
         mFrozen = false;
         ui->freezeCheckBox->setChecked(false);
-        this->setMinimumSize(windowMinSize);
-        this->setMaximumSize(windowMaxSize);
+        // this->setMinimumSize(windowMinSize);
+        // this->setMaximumSize(windowMaxSize);
 
     }
 
@@ -347,15 +349,40 @@ void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)
     refreshCalendarTable(dayNumber, tableWidget);
 }
 
+void MainWindow::refreshCalendarTable()
+{
+    refreshCalendarTable(1, ui->dayTableWidget);
+    refreshCalendarTable(7, ui->weekTableWidget);
+    refreshCalendarTable(4, ui->fourDaysTableWidget);
+}
+
 void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
 {
     tableWidget->clear();
     tableWidget->clearSpans();
 
+    tableWidget->setColumnCount(1 + dayNumber); // 一列显示日期，其余每天有4列
+    tableWidget->setRowCount(288 + 2); // 一行日期 + 一行comboBox + 24小时*12（5min）
+    tableWidget->horizontalHeader()->setVisible(false); // 不显示表头
+    tableWidget->verticalHeader()->setVisible(false);
+    tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers); // 不能编辑
+    tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+    tableWidget->horizontalHeader()->setStretchLastSection(true); // 设置占满并均分
+    tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    // 设置行高
+    tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    tableWidget->setRowHeight(0, 50);
+    tableWidget->setRowHeight(1, 30);
+    for (int i = 2; i < 288 + 2; i++)
+    {
+        tableWidget->setRowHeight(i, 10);
+    }
+
     tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
     tableWidget->setColumnWidth(0, 115);
     // QFont smallFont("Microsoft Yahei UI");
     // smallFont.setPointSize(10);
+
     for (int i = 0; i < 288; i += 12)
     {
         tableWidget->setSpan(i+2, 0, 12, 1);
@@ -373,12 +400,60 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
         tableWidget->setItem(i+2, 0, item);
     }
 
-    QDate curDate(ui->quickCalendar->selectedDate());
-    QTableWidgetItem* item = new QTableWidgetItem(curLocale.toString(curDate, "yyyy.M.d dddd"));
-    // item->setFont(smallFont);
-    item->setTextAlignment(Qt::AlignCenter);
-    // item->setTextAlignment(Qt::AlignVCenter);
-    tableWidget->setItem(0, 1, item);
+    QDate date(ui->quickCalendar->selectedDate());
+    qDebug() << "calendar table" << date;
+    for (int i = 0; i < dayNumber; i++, date = date.addDays(1))
+    {
+        QTableWidgetItem* item = new QTableWidgetItem(curLocale.toString(date, "yyyy.M.d\ndddd"));
+        // item->setFont(smallFont);
+        item->setTextAlignment(Qt::AlignCenter);
+        tableWidget->setItem(0, i + 1, item);
+
+        QList<QSharedPointer<Event>> events(cacheEventModel->eventsForDate(date));
+        QTime latestClearTime(0, 0);
+        for (int j = 0; j < events.size(); j++)
+        {
+            QTime t1(events.at(j)->startDate().time());
+            QTime t2(events.at(j)->endDate().time());
+
+            int startMinute = std::floor(t1.minute() / 5.0 + 0.5) * 5;
+            int endMinute = std::floor(t2.minute() / 5.0 + 0.5) * 5;
+
+            QTime startTime, endTime;
+
+            startTime = QTime(t1.hour(), startMinute);
+            endTime = QTime(t2.hour(), endMinute);
+
+            qDebug() << date << t1 << t2 << startTime << endTime;
+
+            if (endTime <= latestClearTime || startTime == endTime)
+                continue;
+            if (latestClearTime > startTime)
+                startTime = latestClearTime;
+            // 需要改
+            if (!startTime.isValid() || !endTime.isValid())
+                continue;
+
+            int startRow = QTime(0, 0).secsTo(startTime) / 60 / 5;
+            int endRow = QTime(0, 0).secsTo(endTime) / 60 / 5;
+            tableWidget->setSpan(startRow + 2, i + 1, endRow - startRow, 1);
+            /*
+            QTableWidgetItem* item =
+                    new QTableWidgetItem(events.at(j)->name());
+            item->setTextAlignment(Qt::AlignCenter);
+            tableWidget->setItem(startRow + 2, i + 1, item);
+            */
+            // QPushButton* pushButton = new QPushButton(events.at(j)->name());
+            // pushButton->data();
+            CalendarTableEventButton* pushButton =
+                    new CalendarTableEventButton(events.at(j));
+            tableWidget->setIndexWidget(
+                        tableWidget->model()->index(startRow + 2, i + 1), pushButton);
+            qDebug() << date << startRow << endRow;
+
+            latestClearTime = endTime;
+        }
+    }
 }
 
 void MainWindow::changeCurrentButtonToggleState(int index)
@@ -543,6 +618,7 @@ void MainWindow::on_quickCalendar_selectionChanged()
     // QLocale locale  = QLocale(QLocale::Swedish, QLocale::Sweden); // set the locale you want here
     // QString swedishDate = locale.toString(date, "dddd, d MMMM yyyy");
     ui->dateDisplayLabel->setText(curLocale.toString(date, "yyyy.M.d  dddd"));
+    refreshCalendarTable();
 }
 
 void MainWindow::on_month_calendar_selectionChanged()
@@ -987,9 +1063,28 @@ void MainWindow::initInterface()
     initCalendarTable(1, ui->dayTableWidget);
     initCalendarTable(7, ui->weekTableWidget);
     initCalendarTable(4, ui->fourDaysTableWidget);
+    // initCalendarTable();
 }
 
 void MainWindow::on_freezeCheckBox_toggled(bool checked)
 {
     freeze(checked);
+}
+
+void MainWindow::on_createButton_clicked()
+{
+    CreateNewEventDialog* editEventDialog = new CreateNewEventDialog(this);
+    editEventDialog->init(cacheEventModel, QSharedPointer<Event>(NULL), QDateTime::currentDateTime(),
+                          QDateTime::currentDateTime());
+
+    int result = editEventDialog->exec();
+
+    // delete editEventDialog;
+
+    if (result == QDialog::Accepted)
+    {
+        QSharedPointer<Event> newEvent(editEventDialog->getEvent());
+    }
+    ui->month_calendar->showPreviousMonth();
+    ui->month_calendar->showNextMonth();
 }

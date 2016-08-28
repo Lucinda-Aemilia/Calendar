@@ -23,17 +23,6 @@ CreateNewEventDialog::CreateNewEventDialog(QWidget *parent) :
     // 初始化颜色
     ui->colorComboBox->clear();
     addItemWithIconFromColor(Qt::white, tr("White"));
-    /*
-    white
-    red
-    green
-    blue
-    cyan
-    magenta
-    yellow
-    gray
-    lightGray
-    */
     addItemWithIconFromColor(Qt::red, tr("Red"));
     addItemWithIconFromColor(Qt::green, tr("Green"));
     addItemWithIconFromColor(Qt::blue, tr("Blue"));
@@ -42,6 +31,11 @@ CreateNewEventDialog::CreateNewEventDialog(QWidget *parent) :
     addItemWithIconFromColor(Qt::yellow, tr("Yellow"));
     addItemWithIconFromColor(Qt::gray, tr("Gray"));
     addItemWithIconFromColor(Qt::lightGray, tr("Light Gray"));
+
+    // 翻译问题
+    ui->dialogButtonBox->clear();
+    ui->dialogButtonBox->addButton(tr("Ok"), QDialogButtonBox::AcceptRole);
+    ui->dialogButtonBox->addButton(tr("Cancel"), QDialogButtonBox::RejectRole);
 }
 
 void CreateNewEventDialog::addItemWithIconFromColor(const QColor& color, const QString& name)
@@ -242,13 +236,14 @@ void CreateNewEventDialog::deleteCurEvent()
     {
         msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
         msgBox.setButtonText (QMessageBox::Ok, tr("Only delete this event"));
-        // msgBox.setButtonText (QMessageBox::Cancel, tr("Delete all events in this series"));
+        msgBox.setButtonText (QMessageBox::Cancel, tr("Cancel"));
     }
     else
     {
         msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Discard | QMessageBox::Cancel);
         msgBox.setButtonText (QMessageBox::Ok, tr("Only delete this event"));
         msgBox.setButtonText (QMessageBox::Discard, tr("Delete all events in this series"));
+        msgBox.setButtonText (QMessageBox::Cancel, tr("Cancel"));
     }
 
     qDebug() << "before execution" << mCurEvent->name();

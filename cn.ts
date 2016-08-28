@@ -181,7 +181,7 @@
     <message>
         <location filename="createneweventdialog.ui" line="335"/>
         <source>End Date: </source>
-        <translation>结束日期</translation>
+        <translation>结束日期：</translation>
     </message>
     <message>
         <location filename="createneweventdialog.ui" line="345"/>
@@ -351,129 +351,137 @@
         <translation>白色</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="37"/>
+        <location filename="createneweventdialog.cpp" line="26"/>
         <source>Red</source>
         <translation>红色</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="38"/>
+        <location filename="createneweventdialog.cpp" line="27"/>
         <source>Green</source>
         <translation>绿色</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="39"/>
+        <location filename="createneweventdialog.cpp" line="28"/>
         <source>Blue</source>
         <translation>蓝色</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="40"/>
+        <location filename="createneweventdialog.cpp" line="29"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="41"/>
+        <location filename="createneweventdialog.cpp" line="30"/>
         <source>Magenta</source>
         <translation>品红色</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="42"/>
+        <location filename="createneweventdialog.cpp" line="31"/>
         <source>Yellow</source>
         <translation>黄色</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="43"/>
+        <location filename="createneweventdialog.cpp" line="32"/>
         <source>Gray</source>
         <translation>灰色</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="44"/>
+        <location filename="createneweventdialog.cpp" line="33"/>
         <source>Light Gray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="162"/>
+        <location filename="createneweventdialog.cpp" line="37"/>
+        <location filename="createneweventdialog.cpp" line="156"/>
         <source>Ok</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="163"/>
-        <location filename="createneweventdialog.cpp" line="175"/>
+        <location filename="createneweventdialog.cpp" line="38"/>
+        <location filename="createneweventdialog.cpp" line="239"/>
+        <location filename="createneweventdialog.cpp" line="246"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="createneweventdialog.cpp" line="157"/>
+        <location filename="createneweventdialog.cpp" line="169"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="164"/>
-        <location filename="createneweventdialog.cpp" line="173"/>
+        <location filename="createneweventdialog.cpp" line="158"/>
+        <location filename="createneweventdialog.cpp" line="167"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="165"/>
+        <location filename="createneweventdialog.cpp" line="159"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="192"/>
-        <location filename="createneweventdialog.cpp" line="199"/>
+        <location filename="createneweventdialog.cpp" line="186"/>
+        <location filename="createneweventdialog.cpp" line="193"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="193"/>
-        <location filename="createneweventdialog.cpp" line="201"/>
+        <location filename="createneweventdialog.cpp" line="187"/>
+        <location filename="createneweventdialog.cpp" line="195"/>
         <source>Discard all changes</source>
         <translation>舍弃</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="228"/>
+        <location filename="createneweventdialog.cpp" line="222"/>
         <source>Delete the event</source>
         <translation>删除此次活动</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="229"/>
+        <location filename="createneweventdialog.cpp" line="223"/>
         <source>Do you really want to delete the event?</source>
         <translation>您确实想删除此活动吗？</translation>
     </message>
     <message>
+        <location filename="createneweventdialog.cpp" line="238"/>
         <location filename="createneweventdialog.cpp" line="244"/>
-        <location filename="createneweventdialog.cpp" line="250"/>
         <source>Only delete this event</source>
         <translation>仅删除此活动</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="251"/>
+        <location filename="createneweventdialog.cpp" line="245"/>
         <source>Delete all events in this series</source>
         <translation>删除此系列中所有活动</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="313"/>
+        <location filename="createneweventdialog.cpp" line="308"/>
         <source>Untitled Event</source>
         <translation>无标题活动</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="532"/>
-        <location filename="createneweventdialog.cpp" line="536"/>
-        <location filename="createneweventdialog.cpp" line="548"/>
+        <location filename="createneweventdialog.cpp" line="527"/>
+        <location filename="createneweventdialog.cpp" line="531"/>
+        <location filename="createneweventdialog.cpp" line="543"/>
         <source>, </source>
         <translation>，</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="538"/>
+        <location filename="createneweventdialog.cpp" line="533"/>
         <source> st</source>
         <translation>日</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="540"/>
+        <location filename="createneweventdialog.cpp" line="535"/>
         <source> nd</source>
         <translation>日</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="542"/>
+        <location filename="createneweventdialog.cpp" line="537"/>
         <source> rd</source>
         <translation>日</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="544"/>
+        <location filename="createneweventdialog.cpp" line="539"/>
         <source> th</source>
         <translation>日</translation>
     </message>
@@ -496,7 +504,7 @@
     <message>
         <location filename="mainwindow.ui" line="50"/>
         <source>&amp;Create</source>
-        <translation>创建</translation>
+        <translation>创建(&amp;F)</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="125"/>
@@ -571,7 +579,7 @@
     <message>
         <location filename="mainwindow.ui" line="685"/>
         <source>&amp;File</source>
-        <translation>文件</translation>
+        <translation>文件(&amp;F)</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="692"/>
@@ -581,7 +589,7 @@
     <message>
         <location filename="mainwindow.ui" line="696"/>
         <source>&amp;Language</source>
-        <translation type="unfinished"></translation>
+        <translation>语言(&amp;F)</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="718"/>
@@ -601,7 +609,7 @@
     <message>
         <location filename="mainwindow.cpp" line="195"/>
         <source>Close this window to unlock the calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭此窗口以解锁日历</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="749"/>
@@ -649,37 +657,37 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="createneweventdialog.cpp" line="424"/>
+        <location filename="createneweventdialog.cpp" line="419"/>
         <source>Monday</source>
         <translation>周一</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="427"/>
+        <location filename="createneweventdialog.cpp" line="422"/>
         <source>Tuesday</source>
         <translation>周二</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="430"/>
+        <location filename="createneweventdialog.cpp" line="425"/>
         <source>Wednesday</source>
         <translation>周三</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="433"/>
+        <location filename="createneweventdialog.cpp" line="428"/>
         <source>Thursday</source>
         <translation>周四</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="436"/>
+        <location filename="createneweventdialog.cpp" line="431"/>
         <source>Friday</source>
         <translation>周五</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="439"/>
+        <location filename="createneweventdialog.cpp" line="434"/>
         <source>Saturday</source>
         <translation>周六</translation>
     </message>
     <message>
-        <location filename="createneweventdialog.cpp" line="442"/>
+        <location filename="createneweventdialog.cpp" line="437"/>
         <source>Sunday</source>
         <translation>周日</translation>
     </message>
