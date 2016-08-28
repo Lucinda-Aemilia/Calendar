@@ -86,7 +86,7 @@ private slots:
     void onActionImportTriggered();
     // 切换语言
     void onLanguageActionTriggered(bool toggled);
-    void refreshLanguage();
+    void initInterface();
 
     void on_freezeCheckBox_toggled(bool checked);
 
@@ -108,7 +108,8 @@ private:
     QPoint windowPos;
     int windowFlags;
 
-    QTranslator englishTranslator, chineseTranslator;
+    QTranslator chineseTranslator, chineseQtTranslator;
+    QLocale curLocale;
 };
 
 #endif // MAINWINDOW_H

@@ -51,11 +51,6 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(changeCurrentButtonToggleState(int)));
     changeCurrentButtonToggleState(0);
 
-    // 初始化day, week, 4 days日历
-    initCalendarTable(1, ui->dayTableWidget);
-    initCalendarTable(7, ui->weekTableWidget);
-    initCalendarTable(4, ui->fourDaysTableWidget);
-
     // 测试sql连接
     /*
     Event event;
@@ -67,9 +62,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // 将sqlmodel连接到日历
     ui->month_calendar->setCacheEventModel(cacheEventModel);
     // 设置日历widget
-    on_month_calendar_currentPageChanged(QDate::currentDate().year(),
-                                         QDate::currentDate().month());
-
 
     // 测试QCalendarWidget的tableView
     QTableView *tableView = ui->quickCalendar->findChild<QTableView*>("qt_calendar_calendarview");
@@ -121,8 +113,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->englishLanguageAction, SIGNAL(toggled(bool)),
             this, SLOT(onLanguageActionTriggered(bool)));
 
-    // englishTranslator.load("");
-    chineseTranslator.load("cn.qm");
+    // 加载翻译
+    chineseTranslator.load(":/translation/cn.qm");
+    chineseQtTranslator.load(":/translation/qt_zh_CN.qm");
+    curLocale = QLocale(QLocale::English, QLocale::UnitedStates);
+
+    initInterface();
 }
 
 bool MainWindow::eventFilter(QObject* obj, QEvent* event)
@@ -324,21 +320,6 @@ void MainWindow::initCalendarTable(int dayNumber, QTableWidget* tableWidget)
         tableWidget->setRowHeight(i, 10);
     }
 
-    // 设置最左边一列的时间
-    tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
-    tableWidget->setColumnWidth(0, 115);
-    QFont smallFont("Microsoft Yahei UI");
-    smallFont.setPointSize(10);
-    for (int i = 0; i < 288; i += 12)
-    {
-        tableWidget->setSpan(i+2, 0, 12, 1);
-        QTime time(i/12, 0);
-        QTableWidgetItem* item = new QTableWidgetItem(time.toString("a h:mm"));
-        item->setFont(smallFont);
-        item->setTextAlignment(Qt::AlignTop);
-        tableWidget->setItem(i+2, 0, item);
-    }
-
     // 设置最上面一行的日期
     /*
     tableWidget->setSpan(0, 0, 2, 1);
@@ -379,14 +360,21 @@ void MainWindow::refreshCalendarTable(int dayNumber, QTableWidget* tableWidget)
     {
         tableWidget->setSpan(i+2, 0, 12, 1);
         QTime time(i/12, 0);
-        QTableWidgetItem* item = new QTableWidgetItem(time.toString("a h:mm"));
+
+        QString timeName;
+        if (curLocale.language() == QLocale::Chinese)
+            timeName = curLocale.toString(time, "a h:mm");
+        else
+            timeName = curLocale.toString(time, "h:mm a");
+
+        QTableWidgetItem* item = new QTableWidgetItem(timeName);
         // item->setFont(smallFont);
         item->setTextAlignment(Qt::AlignTop);
         tableWidget->setItem(i+2, 0, item);
     }
 
     QDate curDate(ui->quickCalendar->selectedDate());
-    QTableWidgetItem* item = new QTableWidgetItem(curDate.toString("yyyy.M.d dddd"));
+    QTableWidgetItem* item = new QTableWidgetItem(curLocale.toString(curDate, "yyyy.M.d dddd"));
     // item->setFont(smallFont);
     item->setTextAlignment(Qt::AlignCenter);
     // item->setTextAlignment(Qt::AlignVCenter);
@@ -552,9 +540,9 @@ void MainWindow::on_quickCalendar_selectionChanged()
 {
     ui->month_calendar->setSelectedDate(ui->quickCalendar->selectedDate());
     QDate date(ui->quickCalendar->selectedDate());
-    QLocale lo(QLocale::C);
-    ui->dateDisplayLabel->setText(lo.toDate(date.toString("yyyy-MM-dd"), "yyyy-MM-dd")
-                                  .toString("yyyy.M.d  dddd"));
+    // QLocale locale  = QLocale(QLocale::Swedish, QLocale::Sweden); // set the locale you want here
+    // QString swedishDate = locale.toString(date, "dddd, d MMMM yyyy");
+    ui->dateDisplayLabel->setText(curLocale.toString(date, "yyyy.M.d  dddd"));
 }
 
 void MainWindow::on_month_calendar_selectionChanged()
@@ -761,9 +749,12 @@ void MainWindow::onActionExportTriggered()
             tr("Export all events to XML"), "./calendar_events.xml",
             tr("XML files (*.xml)"));
 
+    if (filename.isEmpty())
+        return;
+
     QList<QSharedPointer<Event>> events(cacheEventModel->allEvents());
 
-    QProgressDialog progressDialog(tr("Importing..."), "", 0, events.size(), this);
+    QProgressDialog progressDialog(tr("Exporting..."), "", 0, events.size(), this);
     progressDialog.setCancelButton(NULL);
     progressDialog.setWindowModality(Qt::WindowModal);
     progressDialog.setValue(0);
@@ -818,6 +809,15 @@ void MainWindow::onActionImportTriggered()
     QString filename = QFileDialog::getOpenFileName(this,
                                                     tr("Import XML"), ".",
                                                     tr("XML files (*.xml)"));
+    if (filename.isEmpty())
+        return;
+
+    QFile file(filename);
+    if (!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug() << "Error: Cannot read file " << qPrintable(filename)
+                 << ": " << qPrintable(file.errorString());
+    }
 
     QProgressDialog progressDialog(tr("Importing..."), "", 0, 2, this);
     progressDialog.setCancelButton(NULL);
@@ -827,13 +827,6 @@ void MainWindow::onActionImportTriggered()
     // progressDialog.setWindowFlags(Qt::FramelessWindowHint);
     progressDialog.show();
     // progressDialog.reset();
-
-    QFile file(filename);
-    if (!file.open(QFile::ReadOnly | QFile::Text))
-    {
-        qDebug() << "Error: Cannot read file " << qPrintable(filename)
-                 << ": " << qPrintable(file.errorString());
-    }
 
     QXmlStreamReader xmlReader(&file);
     xmlReader.readNext();
@@ -962,8 +955,11 @@ void MainWindow::onLanguageActionTriggered(bool toggled)
         if (toggled) // 切换为中文
         {
             qApp->installTranslator(&chineseTranslator);
-            refreshLanguage();
+            qApp->installTranslator(&chineseQtTranslator);
+            curLocale = QLocale(QLocale::Chinese, QLocale::China);
+            QLocale::setDefault(curLocale);
             ui->retranslateUi(this);
+            initInterface();
         }
     }
     else
@@ -971,15 +967,26 @@ void MainWindow::onLanguageActionTriggered(bool toggled)
         ui->chineseLanguageAction->setChecked(!toggled);
         if (toggled) // 切换为英文
         {
-            qApp->installTranslator(&englishTranslator);
-            refreshLanguage();
+            // qApp->installTranslator(&englishTranslator);
+            qApp->removeTranslator(&chineseTranslator);
+            qApp->removeTranslator(&chineseQtTranslator);
+            curLocale = QLocale(QLocale::English, QLocale::UnitedStates);
+            QLocale::setDefault(curLocale);
             ui->retranslateUi(this);
+            initInterface();
         }
     }
 }
 
-void MainWindow::refreshLanguage()
+void MainWindow::initInterface()
 {
+    on_quickCalendar_selectionChanged();
+    on_month_calendar_currentPageChanged(QDate::currentDate().year(),
+                                         QDate::currentDate().month());
+    // 初始化day, week, 4 days日历
+    initCalendarTable(1, ui->dayTableWidget);
+    initCalendarTable(7, ui->weekTableWidget);
+    initCalendarTable(4, ui->fourDaysTableWidget);
 }
 
 void MainWindow::on_freezeCheckBox_toggled(bool checked)

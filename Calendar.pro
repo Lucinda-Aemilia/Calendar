@@ -47,3 +47,6 @@ TRANSLATIONS += cn.ts
 
 DISTFILES += \
     TransparentStyle.qml
+
+RESOURCES += \
+    resources.qrc
